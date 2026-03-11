@@ -319,6 +319,44 @@
 </style>
 </head>
 <body>
+<style>
+  .sme-topbar {
+    background: #1a1a2e; height: 44px; display: flex; align-items: center;
+    padding: 0 24px; gap: 8px; position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,.35); font-family: "Segoe UI", sans-serif;
+  }
+  .sme-topbar-logo {
+    font-size: 13px; font-weight: 700; color: #fff; letter-spacing: .04em;
+    white-space: nowrap; display: flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .sme-topbar-logo .logo-badge {
+    background: #0078d4; color: white; font-size: 10px; font-weight: 800;
+    padding: 2px 7px; border-radius: 10px; letter-spacing: .06em;
+  }
+  .sme-topbar-divider { width: 1px; height: 20px; background: rgba(255,255,255,.15); margin: 0 8px; flex-shrink: 0; }
+  .sme-topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; overflow-x: auto; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link {
+    color: rgba(255,255,255,.7); font-size: 12px; font-weight: 500; text-decoration: none;
+    padding: 5px 12px; border-radius: 4px; white-space: nowrap;
+    transition: background .15s, color .15s; display: flex; align-items: center; gap: 6px;
+  }
+  .sme-nav-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .sme-nav-link.active { background: #0078d4; color: #fff; font-weight: 600; }
+  .left-nav { top: 44px !important; height: calc(100vh - 44px) !important; }
+</style>
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span> Regras e Fluxos
+  </a>
+  <div class="sme-topbar-divider"></div>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link">📋 Manual do Desenvolvedor</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link">☁️ Treinamento Azure DevOps</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link active">🚀 Fluxo de Publicação</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link">👥 Papéis e Responsabilidades</a>
+  </nav>
+</header>
 
 <div class="page-wrapper">
 

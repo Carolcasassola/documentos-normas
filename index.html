@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treinamento Azure DevOps – Fluxo de Registro de Atividades</title>
+<title>Manual do Desenvolvedor – Norma Técnica de Engenharia de Software</title>
 <style>
   :root {
     --sp-blue: #0078d4;
     --sp-blue-dark: #005a9e;
     --sp-blue-light: #deecf9;
-    --sp-blue-xlight: #f3f9fe;
     --sp-neutral-0: #ffffff;
     --sp-neutral-10: #f3f2f1;
     --sp-neutral-20: #edebe9;
@@ -19,15 +18,15 @@
     --sp-neutral-90: #201f1e;
     --sp-red: #a4262c;
     --sp-green: #107c10;
-    --sp-orange: #986f0b;
-    --sp-purple: #5c2d91;
     --sp-sidebar-width: 260px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14px; color: var(--sp-neutral-90);
-    background: var(--sp-neutral-10); line-height: 1.5;
+    font-size: 14px;
+    color: var(--sp-neutral-90);
+    background: var(--sp-neutral-10);
+    line-height: 1.5;
   }
 
   /* ── LAYOUT ── */
@@ -39,24 +38,30 @@
     background: var(--sp-neutral-0);
     border-right: 1px solid var(--sp-neutral-30);
     padding: 20px 0;
-    position: fixed; top: 0; bottom: 0; left: 0;
-    overflow-y: auto; z-index: 50;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    overflow-y: auto;
+    z-index: 50;
   }
   .left-nav-label {
     font-size: 11px; font-weight: 700; text-transform: uppercase;
     letter-spacing: .08em; color: var(--sp-neutral-60);
-    padding: 10px 20px 4px; display: block;
+    padding: 8px 20px 4px; display: block;
   }
   .left-nav-item {
     display: flex; align-items: center; gap: 10px;
-    padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px;
-    cursor: pointer; border-left: 3px solid transparent;
-    text-decoration: none; transition: background .12s, color .12s;
+    padding: 8px 20px;
+    color: var(--sp-neutral-80); font-size: 13px;
+    cursor: pointer; transition: background .12s, color .12s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
   }
   .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
   .left-nav-item.active {
-    background: var(--sp-blue-light); color: var(--sp-blue-dark);
-    border-left-color: var(--sp-blue); font-weight: 600;
+    background: var(--sp-blue-light);
+    color: var(--sp-blue-dark);
+    border-left-color: var(--sp-blue);
+    font-weight: 600;
   }
 
   /* ── MAIN ── */
@@ -64,57 +69,45 @@
 
   /* ── HERO ── */
   .page-hero {
-    background: linear-gradient(135deg, #003f6b 0%, var(--sp-blue-dark) 50%, var(--sp-blue) 100%);
+    background: linear-gradient(135deg, var(--sp-blue-dark) 0%, var(--sp-blue) 60%, #1b9fe4 100%);
     padding: 40px 48px 36px; color: white;
     position: relative; overflow: hidden;
   }
-  .page-hero::before {
-    content:''; position: absolute; right: -80px; top: -80px;
-    width: 360px; height: 360px;
-    background: rgba(255,255,255,.04); border-radius: 50%;
-  }
   .page-hero::after {
-    content:''; position: absolute; right: 100px; bottom: -60px;
-    width: 200px; height: 200px;
-    background: rgba(0,120,212,.2); border-radius: 50%;
+    content:''; position: absolute; right: -60px; top: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,.05); border-radius: 50%;
   }
   .hero-eyebrow {
     font-size: 11px; font-weight: 600; text-transform: uppercase;
     letter-spacing: .1em; opacity: .8; margin-bottom: 8px;
-    position: relative; z-index: 1;
   }
-  .hero-title {
-    font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 8px;
-    position: relative; z-index: 1;
-  }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 8px; }
   .hero-title strong { font-weight: 700; }
+  .hero-meta {
+    font-size: 12px; opacity: .75;
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px;
+  }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 6px;
     background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
     border-radius: 12px; padding: 3px 10px;
     font-size: 11px; font-weight: 600; margin-top: 14px;
-    position: relative; z-index: 1;
   }
   .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
-  .hero-meta {
-    font-size: 12px; opacity: .75;
-    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;
-    position: relative; z-index: 1;
-  }
 
   /* ── CONTENT ── */
   .content-area { padding: 32px 48px; max-width: 960px; }
 
   .alert {
     display: flex; gap: 14px; align-items: flex-start;
-    padding: 16px 20px; border-radius: 2px; margin-bottom: 24px;
+    padding: 16px 20px; border-radius: 2px; margin-bottom: 28px;
   }
   .alert-info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); }
   .alert-warning { background: #fff4ce; border-left: 4px solid #f7c948; }
   .alert-success { background: #dff6dd; border-left: 4px solid var(--sp-green); }
-  .alert-danger  { background: #fde7e9; border-left: 4px solid var(--sp-red); }
   .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-  .alert-body { font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+  .alert-body { font-size: 13px; color: var(--sp-neutral-80); }
   .alert-body strong { display: block; font-size: 14px; color: var(--sp-neutral-90); margin-bottom: 4px; }
 
   .sp-section { margin-bottom: 36px; }
@@ -127,9 +120,8 @@
   .section-heading .sec-num {
     background: var(--sp-blue); color: white;
     font-size: 12px; font-weight: 700;
-    min-width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; padding: 0 4px;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .subsection-heading {
     font-size: 15px; font-weight: 600; color: var(--sp-blue-dark);
@@ -143,24 +135,13 @@
   .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
   .sp-list li {
     font-size: 13.5px; color: var(--sp-neutral-80);
-    padding: 4px 0 4px 20px; position: relative; line-height: 1.55;
+    padding: 5px 0 5px 20px; position: relative; line-height: 1.5;
   }
   .sp-list li::before {
-    content:''; position: absolute; left: 4px; top: 11px;
+    content:''; position: absolute; left: 4px; top: 12px;
     width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue);
   }
-  .sp-list.numbered { counter-reset: item; }
-  .sp-list.numbered li { padding-left: 28px; }
-  .sp-list.numbered li::before {
-    content: counter(item); counter-increment: item;
-    width: 18px; height: 18px; border-radius: 50%;
-    background: var(--sp-blue); color: white;
-    font-size: 10px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    top: 5px; left: 0;
-  }
 
-  /* ── CARDS ── */
   .cards-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
     gap: 12px; margin-bottom: 20px;
@@ -168,101 +149,63 @@
   .sp-card {
     background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
     border-radius: 2px; padding: 16px;
-    transition: box-shadow .2s, border-color .2s;
+    transition: box-shadow .2s, border-color .2s; cursor: default;
   }
   .sp-card:hover { box-shadow: 0 2px 8px rgba(0,120,212,.15); border-color: var(--sp-blue); }
   .card-icon { font-size: 22px; margin-bottom: 8px; }
   .card-title { font-size: 13px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 4px; }
   .card-desc { font-size: 12px; color: var(--sp-neutral-60); line-height: 1.4; }
 
-  /* ── PROPERTY BAG ── */
   .property-bag {
     background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
     border-radius: 2px; overflow: hidden; margin-bottom: 20px;
   }
-  .property-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
   .property-row:last-child { border-bottom: none; }
   .property-key {
     background: var(--sp-neutral-10); padding: 10px 16px;
     font-size: 12px; font-weight: 600; color: var(--sp-neutral-60);
-    text-transform: uppercase; letter-spacing: .04em;
-    display: flex; align-items: flex-start; border-right: 1px solid var(--sp-neutral-20);
-    padding-top: 12px;
+    text-transform: uppercase; letter-spacing: .05em;
+    display: flex; align-items: center; border-right: 1px solid var(--sp-neutral-20);
   }
-  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-  /* ── TAGS ── */
-  .tag {
-    display: inline-flex; align-items: center;
-    background: var(--sp-blue-light); color: var(--sp-blue-dark);
-    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
-  }
+  .tag { display: inline-flex; align-items: center; background: var(--sp-blue-light); color: var(--sp-blue-dark); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
   .tag.green  { background: #dff6dd; color: #107c10; }
   .tag.orange { background: #fff4ce; color: #986f0b; }
   .tag.red    { background: #fde7e9; color: var(--sp-red); }
-  .tag.purple { background: #f0e6ff; color: var(--sp-purple); }
 
-  /* ── FLOW / STATUS PIPELINE ── */
-  .status-flow {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 0; margin: 16px 0 20px;
-  }
-  .status-node {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 4px; padding: 10px 14px;
-    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
-    border-radius: 4px; min-width: 90px; text-align: center;
-    font-size: 12px; font-weight: 600;
-  }
-  .status-node .s-icon { font-size: 18px; }
-  .status-node.new    { border-top: 3px solid #8a8886; }
-  .status-node.active { border-top: 3px solid var(--sp-blue); }
-  .status-node.review { border-top: 3px solid var(--sp-orange); }
-  .status-node.resolved { border-top: 3px solid #0099bc; }
-  .status-node.testing  { border-top: 3px solid #b146c2; }
-  .status-node.approved { border-top: 3px solid var(--sp-green); }
-  .status-node.done     { border-top: 3px solid #107c10; }
-  .flow-arrow { font-size: 20px; color: var(--sp-neutral-30); padding: 0 4px; margin-top: -8px; }
-
-  /* ── CHECKLIST ── */
-  .checklist { margin: 12px 0 20px; }
-  .check-group { margin-bottom: 16px; }
-  .check-group-title {
-    font-size: 12px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .06em; color: var(--sp-blue-dark);
-    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-  }
-  .check-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 6px 0; font-size: 13px; color: var(--sp-neutral-80);
-    border-bottom: 1px solid var(--sp-neutral-20);
-  }
-  .check-item:last-child { border-bottom: none; }
-  .check-box {
-    width: 16px; height: 16px; border: 2px solid var(--sp-neutral-30);
-    border-radius: 3px; flex-shrink: 0; margin-top: 1px;
-  }
-
-  /* ── CALLOUT ── */
   .callout {
     background: var(--sp-blue-light); border: 1px solid #c7e0f4;
     border-radius: 2px; padding: 14px 18px; margin: 12px 0;
     font-size: 13px; color: var(--sp-blue-dark);
   }
-  .callout.warn { background: #fff4ce; border-color: #f0d080; color: #7a5000; }
-  .callout.danger { background: #fde7e9; border-color: #f5b5bb; color: #8e0c0c; }
-  .callout.success { background: #dff6dd; border-color: #9ed89a; color: #1a5c1a; }
 
-  /* ── TWO COL ── */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
-  .mini-card {
+  .flow-steps { display: flex; flex-direction: column; gap: 0; margin: 16px 0 20px; }
+  .flow-step { display: flex; align-items: flex-start; gap: 16px; padding: 14px 0; }
+  .flow-step:not(:last-child) { border-bottom: 1px dashed var(--sp-neutral-30); }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sp-blue); color: white;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 2px; }
+  .step-desc  { font-size: 12px; color: var(--sp-neutral-60); }
+
+  .glossary-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
     background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
-    border-radius: 2px; padding: 16px;
+    border-radius: 2px; overflow: hidden;
   }
-  .mini-card h5 {
-    font-size: 12px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .05em; color: var(--sp-blue-dark); margin-bottom: 10px;
-  }
+  .glossary-table thead tr { background: var(--sp-blue); color: white; }
+  .glossary-table th { padding: 10px 16px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+  .glossary-table td { padding: 10px 16px; border-bottom: 1px solid var(--sp-neutral-20); vertical-align: top; }
+  .glossary-table tr:last-child td { border-bottom: none; }
+  .glossary-table tr:nth-child(even) { background: var(--sp-neutral-10); }
+  .glossary-table tr:hover { background: var(--sp-blue-light); }
+  .glossary-term { font-weight: 700; color: var(--sp-blue-dark); white-space: nowrap; }
 
   .sp-link { color: var(--sp-blue); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; transition: border-color .15s; }
   .sp-link:hover { border-bottom-color: var(--sp-blue); }
@@ -272,7 +215,8 @@
     position: fixed; bottom: 24px; right: 24px;
     width: 40px; height: 40px; border-radius: 50%;
     background: var(--sp-blue); color: white; border: none;
-    font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    font-size: 18px; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
     display: none; align-items: center; justify-content: center; z-index: 900;
   }
   #scrollTop:hover { background: var(--sp-blue-dark); }
@@ -284,598 +228,440 @@
     .content-area { padding: 20px; }
     .page-hero { padding: 24px 20px; }
     .property-row { grid-template-columns: 1fr; }
-    .two-col { grid-template-columns: 1fr; }
-    .status-flow { gap: 4px; }
   }
 </style>
 </head>
 <body>
+<style>
+  .sme-topbar {
+    background: #1a1a2e; height: 44px; display: flex; align-items: center;
+    padding: 0 24px; gap: 8px; position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,.35); font-family: "Segoe UI", sans-serif;
+  }
+  .sme-topbar-logo {
+    font-size: 13px; font-weight: 700; color: #fff; letter-spacing: .04em;
+    white-space: nowrap; display: flex; align-items: center; gap: 8px; text-decoration: none;
+  }
+  .sme-topbar-logo .logo-badge {
+    background: #0078d4; color: white; font-size: 10px; font-weight: 800;
+    padding: 2px 7px; border-radius: 10px; letter-spacing: .06em;
+  }
+  .sme-topbar-divider { width: 1px; height: 20px; background: rgba(255,255,255,.15); margin: 0 8px; flex-shrink: 0; }
+  .sme-topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; overflow-x: auto; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link {
+    color: rgba(255,255,255,.7); font-size: 12px; font-weight: 500; text-decoration: none;
+    padding: 5px 12px; border-radius: 4px; white-space: nowrap;
+    transition: background .15s, color .15s; display: flex; align-items: center; gap: 6px;
+  }
+  .sme-nav-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .sme-nav-link.active { background: #0078d4; color: #fff; font-weight: 600; }
+  .left-nav { top: 44px !important; height: calc(100vh - 44px) !important; }
+</style>
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span> Regras e Fluxos
+  </a>
+  <div class="sme-topbar-divider"></div>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link active">📋 Manual do Desenvolvedor</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link">☁️ Treinamento Azure DevOps</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link">🚀 Fluxo de Publicação</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link">👥 Papéis e Responsabilidades</a>
+  </nav>
+</header>
 
 <div class="page-wrapper">
 
   <!-- SIDEBAR -->
   <nav class="left-nav">
     <span class="left-nav-label">Nesta Página</span>
-    <a href="#definicao"    class="left-nav-item active">📋 Definição e Boas Práticas</a>
-    <a href="#etapas"       class="left-nav-item">🔄 Etapas no Fluxo</a>
-    <a href="#status-pbi"   class="left-nav-item">📊 Status da História (PBI)</a>
-    <span class="left-nav-label">Histórias</span>
-    <a href="#titulos-tags" class="left-nav-item">🏷️ Títulos e Tags</a>
-    <a href="#historia-criterios" class="left-nav-item">📝 História e Critérios</a>
-    <a href="#design"       class="left-nav-item">🎨 Requisitos de Design</a>
-    <a href="#cenarios"     class="left-nav-item">🧪 Cenários e Evidências</a>
-    <a href="#entrega"      class="left-nav-item">📦 Entrega das Histórias</a>
-    <a href="#quebra"       class="left-nav-item">✂️ Quebra de Histórias</a>
-    <a href="#uxui"         class="left-nav-item">🖌️ Ajustes UX/UI</a>
-    <a href="#transbordo"   class="left-nav-item">↔️ Transbordo</a>
-    <span class="left-nav-label">Tarefas</span>
-    <a href="#tasks"        class="left-nav-item">⚙️ Preenchimento de Tasks</a>
-    <a href="#fechamento"   class="left-nav-item">✅ Fechamento e Review</a>
-    <span class="left-nav-label">Outros</span>
-    <a href="#bugsprint"    class="left-nav-item">🐛 BugSprint</a>
-    <a href="#discussion"   class="left-nav-item">💬 Fluxo Discussion</a>
-    <a href="#checklist"    class="left-nav-item">☑️ Checklist Dev</a>
-    <a href="#cotic"        class="left-nav-item">🏛️ Fiscalização COTIC</a>
+    <a href="#resumo"       class="left-nav-item active">📌 Resumo</a>
+    <a href="#governanca"   class="left-nav-item">🏛️ Governança</a>
+    <a href="#principios"   class="left-nav-item">⚙️ Princípios</a>
+    <a href="#modelos"      class="left-nav-item">🏗️ Modelos Arquiteturais</a>
+    <a href="#microservicos" class="left-nav-item">🔀 Microserviços</a>
+    <a href="#sistemas"     class="left-nav-item">💻 Sistemas Estratégicos</a>
+    <a href="#integracoes"  class="left-nav-item">🔗 Integrações</a>
+    <a href="#api"          class="left-nav-item">📄 API-First</a>
+    <a href="#tecnologias"  class="left-nav-item">🛠️ Tecnologias</a>
+    <a href="#qualidade"    class="left-nav-item">✅ Qualidade</a>
+    <a href="#documentacao" class="left-nav-item">📐 Documentação C4</a>
+    <a href="#branching"    class="left-nav-item">🌿 Branching</a>
+    <a href="#seguranca"    class="left-nav-item">🔒 Segurança</a>
+    <a href="#evolucao"     class="left-nav-item">📈 Evolução</a>
+    <a href="#conformidade" class="left-nav-item">⚖️ Conformidade</a>
+    <a href="#fluxo"        class="left-nav-item">🔄 Fluxo de Entrega</a>
+    <a href="#glossario"    class="left-nav-item">📖 Glossário</a>
   </nav>
 
-  <!-- MAIN -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <main class="main-content">
 
     <!-- HERO -->
     <div class="page-hero">
-      <div class="hero-eyebrow">Treinamento · Azure DevOps · SME – Spassu</div>
-      <div class="hero-title"><strong>Fluxo de Registro de Atividades</strong><br>Azure DevOps</div>
-      <div class="hero-badge"><span class="dot"></span> Guia Oficial de Boas Práticas</div>
+      <div class="hero-eyebrow">Norma Técnica Institucional</div>
+      <div class="hero-title"><strong>Norma Técnica de Engenharia</strong><br>de Software e Arquitetura de Sistemas</div>
+      <div class="hero-badge"><span class="dot"></span> Versão 1.0.0 · Documento Institucional Obrigatório</div>
       <div class="hero-meta">
-        <span>👤 Equipe Spassu</span>
-        <span>🏛️ COTIC</span>
-        <span>📌 Uso obrigatório por todos os times</span>
+        <span>📅 Publicado: 2025</span>
+        <span>👤 Arquitetura &amp; COTIC</span>
+        <span>🔒 Cumprimento Obrigatório</span>
       </div>
     </div>
 
     <div class="content-area">
 
-      <!-- DEFINIÇÃO -->
-      <div class="sp-section" id="definicao">
-        <h2 class="section-heading"><span class="sec-num">📋</span> Definição e Boas Práticas</h2>
-        <p class="sp-text">Este material tem o intuito de estabelecer um fluxo padronizado para o registro e acompanhamento das atividades no Azure DevOps, garantindo <strong>transparência</strong>, <strong>rastreabilidade do progresso</strong>, <strong>visibilidade das entregas</strong> e <strong>gestão do trabalho</strong> realizado pela equipe Spassu.</p>
+      <div class="alert alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-body">
+          <strong>Documento Normativo Obrigatório</strong>
+          Após aprovação institucional, o cumprimento desta norma é obrigatório para todos os times de desenvolvimento. Não conformidade pode bloquear deploys e exigir refatoração formal.
+        </div>
+      </div>
 
-        <div class="two-col">
-          <div class="mini-card">
-            <h5>📌 Guia de Boas Práticas</h5>
-            <ul class="sp-list">
-              <li>Registre suas horas dentro do mesmo dia de execução</li>
-              <li>Evite descrições genéricas como "ajustes" ou "testes gerais"</li>
-              <li>Utilize tags do sistema, área ou segmento da atuação para facilitar filtros e relatórios</li>
-              <li>Mantenha comunicação contínua com o PO, Design de Serviços e o Scrum Master</li>
-            </ul>
-          </div>
-          <div class="mini-card">
-            <h5>✅ Benefícios</h5>
-            <ul class="sp-list">
-              <li>Visão consolidada do andamento e evolução do projeto</li>
-              <li>Facilidade na medição de produtividade e indicadores ágeis</li>
-              <li>Base sólida para reports e auditorias contratuais</li>
-            </ul>
-          </div>
+      <!-- 1. Resumo -->
+      <div class="sp-section" id="resumo">
+        <h2 class="section-heading"><span class="sec-num">📌</span> Resumo Executivo</h2>
+        <p class="sp-text">Esta norma define como os sistemas da instituição devem ser construídos, integrados e evoluídos. É um instrumento de organização institucional — não imposição tecnológica, não proibição de inovação, não burocracia sem propósito.</p>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">🎯</div><div class="card-title">Padronizar Desenvolvimento</div><div class="card-desc">Processos e práticas uniformes em todos os times</div></div>
+          <div class="sp-card"><div class="card-icon">🔐</div><div class="card-title">Garantir Segurança</div><div class="card-desc">Critérios mínimos de segurança da informação</div></div>
+          <div class="sp-card"><div class="card-icon">🔗</div><div class="card-title">Preservar Integrações</div><div class="card-desc">Compatibilidade com sistemas existentes</div></div>
+          <div class="sp-card"><div class="card-icon">📈</div><div class="card-title">Evolução Controlada</div><div class="card-desc">Modernização planejada e incremental</div></div>
+          <div class="sp-card"><div class="card-icon">🏛️</div><div class="card-title">Governança Técnica</div><div class="card-desc">Quem decide e como as decisões são tomadas</div></div>
+          <div class="sp-card"><div class="card-icon">📄</div><div class="card-title">Contratos de API</div><div class="card-desc">Como sistemas devem se comunicar formalmente</div></div>
         </div>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- ETAPAS NO FLUXO -->
-      <div class="sp-section" id="etapas">
-        <h2 class="section-heading"><span class="sec-num">🔄</span> Etapas no Fluxo</h2>
-
-        <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px,1fr))">
-          <div class="sp-card">
-            <div class="card-icon">✍️</div>
-            <div class="card-title">Escrita e Backlog</div>
-            <div class="card-desc">PO/DS escreve histórias no backlog. PO revisa as histórias com o DS.</div>
-          </div>
-          <div class="sp-card">
-            <div class="card-icon">📐</div>
-            <div class="card-title">Refinamento e Estimativas</div>
-            <div class="card-desc">DS apresenta histórias revisadas ao time e estima horas para desenvolvimento.</div>
-          </div>
-          <div class="sp-card">
-            <div class="card-icon">📅</div>
-            <div class="card-title">Planning</div>
-            <div class="card-desc">Apresentação ao PO das histórias que couberam no ciclo e tempo estimado.</div>
-          </div>
-          <div class="sp-card">
-            <div class="card-icon">💻</div>
-            <div class="card-title">Desenvolvimento e Testes</div>
-            <div class="card-desc">Time inicia o desenvolvimento. Intercorrências comunicadas na Discussion ao PO, DS, SM.</div>
-          </div>
-          <div class="sp-card">
-            <div class="card-icon">🎯</div>
-            <div class="card-title">Review</div>
-            <div class="card-desc">Time apresenta ao PO todo o desenvolvimento da sprint em homologação.</div>
-          </div>
-          <div class="sp-card">
-            <div class="card-icon">🏛️</div>
-            <div class="card-title">Fiscalização</div>
-            <div class="card-desc">COTIC fiscaliza para validar questões técnicas e conferir evidências geradas.</div>
-          </div>
-        </div>
-
-        <h3 class="subsection-heading">Status esperado por etapa</h3>
+      <!-- 2. Governança -->
+      <div class="sp-section" id="governanca">
+        <h2 class="section-heading"><span class="sec-num">2</span> Estrutura de Governança</h2>
         <div class="property-bag">
-          <div class="property-row"><div class="property-key">Escrita e Backlog</div><div class="property-val">Histórias = <span class="tag">New</span></div></div>
-          <div class="property-row"><div class="property-key">Refinamento</div><div class="property-val">Histórias = <span class="tag orange">Revisadas</span> · Tarefas criadas = <span class="tag">Horas estimadas</span></div></div>
-          <div class="property-row"><div class="property-key">Desenvolvimento</div><div class="property-val">História em <span class="tag">Active</span> · Tarefas <span class="tag">In Progress</span></div></div>
-          <div class="property-row"><div class="property-key">Testes</div><div class="property-val">História em <span class="tag purple">Testing</span></div></div>
-          <div class="property-row"><div class="property-key">Pós-testes (QA ok)</div><div class="property-val">História em <span class="tag" style="background:#e0f6fb;color:#0099bc">Resolved</span> · Tarefas em <span class="tag green">Done</span></div></div>
-          <div class="property-row"><div class="property-key">Review (PO aprova)</div><div class="property-val">História em <span class="tag green">Done</span></div></div>
+          <div class="property-row"><div class="property-key">🏗️ Arquitetura</div><div class="property-val">Estrutura padrões técnicos · Define modelo arquitetural · Produz documentação C4 · Propõe ADRs · Atualiza documentação em cada alteração relevante · Função evangelizadora técnica</div></div>
+          <div class="property-row"><div class="property-key">🏛️ COTIC</div><div class="property-val">Consolida e prioriza demandas · Valida padrões · Endossa decisões técnicas · Garante aderência institucional <span class="tag">Instância de Validação</span></div></div>
+          <div class="property-row"><div class="property-key">🏢 Coordenadorias</div><div class="property-val">Definem regras de negócio · Validam funcionalidades · Aprovam semântica de contratos <span class="tag orange">Clientes de Arquitetura</span></div></div>
+          <div class="property-row"><div class="property-key">👨‍💻 Dev / Liderança</div><div class="property-val">Implementam conforme a norma · Co-constroem contratos · Garantem aderência técnica · Participam de revisões e refinamentos</div></div>
         </div>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- STATUS PBI -->
-      <div class="sp-section" id="status-pbi">
-        <h2 class="section-heading"><span class="sec-num">📊</span> Fluxo de Movimentação de História (PBI)</h2>
-
-        <div class="status-flow">
-          <div class="status-node new"><span class="s-icon">🆕</span>New</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node review"><span class="s-icon">👁️</span>Revisada</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node approved"><span class="s-icon">✅</span>Approved</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node active"><span class="s-icon">⚡</span>Active</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node testing"><span class="s-icon">🧪</span>Testing</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node resolved"><span class="s-icon">🔵</span>Resolved</div>
-          <div class="flow-arrow">›</div>
-          <div class="status-node done"><span class="s-icon">🏁</span>Done</div>
-        </div>
-
-        <div class="property-bag" style="margin-top:16px">
-          <div class="property-row"><div class="property-key">🆕 New</div><div class="property-val">Toda história criada inicia com esse status. Pode ser criada pelo PO/DS.</div></div>
-          <div class="property-row"><div class="property-key">👁️ Revisada</div><div class="property-val">Deve passar para Revisada após análise do DS e PO. (Com exceção de DevOps, por já possuir estrutura técnica.)</div></div>
-          <div class="property-row"><div class="property-key">✅ Approved</div><div class="property-val">Obrigatoriamente precisa ser aprovada pelo PO antes de iniciar.</div></div>
-          <div class="property-row"><div class="property-key">⚡ Active</div><div class="property-val">Ao iniciar o trabalho, apenas o responsável pela atividade deve colocar em Active.</div></div>
-          <div class="property-row"><div class="property-key">🧪 Testing</div><div class="property-val">Ao finalizar o desenvolvimento deve ser feito repasse para o QA e colocada em Testing.</div></div>
-          <div class="property-row"><div class="property-key">🔵 Resolved</div><div class="property-val">Ao terminar os testes, o QA pode colocar em Resolved se o fluxo estiver de acordo.</div></div>
-          <div class="property-row"><div class="property-key">🏁 Done</div><div class="property-val">Na review, o PO coloca a história em Done e finaliza o fluxo.</div></div>
-        </div>
-
-        <div class="callout warn">
-          ⚠️ <strong>Lembrando!</strong> Uma história só deve ser iniciada após a aprovação do PO. Não deve ser alterado o status antes da aprovação. Toda história deve estar como <strong>Resolved</strong> ao final da sprint para que o PO dê o aceite (Done) na Review, com todas as tarefas vinculadas finalizadas (Done) e horas lançadas.
+      <!-- 3. Princípios -->
+      <div class="sp-section" id="principios">
+        <h2 class="section-heading"><span class="sec-num">3</span> Princípios Arquiteturais Oficiais</h2>
+        <div class="callout"><strong>Arquitetura é decisão técnica baseada em contexto, não tendência de mercado.</strong></div>
+        <div class="cards-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:16px">
+          <div class="sp-card"><div class="card-icon">🥇</div><div class="card-title">API-First</div></div>
+          <div class="sp-card"><div class="card-icon">📃</div><div class="card-title">Contract-First</div></div>
+          <div class="sp-card"><div class="card-icon">🏛️</div><div class="card-title">Governança Centralizada</div></div>
+          <div class="sp-card"><div class="card-icon">📈</div><div class="card-title">Evolução Controlada</div></div>
+          <div class="sp-card"><div class="card-icon">🧩</div><div class="card-title">Modularidade</div></div>
+          <div class="sp-card"><div class="card-icon">🔐</div><div class="card-title">Segurança por Padrão</div></div>
+          <div class="sp-card"><div class="card-icon">🔌</div><div class="card-title">Baixo Acoplamento</div></div>
+          <div class="sp-card"><div class="card-icon">🎯</div><div class="card-title">Alta Coesão</div></div>
+          <div class="sp-card"><div class="card-icon">👁️</div><div class="card-title">Observabilidade</div></div>
         </div>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- TÍTULOS E TAGS -->
-      <div class="sp-section" id="titulos-tags">
-        <h2 class="section-heading"><span class="sec-num">🏷️</span> Criação e Validação de Histórias — Títulos e Tags</h2>
-        <p class="sp-text">As histórias devem sempre ser criadas pelos POs ou Design de Serviços dos projetos e devem conter:</p>
-
-        <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">Título</div>
-            <div class="property-val">Com o módulo/projeto/épico descrito nos colchetes e o que a história trata no restante do título.<br><span style="font-style:italic;color:var(--sp-neutral-60)">[NovoSGP] Implementar filtro de relatório por período</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Tag do Projeto</div>
-            <div class="property-val">
-              <span class="tag">Alimentação</span>&nbsp;
-              <span class="tag">Logística</span>&nbsp;
-              <span class="tag">Intranet</span>&nbsp;
-              <span class="tag">NovoSGP</span>&nbsp;
-              <span class="tag">Portal SME</span>&nbsp;
-              <span class="tag">SERAP</span>&nbsp;
-              <span class="tag">CDEP</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout warn">⚠️ O PO sempre deve dar <strong>Approved</strong> nas histórias na planning, <strong>antes de iniciar o desenvolvimento</strong>. Não deve ser iniciada/alterada para Active uma história antes da aprovação do PO.</div>
-        <p class="sp-text" style="margin-top:8px">* Histórias que não são criadas pelos POs, em casos específicos, são criadas pelos DSs e devem passar por aprovação do PO do produto ou de COTIC.</p>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- HISTÓRIA E CRITÉRIOS -->
-      <div class="sp-section" id="historia-criterios">
-        <h2 class="section-heading"><span class="sec-num">📝</span> Criação e Validação de Histórias — História e Critérios de Aceite</h2>
-
-        <div class="two-col">
-          <div class="mini-card">
-            <h5>📖 História de Usuário (PO)</h5>
-            <p style="font-size:13px;color:var(--sp-neutral-80);margin-bottom:8px">Na descrição deve estar claro o valor e o resultado que a história visa entregar para o sistema e para os usuários.</p>
-            <div class="callout" style="font-size:12px">
-              <strong>Formato:</strong><br>
-              <em>Como</em> (usuário, PO...),<br>
-              <em>Preciso</em> (criar um relatório...),<br>
-              <em>Para que</em> (melhorar a visibilidade...)
-            </div>
-          </div>
-          <div class="mini-card">
-            <h5>✅ Critérios de Aceite (PO)</h5>
-            <ul class="sp-list">
-              <li>Descrição de tudo que precisa ser atendido para que o PO e a COTIC consigam avaliar e comprovar a entrega</li>
-              <li>Os critérios devem ser listados e enumerados, contendo a ordem do que deve ser atendido no desenvolvimento</li>
-              <li>Os critérios devem ser possíveis de testar, validar e comprovar que o produto funciona como esperado</li>
-              <li>Tudo que for descrito deve ser previsto, atendido no desenvolvimento e comprovado no teste</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- DESIGN -->
-      <div class="sp-section" id="design">
-        <h2 class="section-heading"><span class="sec-num">🎨</span> Criação e Validação de Histórias — Requisitos de Design</h2>
-        <p class="sp-text">Os Designers de Serviços ao realizarem os refinamentos das histórias com os POs devem:</p>
+      <!-- 4. Modelos -->
+      <div class="sp-section" id="modelos">
+        <h2 class="section-heading"><span class="sec-num">4</span> Modelos Arquiteturais Permitidos</h2>
+        <h3 class="subsection-heading">4.1 Monólito Modular</h3>
+        <p class="sp-text"><span class="tag green">✅ Permitido e Recomendado</span> quando definido pela Arquitetura.</p>
         <ul class="sp-list">
-          <li>Contribuir para maior clareza e entendimento dos itens: <strong>História de Usuário</strong> e <strong>Critérios de Aceite</strong>, ajustando o texto para possibilitar melhor compreensão do time e da fiscalização da COTIC</li>
-          <li>Nos <strong>Requisitos de Desenvolvimento (Design)</strong>, podem incluir complementos técnicos das histórias escritas pelos POs que ajudam o time a compreender o que deve ser feito</li>
-          <li>Podem descrever cenários e casos de uso, de forma opcional e complementar nas histórias</li>
+          <li>Separação clara por domínio</li>
+          <li>Services layer obrigatória</li>
+          <li>Proibição de dependência cruzada informal</li>
+          <li>Preparação para futura extração</li>
+        </ul>
+        <h3 class="subsection-heading">4.2 Microserviços Orientados a Domínio</h3>
+        <p class="sp-text"><span class="tag orange">⚠️ Permitido com Justificativa Formal</span></p>
+        <ul class="sp-list">
+          <li>Banco de dados isolado por serviço</li>
+          <li>Contrato versionado</li>
+          <li>Testes de contrato obrigatórios</li>
+          <li>Observabilidade implementada</li>
+          <li>Documentação C4 com boundary explícito</li>
         </ul>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- CENÁRIOS E EVIDÊNCIAS -->
-      <div class="sp-section" id="cenarios">
-        <h2 class="section-heading"><span class="sec-num">🧪</span> Criação e Validação de Histórias — Cenários e Evidências de Testes</h2>
-        <p class="sp-text">Os Analistas de Qualidade ao avaliarem os critérios e as histórias de usuários devem:</p>
-        <ul class="sp-list">
-          <li>Criar cenários de testes que atendam todos os critérios descritos nas histórias, evidenciados no campo <strong>Cenários e Código de Teste (QA)</strong></li>
-          <li>No campo <strong>Evidências de entrega da História (QA)</strong>: inserir todos os arquivos de testes de acordo com os cenários e o código de teste criado</li>
-        </ul>
-
-        <h3 class="subsection-heading">Formatos de arquivo aceitos</h3>
-        <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px,1fr))">
-          <div class="sp-card"><div class="card-icon">🗜️</div><div class="card-title">Compactados</div><div class="card-desc">ZIP</div></div>
-          <div class="sp-card"><div class="card-icon">🖼️</div><div class="card-title">Imagem</div><div class="card-desc">SVG, JPG e PNG</div></div>
-          <div class="sp-card"><div class="card-icon">📄</div><div class="card-title">Documentos</div><div class="card-desc">PDF (não editável)</div></div>
-          <div class="sp-card"><div class="card-icon">📧</div><div class="card-title">E-mail</div><div class="card-desc">PDF</div></div>
-          <div class="sp-card"><div class="card-icon">🎬</div><div class="card-title">Vídeo</div><div class="card-desc">MP4</div></div>
+      <!-- 5. Microserviços -->
+      <div class="sp-section" id="microservicos">
+        <h2 class="section-heading"><span class="sec-num">5</span> Diretriz para Adoção de Microserviços</h2>
+        <div class="alert alert-info">
+          <div class="alert-icon">ℹ️</div>
+          <div class="alert-body"><strong>Arquitetura distribuída não é objetivo em si</strong>A adoção de microserviços deve decorrer de necessidade estrutural comprovada — necessária em grandes sistemas e processamentos, visando escalabilidade horizontal e computação distribuída.</div>
         </div>
-        <div class="callout danger">🚫 <strong>Lembrete:</strong> Utilizar apenas documento <strong>não editável</strong>.</div>
-
-        <h3 class="subsection-heading">Evidências no SharePoint SME</h3>
         <ul class="sp-list">
-          <li><strong>Mês corrente:</strong> inserir na pasta do mês corrente seguindo a ordem de Sprint do mês</li>
-          <li><strong>Título da evidência:</strong> com o número da história, módulo/projeto/épico descrito nos colchetes e o que a história trata no restante do título</li>
+          <li>Coerência com o ecossistema existente</li>
+          <li>Capacidade operacional do time</li>
+          <li>Compatibilidade com legados</li>
+          <li>Sustentabilidade de longo prazo</li>
         </ul>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- ENTREGA DAS HISTÓRIAS -->
-      <div class="sp-section" id="entrega">
-        <h2 class="section-heading"><span class="sec-num">📦</span> Criação e Validação de Histórias — Entrega das Histórias</h2>
-        <p class="sp-text">Ao finalizar o desenvolvimento e atendendo todos os critérios de aceite, os seguintes itens precisam ser conferidos:</p>
-
-        <div class="property-bag">
-          <div class="property-row"><div class="property-key">Status da História</div><div class="property-val">Deve estar com status <span class="tag" style="background:#e0f6fb;color:#0099bc">Resolved</span> para a apresentação na Review</div></div>
-          <div class="property-row"><div class="property-key">Estimativa de Esforço</div><div class="property-val">Deve estar preenchida com a soma de esforço e todas as tasks concluídas</div></div>
-          <div class="property-row"><div class="property-key">Evidências</div><div class="property-val">Devem estar inseridas na história — links e documentos que comprovem a entrega, acessíveis</div></div>
-          <div class="property-row"><div class="property-key">Pull Requests</div><div class="property-val">Links dos PRs do GitHub adicionados nos campos destinados aos Pull Requests da história</div></div>
-        </div>
-
-        <div class="callout warn">⚠️ Para projetos que utilizam <strong>WordPress</strong> ou <strong>GitLab</strong>, os PRs não podem ser adicionados diretamente — consulte o campo específico destinado a esses casos.</div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- QUEBRA DE HISTÓRIAS -->
-      <div class="sp-section" id="quebra">
-        <h2 class="section-heading"><span class="sec-num">✂️</span> Quebra de Histórias</h2>
-        <p class="sp-text">A quebra de histórias deve acontecer quando a complexidade é grande demais para ser concluída dentro de uma única Sprint ou possa haver dificuldade de entendimento para o planejamento ou testes. O objetivo é dividir uma história em partes menores, mantendo valor do negócio em cada entrega.</p>
-
-        <div class="two-col">
-          <div class="mini-card">
-            <h5>✅ Por que quebrar?</h5>
-            <ul class="sp-list">
-              <li>Para evitar transbordo</li>
-              <li>Melhor previsibilidade</li>
-              <li>Histórias menores são mais fáceis de estimar, desenvolver e concluir</li>
-              <li>Reduz risco de retrabalho e antecipa o feedback</li>
-              <li>Melhora o foco e a comunicação do time</li>
-            </ul>
-          </div>
-          <div class="mini-card">
-            <h5>📐 Critérios para quebrar</h5>
-            <ul class="sp-list">
-              <li><strong>Fluxo de valor:</strong> separar por partes do processo</li>
-              <li><strong>Papel por usuário:</strong> quebrar por persona (atentar para o valor negocial)</li>
-              <li><strong>Regras de negócio:</strong> dividir conforme variação/exceção</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- UX/UI -->
-      <div class="sp-section" id="uxui">
-        <h2 class="section-heading"><span class="sec-num">🖌️</span> Ajustes de Protótipos e Histórias de UX/UI</h2>
-
-        <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">Ajuste ≤ 8h</div>
-            <div class="property-val">A tarefa deve ser criada na história de <strong>Apoio</strong> ou <strong>Apoio ao PO</strong>.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Ajuste &gt; 1 dia</div>
-            <div class="property-val">Deve ser criada uma história de protótipo específica para atuação e negociado o melhor momento: durante a sprint atual (despriorizando outra história) ou na sprint seguinte.</div>
-          </div>
-        </div>
-        <div class="callout">💡 Os links e evidências devem ser adicionadas nas tarefas e histórias conforme o fluxo apresentado e validado com o PO. Essa prática garante rastreabilidade, organização e visibilidade no ciclo de entregas.</div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- TRANSBORDO -->
-      <div class="sp-section" id="transbordo">
-        <h2 class="section-heading"><span class="sec-num">↔️</span> Transbordo de Histórias</h2>
-        <p class="sp-text">Caso seja necessário transbordar uma história de uma sprint para outra, existem duas situações:</p>
-
-        <div class="two-col">
-          <div class="mini-card">
-            <h5>📌 Não concluída durante a sprint</h5>
-            <ul class="sp-list">
-              <li>Todas as tarefas nas quais houve trabalho precisam ser encerradas (<span class="tag green">Done</span>) com horas registradas</li>
-              <li>A história permanece no status <span class="tag">Active</span> na sprint atual, mas deve ser migrada imediatamente para a nova sprint</li>
-              <li>Uma nova tarefa deve ser criada na nova sprint com apenas a estimativa de horas remanescentes</li>
-            </ul>
-          </div>
-          <div class="mini-card">
-            <h5>📌 Não iniciada conforme planejamento</h5>
-            <ul class="sp-list">
-              <li>Se as tarefas não foram movimentadas e nenhuma hora foi registrada durante a sprint</li>
-              <li>É possível realizar o transbordo para a próxima sprint da história completa, junto com todas as suas tarefas e estimativas originais</li>
-            </ul>
-          </div>
-        </div>
-        <div class="callout warn">⚠️ Em ambos os casos deve ser inserido um comentário no campo <strong>Discussion</strong> sobre o adiamento da história para sprint posterior.</div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- TASKS -->
-      <div class="sp-section" id="tasks">
-        <h2 class="section-heading"><span class="sec-num">⚙️</span> Criação e Validação de Tarefas — Preenchimento das Tasks</h2>
-        <p class="sp-text">No refinamento técnico, o responsável por cada tarefa (Task) criada deve preencher os itens abaixo:</p>
-
-        <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">Título</div>
-            <div class="property-val">Adicionar sempre entre colchetes se é desenvolvimento <strong>backend</strong>, <strong>frontend</strong>, <strong>teste</strong> etc e sua devida descrição.<br><span style="font-style:italic;color:var(--sp-neutral-60)">[Backend] Criar endpoint de relatório por período</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Atribuição</div>
-            <div class="property-val">A quem a tarefa está atribuída — quem realizará o trabalho previsto. Ajuda a estimar a capacidade do time para a entrega.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Tag do Projeto</div>
-            <div class="property-val"><span class="tag">Alimentação</span>&nbsp;<span class="tag">Logística</span>&nbsp;<span class="tag">Intranet</span>&nbsp;<span class="tag">Portal SME</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Descrição</div>
-            <div class="property-val">Objetivo da tarefa, escopo (o que precisa ser feito), requisitos técnicos e funcionais, duração estimada × tempo gasto.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Activity</div>
-            <div class="property-val">Selecionar se a tarefa é <span class="tag">Development</span>&nbsp;<span class="tag">Design</span>&nbsp;<span class="tag">Cerimônias</span>&nbsp;<span class="tag">Testing</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Estimativa Inicial</div>
-            <div class="property-val">Quantidade de horas estimadas para realização da atividade (obrigatório antes da planning)</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Quanto falta para finalizar</div>
-            <div class="property-val">Antes de iniciar = horas estimadas. Após início, deve ser atualizado com a estimativa de horas pendentes.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Horas trabalhadas</div>
-            <div class="property-val">Quanto tempo de trabalho efetivo foi realizado — preencher ao concluir a tarefa.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Data inicial / final</div>
-            <div class="property-val">Registradas automaticamente ao mover para <span class="tag">In Progress</span> e <span class="tag green">Done</span>. Caso não seja automático, inserir manualmente.</div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="sp-divider">
-
-      <!-- FECHAMENTO E REVIEW -->
-      <div class="sp-section" id="fechamento">
-        <h2 class="section-heading"><span class="sec-num">✅</span> Fechamento de Tarefas e Preparação para Review</h2>
-        <p class="sp-text">A Review é um dos ritos mais importantes para a entrega final. É imprescindível que:</p>
+      <!-- 6. Sistemas Estratégicos -->
+      <div class="sp-section" id="sistemas">
+        <h2 class="section-heading"><span class="sec-num">6</span> Sistemas Estratégicos</h2>
+        <p class="sp-text">Aplica-se a: <span class="tag">NovoSGP</span> <span class="tag">Novo Pedagógico</span> <span class="tag">SME Identity</span></p>
+        <h3 class="subsection-heading">6.1 Fatiamento por Domínio</h3>
         <ul class="sp-list">
-          <li>A apresentação deve ser efetivamente realizada em <strong>ambiente de homologação da SME</strong></li>
-          <li>Antes da review, todas as tarefas (Tasks) precisam estar revisadas, com evidências e links inseridos nas histórias, horas lançadas e status <span class="tag green">Done</span></li>
-          <li>Todas as histórias desenvolvidas e testadas estejam no status <span class="tag" style="background:#e0f6fb;color:#0099bc">Resolved</span> para que o Done seja aplicado pelo PO após a apresentação</li>
-          <li>Preparar massas de dados, cadastros e tudo necessário para demonstrar os critérios atendidos da história</li>
+          <li>Corte orientado a domínio funcional</li>
+          <li>Boundary explícito obrigatório</li>
+          <li><strong>Proibido</strong> fracionamento técnico artificial</li>
+        </ul>
+        <h3 class="subsection-heading">6.2 Compatibilidade com Legados</h3>
+        <ul class="sp-list">
+          <li>Manutenção de contratos compatíveis</li>
+          <li>Versionamento controlado</li>
+          <li>Não interrupção de integrações existentes</li>
+          <li>Evolução incremental</li>
+        </ul>
+        <h3 class="subsection-heading">6.3 Camada Anticorrupção</h3>
+        <p class="sp-text"><span class="tag red">⛔ Obrigatória</span> quando houver integração com modelo legado incompatível, exposição de ferramenta como endpoint, ETL, divergência semântica ou necessidade de isolamento.</p>
+        <div class="callout">A camada anticorrupção deve proteger o domínio interno e ser <strong>documentada no C4</strong>.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 7. Integrações -->
+      <div class="sp-section" id="integracoes">
+        <h2 class="section-heading"><span class="sec-num">7</span> Integrações</h2>
+        <h3 class="subsection-heading">7.1 Síncronas</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Protocolo</div><div class="property-val"><span class="tag">REST</span></div></div>
+          <div class="property-row"><div class="property-key">Especificação</div><div class="property-val"><span class="tag">OpenAPI 3.x</span></div></div>
+          <div class="property-row"><div class="property-key">Versionamento</div><div class="property-val"><span class="tag red">Obrigatório</span></div></div>
+        </div>
+        <h3 class="subsection-heading">7.2 Assíncronas</h3>
+        <p class="sp-text"><span class="tag orange">Permitidas</span> quando houver necessidade de desacoplamento, processamento não crítico em tempo real ou escalabilidade independente.</p>
+        <ul class="sp-list">
+          <li>Eventos versionados</li>
+          <li>Payload documentado</li>
+          <li>Idempotência garantida</li>
+          <li>Estratégia de retry definida</li>
+          <li>Rastreabilidade implementada</li>
         </ul>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- BUGSPRINT -->
-      <div class="sp-section" id="bugsprint">
-        <h2 class="section-heading"><span class="sec-num">🐛</span> Criação de BugSprint</h2>
-        <p class="sp-text"><strong>BugSprint</strong> é uma característica específica de correção em uma história em andamento na Sprint vigente. É ocasionado ao ser realizado testes pelo QA/Design de Serviços ao longo da Sprint.</p>
+      <!-- 8. API First -->
+      <div class="sp-section" id="api">
+        <h2 class="section-heading"><span class="sec-num">8</span> API-First e Contract-First</h2>
+        <div class="alert alert-success">
+          <div class="alert-icon">📄</div>
+          <div class="alert-body"><strong>Contrato é ativo institucional.</strong>APIs são definidas em conjunto com negócio, arquitetura e liderança técnica. Independente da modernização tecnológica, os contratos devem ser preservados.</div>
+        </div>
+        <ul class="sp-list">
+          <li>Contrato construído colaborativamente</li>
+          <li>Responsáveis registrados formalmente</li>
+          <li>Versionamento obrigatório</li>
+          <li>Validação formal antes de publicação</li>
+          <li><strong>Breaking change (major)</strong> exige nova versão obrigatoriamente</li>
+        </ul>
+      </div>
 
+      <hr class="sp-divider">
+
+      <!-- 9. Tecnologias -->
+      <div class="sp-section" id="tecnologias">
+        <h2 class="section-heading"><span class="sec-num">9</span> Versionamento Tecnológico</h2>
+        <h3 class="subsection-heading">9.1 .NET</h3>
+        <ul class="sp-list">
+          <li>Sistemas novos → versão LTS mais recente aprovada institucionalmente</li>
+          <li>Sistemas legados (v2, v5 ou anteriores) → plano de progressão obrigatório</li>
+          <li>Migração deve preservar contratos</li>
+          <li>Refatoração incremental obrigatória</li>
+          <li><span class="tag red">Proibido</span> reescrita integral sem justificativa formal</li>
+        </ul>
+        <h3 class="subsection-heading">9.2 Python</h3>
         <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">Título do BugSprint</div>
-            <div class="property-val">Adicionar sempre entre colchetes o termo <strong>[BUGSPRINT]</strong>, acrescido do número da história e o problema encontrado.<br><span style="font-style:italic;color:var(--sp-neutral-60)">[BUGSPRINT] #1234 - Filtro de data não retorna resultados corretos</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Relação</div>
-            <div class="property-val">É preciso relacionar o Bug à história original.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Descrição</div>
-            <div class="property-val">Descrever o comportamento ocasionado, mencionando o que era esperado, vinculando com o critério de aceite da história original que não foi atendido.</div>
-          </div>
+          <div class="property-row"><div class="property-key">Versão</div><div class="property-val">Estável oficialmente suportada (preferencialmente a mais recente aprovada)</div></div>
+          <div class="property-row"><div class="property-key">Frameworks</div><div class="property-val"><span class="tag">Django</span> monólitos e microserviços existentes &nbsp; <span class="tag green">FastAPI</span> preferencial para novos microserviços</div></div>
+          <div class="property-row"><div class="property-key">Django Admin</div><div class="property-val"><span class="tag red">⛔ Proibido em novos projetos</span></div></div>
+          <div class="property-row"><div class="property-key">Tipagem</div><div class="property-val"><span class="tag red">Obrigatória</span> — type hints (PEP 484)</div></div>
+          <div class="property-row"><div class="property-key">PEPs Obrigatórias</div><div class="property-val"><span class="tag">PEP 8</span> Estilo &nbsp; <span class="tag">PEP 257</span> Docstrings &nbsp; <span class="tag">PEP 484</span> Type Hints</div></div>
+          <div class="property-row"><div class="property-key">Boas Práticas</div><div class="property-val">SOLID · Clean Code · Design Patterns GOF · Camada de serviços explícita</div></div>
+        </div>
+        <h3 class="subsection-heading">9.3 Frontend — React + Next.js</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Componentes</div><div class="property-val">Functional components obrigatório</div></div>
+          <div class="property-row"><div class="property-key">Linguagem</div><div class="property-val"><span class="tag red">TypeScript Obrigatório</span></div></div>
+          <div class="property-row"><div class="property-key">Organização</div><div class="property-val">Por domínio · App Router moderno · Separação server/client</div></div>
+          <div class="property-row"><div class="property-key">Variáveis Sensíveis</div><div class="property-val"><span class="tag red">Nunca em repositório</span></div></div>
+          <div class="property-row"><div class="property-key">Arquivos .lock</div><div class="property-val"><span class="tag red">⛔ Proibido commitar</span></div></div>
         </div>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- DISCUSSION -->
-      <div class="sp-section" id="discussion">
-        <h2 class="section-heading"><span class="sec-num">💬</span> Fluxo de Notificação — Campo Discussion</h2>
-        <p class="sp-text">O campo Discussion do Azure DevOps é o <strong>principal canal de comunicação</strong> e registro de interações referentes a cada work item. Seu uso adequado garante rastreabilidade, transparência e colaboração.</p>
-
+      <!-- 10. Qualidade -->
+      <div class="sp-section" id="qualidade">
+        <h2 class="section-heading"><span class="sec-num">10</span> Qualidade de Código</h2>
+        <p class="sp-text">Qualidade medida via <strong>SonarQube</strong> integrado à esteira CI/CD (Jenkins). Quality Gate bloqueia o merge em caso de não conformidade.</p>
         <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">Registro de Interações</div>
-            <div class="property-val">Todas as comunicações relacionadas ao andamento da história ou tarefa devem ser realizadas através do campo Discussion. <span class="tag red">Evitar e-mail ou chat isolado</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Contextualização</div>
-            <div class="property-val">Sempre inicie o comentário com uma breve contextualização.<br><span style="font-style:italic;color:var(--sp-neutral-60)">"Durante o teste funcional da sprint 32…"</span></div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Marcação de Responsáveis</div>
-            <div class="property-val">Utilize <strong>@menção</strong> para notificar responsáveis ou interessados diretos — gera notificação no Azure e por e-mail.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Atualização de Status</div>
-            <div class="property-val">Antes de alterar o status de um item (ex: In Progress → Code Review), registre no Discussion um resumo do que foi concluído ou permanece pendente.</div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Tom e Clareza</div>
-            <div class="property-val">Manter a comunicação <strong>objetiva, técnica e profissional</strong>. Evitar termos ambíguos ou informais.</div>
-          </div>
+          <div class="property-row"><div class="property-key">Coverage</div><div class="property-val"><span class="tag green">≥ 80%</span></div></div>
+          <div class="property-row"><div class="property-key">Vulnerabilidades</div><div class="property-val"><span class="tag red">Zero críticas</span></div></div>
+          <div class="property-row"><div class="property-key">Complexidade</div><div class="property-val">Controlada</div></div>
+          <div class="property-row"><div class="property-key">Code Review</div><div class="property-val"><span class="tag red">Obrigatório</span></div></div>
+          <div class="property-row"><div class="property-key">Quality Gate</div><div class="property-val"><span class="tag orange">Bloqueia merge em não conformidade</span></div></div>
+        </div>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://spassuti.sharepoint.com/sites/DemandasDEVOPS/SitePages/Fluxo-de-Publica%C3%A7%C3%A3o-nos-Ambientes-SME.aspx" target="_blank">Fluxo de Publicação nos Ambientes SME</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 11. C4 -->
+      <div class="sp-section" id="documentacao">
+        <h2 class="section-heading"><span class="sec-num">11</span> Documentação Arquitetural (C4)</h2>
+        <p class="sp-text">Modelo oficial: <strong>C4</strong>. Microserviços devem explicitar boundaries.</p>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">🗺️</div><div class="card-title">Diagrama de Contexto</div><div class="card-desc">Visão macro do sistema e atores externos</div></div>
+          <div class="sp-card"><div class="card-icon">📦</div><div class="card-title">Diagrama de Contêiner</div><div class="card-desc">Serviços, bancos e frontends</div></div>
+          <div class="sp-card"><div class="card-icon">🧩</div><div class="card-title">Diagrama de Componentes</div><div class="card-desc">Módulos internos e responsabilidades</div></div>
+        </div>
+        <p class="sp-text">Em casos específicos: contexto de negócio com fluxograma · diagrama de sequência · modelagem de banco de dados · contrato de base não relacional.</p>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://c4model.com/" target="_blank">Documentação oficial do modelo C4</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 12. Branching -->
+      <div class="sp-section" id="branching">
+        <h2 class="section-heading"><span class="sec-num">12</span> Branching</h2>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">🌳 master</div><div class="property-val">Branch de produção <span class="tag red">Commit direto proibido</span></div></div>
+          <div class="property-row"><div class="property-key">🔶 hom</div><div class="property-val">Ambiente de homologação</div></div>
+          <div class="property-row"><div class="property-key">🔷 teste</div><div class="property-val">Ambiente de testes</div></div>
+          <div class="property-row"><div class="property-key">🌿 feature/*</div><div class="property-val">Branch local do dev (substitui develop)</div></div>
+          <div class="property-row"><div class="property-key">🐛 bugfix/*</div><div class="property-val">Correção de bugs (fluxo igual ao feature)</div></div>
+          <div class="property-row"><div class="property-key">🔥 hotfix/*</div><div class="property-val">Correção urgente em produção</div></div>
+        </div>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://spassuti.sharepoint.com/sites/DemandasDEVOPS/SitePages/Fluxo-de-Publica%C3%A7%C3%A3o-nos-Ambientes-SME.aspx" target="_blank">Pull Requests e aprovações — documentação completa</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 13. Segurança -->
+      <div class="sp-section" id="seguranca">
+        <h2 class="section-heading"><span class="sec-num">13</span> Segurança</h2>
+        <div class="alert alert-warning">
+          <div class="alert-icon">🔒</div>
+          <div class="alert-body"><strong>Responsabilidade do Desenvolvedor</strong>O desenvolvedor deve ser cuidadoso e responsável para que seu código esteja em conformidade com os padrões elevados de segurança da informação.</div>
+        </div>
+        <ul class="sp-list">
+          <li>Observância ao <strong>OWASP Top 10</strong></li>
+          <li>Autenticação centralizada</li>
+          <li>Validação server-side obrigatória</li>
+          <li>Logs estruturados</li>
+          <li>Mascaramento / criptografia de dados sensíveis</li>
+          <li><span class="tag red">⛔</span> <strong>Não commitar</strong> arquivos de variáveis de ambiente</li>
+          <li><span class="tag red">⛔</span> <strong>Não commitar</strong> arquivos lock</li>
+          <li>Auditoria de dependências via <strong>GitHub Dependabot</strong></li>
+          <li>Política de atualização de bibliotecas críticas</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 14. Evolução -->
+      <div class="sp-section" id="evolucao">
+        <h2 class="section-heading"><span class="sec-num">14</span> Modelo de Evolução Tecnológica</h2>
+        <h3 class="subsection-heading">14.1 Estratégia Geral</h3>
+        <p class="sp-text">Evolução deve ser <strong>incremental</strong>, <strong>compatível</strong> e <strong>planejada</strong>. Toda decisão que impacte contrato público exige <span class="tag">ADR aprovado por Arquitetura</span> e validado por COTIC.</p>
+        <h3 class="subsection-heading">14.2 Roadmap .NET</h3>
+        <ul class="sp-list">
+          <li>LTS vigente para novos sistemas</li>
+          <li>Plano de migração para versões legadas</li>
+          <li>Compatibilidade de API durante upgrades</li>
+          <li>Evitar reescritas disruptivas</li>
+          <li>Clean Code · SOLID · Design Patterns GOF obrigatórios</li>
+          <li>Minimizar débitos técnicos sempre que possível</li>
+        </ul>
+        <h3 class="subsection-heading">14.3 Roadmap Python</h3>
+        <ul class="sp-list">
+          <li>Versões oficialmente suportadas</li>
+          <li>Obedecer premissas das PEP e suas atualizações</li>
+          <li>Garantir compatibilidade de contrato</li>
+          <li>Clean Code · SOLID · Design Patterns GOF obrigatórios</li>
+          <li>Minimizar débitos técnicos sempre que possível</li>
+        </ul>
+        <h3 class="subsection-heading">14.4 Modernização de Legados</h3>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">✅</div><div class="card-title">Sustentável</div><div class="card-desc">Sistema estável, sem necessidade de intervenção imediata</div></div>
+          <div class="sp-card"><div class="card-icon">🔧</div><div class="card-title">Em Modularização</div><div class="card-desc">Processo de separação em módulos em andamento</div></div>
+          <div class="sp-card"><div class="card-icon">🔄</div><div class="card-title">Em Substituição Planejada</div><div class="card-desc">Roadmap definido para substituição gradual</div></div>
+        </div>
+        <div class="callout">Modernização motivada por necessidade técnica ou institucional: performance, resiliência ou alta disponibilidade.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 15. Conformidade -->
+      <div class="sp-section" id="conformidade">
+        <h2 class="section-heading"><span class="sec-num">15</span> Conformidade</h2>
+        <p class="sp-text">Esta norma é <strong>obrigatória</strong> após aprovação institucional. Não conformidade pode:</p>
+        <ul class="sp-list">
+          <li><span class="tag red">Bloquear deploy</span></li>
+          <li>Exigir refatoração formal</li>
+          <li>Gerar revisão técnica formal</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- Fluxo de Entrega -->
+      <div class="sp-section" id="fluxo">
+        <h2 class="section-heading"><span class="sec-num">🔄</span> Fluxo de Entrega</h2>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div><div class="step-title">Arquitetura estrutura</div><div class="step-desc">Define padrões técnicos e modelo arquitetural</div></div></div>
+          <div class="flow-step"><div class="step-num">2</div><div><div class="step-title">COTIC valida</div><div class="step-desc">Consolida e prioriza demandas</div></div></div>
+          <div class="flow-step"><div class="step-num">3</div><div><div class="step-title">Design de Serviços escreve histórias</div><div class="step-desc">Documentação de requisitos e critérios de aceite</div></div></div>
+          <div class="flow-step"><div class="step-num">4</div><div><div class="step-title">PO prioriza</div><div class="step-desc">Product Owner define ordem de execução</div></div></div>
+          <div class="flow-step"><div class="step-num">5</div><div><div class="step-title">Time DEV (Squad) refina e planeja</div><div class="step-desc">Refinamento técnico e planejamento de sprints</div></div></div>
+          <div class="flow-step"><div class="step-num">6</div><div><div class="step-title">Times atuam em sprints ou ciclos</div><div class="step-desc">SCRUM ou KANBAN conforme o time</div></div></div>
+          <div class="flow-step"><div class="step-num">7</div><div><div class="step-title">Desenvolvimento executa</div><div class="step-desc">Implementação conforme esta norma</div></div></div>
+          <div class="flow-step"><div class="step-num">8</div><div><div class="step-title">QA testa</div><div class="step-desc">Validação de qualidade e critérios de aceite</div></div></div>
+          <div class="flow-step"><div class="step-num">9</div><div><div class="step-title">PO homologa</div><div class="step-desc">Aprovação funcional pelo Product Owner</div></div></div>
+          <div class="flow-step"><div class="step-num">10</div><div><div class="step-title">Entrega automatizada com plano de rollback</div><div class="step-desc">Deploy em produção com estratégia de reversão garantida</div></div></div>
         </div>
       </div>
 
       <hr class="sp-divider">
 
-      <!-- CHECKLIST DEV -->
-      <div class="sp-section" id="checklist">
-        <h2 class="section-heading"><span class="sec-num">☑️</span> Checklist de Liberação de Histórias — Time Dev</h2>
-        <p class="sp-text">Garante que todas as entregas estejam completas, validadas e prontas para teste antes da homologação. Padroniza o que o desenvolvedor deve executar antes de mover uma história para <strong>"Pronto para Teste"</strong>.</p>
-
-        <div class="checklist">
-          <div class="check-group">
-            <div class="check-group-title">🔧 Validação Técnica</div>
-            <div class="check-item"><div class="check-box"></div>O código foi commitado e versionado corretamente no repositório</div>
-            <div class="check-item"><div class="check-box"></div>O Pull Request (PR) foi criado e aprovado por outro desenvolvedor</div>
-            <div class="check-item"><div class="check-box"></div>Todos os conflitos de merge foram resolvidos</div>
-            <div class="check-item"><div class="check-box"></div>O código foi buildado sem erros no pipeline (build verde)</div>
-            <div class="check-item"><div class="check-box"></div>Nenhum warning crítico permanece no código</div>
-          </div>
-          <div class="check-group">
-            <div class="check-group-title">📎 Evidências e Documentação</div>
-            <div class="check-item"><div class="check-box"></div>A história possui descrição clara e atualizada no Azure DevOps</div>
-            <div class="check-item"><div class="check-box"></div>Os critérios de aceite foram revisados e estão completos</div>
-            <div class="check-item"><div class="check-box"></div>As evidências de testes de desenvolvedor (DEV TEST) foram anexadas (prints, logs, vídeos)</div>
-            <div class="check-item"><div class="check-box"></div>Caso aplicável, evidências de integração com APIs ou outros sistemas foram incluídas</div>
-          </div>
-          <div class="check-group">
-            <div class="check-group-title">🚀 Ambiente e Deploy</div>
-            <div class="check-item"><div class="check-box"></div>O deploy foi realizado no ambiente de QA (ou ambiente designado para testes)</div>
-            <div class="check-item"><div class="check-box"></div>A versão implantada corresponde à história que será testada</div>
-            <div class="check-item"><div class="check-box"></div>O banco de dados e serviços externos foram configurados corretamente</div>
-            <div class="check-item"><div class="check-box"></div>As variáveis de ambiente estão atualizadas e funcionando</div>
-          </div>
-          <div class="check-group">
-            <div class="check-group-title">🧪 Testes e Garantia de Qualidade</div>
-            <div class="check-item"><div class="check-box"></div>Os testes unitários foram executados e estão passando</div>
-            <div class="check-item"><div class="check-box"></div>Os testes automatizados (quando aplicável) foram executados no pipeline</div>
-            <div class="check-item"><div class="check-box"></div>Não há erros no console ou logs da aplicação relacionados à entrega</div>
-            <div class="check-item"><div class="check-box"></div>A funcionalidade está alinhada com o comportamento esperado descrito pelo PO</div>
-          </div>
-        </div>
+      <!-- Glossário -->
+      <div class="sp-section" id="glossario">
+        <h2 class="section-heading"><span class="sec-num">📖</span> Glossário</h2>
+        <table class="glossary-table">
+          <thead><tr><th>Termo</th><th>Definição</th></tr></thead>
+          <tbody>
+            <tr><td class="glossary-term">Arquitetura</td><td>Área que define padrões técnicos e estrutura dos sistemas.</td></tr>
+            <tr><td class="glossary-term">COTIC</td><td>Instância que valida e prioriza decisões técnicas.</td></tr>
+            <tr><td class="glossary-term">Contrato (API)</td><td>Regras formais que definem como um sistema conversa com outro.</td></tr>
+            <tr><td class="glossary-term">API-First</td><td>Primeiro define-se o contrato, depois implementa-se o sistema.</td></tr>
+            <tr><td class="glossary-term">Microserviço</td><td>Sistema pequeno e independente, usado quando há necessidade real de escala ou isolamento.</td></tr>
+            <tr><td class="glossary-term">Monólito Modular</td><td>Sistema único, mas organizado por partes bem separadas.</td></tr>
+            <tr><td class="glossary-term">Legado</td><td>Sistema já existente que precisa continuar funcionando.</td></tr>
+            <tr><td class="glossary-term">Versionamento</td><td>Controle de mudanças para não quebrar integrações existentes.</td></tr>
+            <tr><td class="glossary-term">C4</td><td>Modelo padrão de documentação arquitetural. <a class="sp-link" href="https://c4model.com/" target="_blank">c4model.com</a></td></tr>
+            <tr><td class="glossary-term">ADR</td><td>Registro formal de decisão técnica (Architecture Decision Record).</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <hr class="sp-divider">
-
-      <!-- FISCALIZAÇÃO COTIC -->
-      <div class="sp-section" id="cotic">
-        <h2 class="section-heading"><span class="sec-num">🏛️</span> Fiscalização COTIC</h2>
-        <p class="sp-text">Itens avaliados por COTIC ao fiscalizar as histórias:</p>
-
-        <div class="property-bag">
-          <div class="property-row">
-            <div class="property-key">A história tem evidência da entrega?</div>
-            <div class="property-val">
-              <ul class="sp-list" style="margin:0">
-                <li>Para códigos: link dos PRs no GitHub (Pull Request da branch da história para branch de release da sprint)</li>
-                <li>Evidências de testes anexados para projetos em WordPress e GitLab</li>
-                <li>Para layouts e protótipos: link do Figma</li>
-                <li>Fluxo correto de movimentação do card no Azure</li>
-              </ul>
-            </div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">A história tem uma entrega de resultado?</div>
-            <div class="property-val">
-              <ul class="sp-list" style="margin:0">
-                <li>O resultado e o valor da história deve estar claro na descrição e nos critérios de aceite</li>
-                <li>Mesmo histórias técnicas precisam ter foco em resultados para o produto, não apenas tarefas</li>
-                <li>Validar o valor e o resultado junto aos POs durante os refinamentos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">A história é passível de auditoria?</div>
-            <div class="property-val">
-              <ul class="sp-list" style="margin:0">
-                <li>Deve estar clara e detalhada o suficiente para quem não está no contexto do produto avaliar o resultado</li>
-                <li>Critérios de aceite devem estar ordenados e numerados</li>
-                <li>A partir dos critérios deve ser possível comprovar o funcionamento da solução entregue</li>
-                <li>Comentários na Discussion devem estar respondidos (Spassu, PO, COTIC)</li>
-                <li><span class="tag red">⛔ Não aceito:</span> termos como "Segue anexo" — usar: "nome do arquivo em anexo"</li>
-              </ul>
-            </div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Foi entregue exatamente o que foi pedido?</div>
-            <div class="property-val">
-              <ul class="sp-list" style="margin:0">
-                <li>Todos os critérios de aceite devem ter sido atendidos e evidenciados nos testes</li>
-                <li>Critério não atendido → deve existir Discussion com De acordo dos envolvidos</li>
-                <li>Os links dos PRs devem conter o código conforme os critérios e fluxos solicitados</li>
-              </ul>
-            </div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Tem link do ambiente de homologação?</div>
-            <div class="property-val">
-              Necessário evidenciar o acesso ao ambiente de homologação com o perfil que possa acessar o desenvolvimento.<br>
-              <span class="tag red">⛔ Senhas não devem estar visíveis nas histórias</span> — salvar no Passbolt, nunca no Azure.
-            </div>
-          </div>
-          <div class="property-row">
-            <div class="property-key">Repositórios Oficiais</div>
-            <div class="property-val">
-              <span class="tag">Documentos: SharePoint SME</span>&nbsp;
-              <span class="tag">Código: GitHub / GitLab</span>&nbsp;
-              <span class="tag">Layout: Figma</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout danger">
-          🚫 <strong>Atenção:</strong> Histórias com altas horas de desenvolvimento e pouco código entregue devem ser justificadas e detalhadas, explicando o ocorrido e evidenciando o tempo gasto × código construído. BUGs devem ter evidências de entrega: análise do ocorrido, correção proposta ou aplicada.
-        </div>
-
-        <div class="callout warn" style="margin-top:8px">
-          ⚠️ <strong>Lembrete — Padrões de Arquivo:</strong>
-          Compactados = ZIP · Imagem = SVG, JPG, PNG · Documentos = PDF · E-mail = PDF · Vídeo = MP4 · Utilizar apenas documento não editável.
-        </div>
-      </div>
-
-    </div>
+    </div><!-- /content-area -->
   </main>
-</div>
+</div><!-- /page-wrapper -->
 
 <button id="scrollTop" title="Voltar ao topo">↑</button>
 
