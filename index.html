@@ -234,40 +234,79 @@
 <body>
 <style>
   .sme-topbar {
-    background: #1a1a2e; height: 44px; display: flex; align-items: center;
-    padding: 0 24px; gap: 8px; position: sticky; top: 0; z-index: 200;
-    box-shadow: 0 2px 8px rgba(0,0,0,.35); font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(90deg, #0f1923 0%, #162032 100%);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 12px rgba(0,0,0,.45);
+    font-family: "Segoe UI", sans-serif;
+    border-bottom: 1px solid rgba(0,120,212,.3);
   }
   .sme-topbar-logo {
-    font-size: 13px; font-weight: 700; color: #fff; letter-spacing: .04em;
-    white-space: nowrap; display: flex; align-items: center; gap: 8px; text-decoration: none;
+    font-size: 14px; font-weight: 700; color: #ffffff;
+    letter-spacing: .03em; white-space: nowrap;
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+    flex-shrink: 0; padding-right: 24px;
+    border-right: 1px solid rgba(255,255,255,.12);
+    margin-right: 16px;
   }
   .sme-topbar-logo .logo-badge {
-    background: #0078d4; color: white; font-size: 10px; font-weight: 800;
-    padding: 2px 7px; border-radius: 10px; letter-spacing: .06em;
+    background: #0078d4; color: white;
+    font-size: 11px; font-weight: 800;
+    padding: 3px 10px; border-radius: 12px;
+    letter-spacing: .06em; line-height: 1.4;
   }
-  .sme-topbar-divider { width: 1px; height: 20px; background: rgba(255,255,255,.15); margin: 0 8px; flex-shrink: 0; }
-  .sme-topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; overflow-x: auto; }
+  .sme-topbar-logo .logo-text {
+    color: rgba(255,255,255,.85);
+    font-size: 13px; font-weight: 500;
+  }
+  .sme-topbar-nav {
+    display: flex; align-items: stretch;
+    gap: 4px; flex: 1; overflow-x: auto; height: 100%;
+  }
   .sme-topbar-nav::-webkit-scrollbar { display: none; }
   .sme-nav-link {
-    color: rgba(255,255,255,.7); font-size: 12px; font-weight: 500; text-decoration: none;
-    padding: 5px 12px; border-radius: 4px; white-space: nowrap;
-    transition: background .15s, color .15s; display: flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,.65);
+    font-size: 12.5px; font-weight: 500;
+    text-decoration: none;
+    padding: 0 16px;
+    border-radius: 0;
+    white-space: nowrap;
+    transition: background .15s, color .15s, border-color .15s;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 3px solid transparent;
+    position: relative;
   }
-  .sme-nav-link:hover { background: rgba(255,255,255,.1); color: #fff; }
-  .sme-nav-link.active { background: #0078d4; color: #fff; font-weight: 600; }
-  .left-nav { top: 44px !important; height: calc(100vh - 44px) !important; }
+  .sme-nav-link:hover {
+    background: rgba(255,255,255,.07);
+    color: #ffffff;
+    border-bottom-color: rgba(0,120,212,.5);
+  }
+  .sme-nav-link.active {
+    color: #ffffff;
+    font-weight: 600;
+    background: rgba(0,120,212,.15);
+    border-bottom-color: #0078d4;
+  }
+  .sme-nav-link .nav-icon { font-size: 16px; flex-shrink: 0; }
+  .sme-nav-link .nav-label { font-size: 12.5px; }
+  .left-nav { top: 60px !important; height: calc(100vh - 60px) !important; }
 </style>
 <header class="sme-topbar">
   <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
-    <span class="logo-badge">SME</span> Regras e Fluxos
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
   </a>
-  <div class="sme-topbar-divider"></div>
   <nav class="sme-topbar-nav">
-    <a href="https://carolcasassola.github.io/documentos-normas/manual-desenvolvedor.html" class="sme-nav-link active">📋 Manual do Desenvolvedor</a>
-    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link">☁️ Treinamento Azure DevOps</a>
-    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link">🚀 Fluxo de Publicação</a>
-    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link">👥 Papéis e Responsabilidades</a>
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link active"><span class="nav-icon">📋</span><span class="nav-label">Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span class="nav-label">Treinamento Azure DevOps</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span class="nav-label">Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span class="nav-label">Papéis e Responsabilidades</span></a>
   </nav>
 </header>
 
