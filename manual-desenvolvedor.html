@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual do Desenvolvedor – Norma Técnica de Engenharia de Software</title>
+<style>
+  :root {
+    --sp-blue: #0078d4;
+    --sp-blue-dark: #005a9e;
+    --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff;
+    --sp-neutral-10: #f3f2f1;
+    --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce;
+    --sp-neutral-60: #605e5c;
+    --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e;
+    --sp-red: #a4262c;
+    --sp-green: #107c10;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    color: var(--sp-neutral-90);
+    background: var(--sp-neutral-10);
+    line-height: 1.5;
+  }
+
+  /* ── LAYOUT ── */
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .left-nav {
+    width: var(--sp-sidebar-width);
+    background: var(--sp-neutral-0);
+    border-right: 1px solid var(--sp-neutral-30);
+    padding: 20px 0;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    overflow-y: auto;
+    z-index: 50;
+  }
+  .left-nav-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--sp-neutral-60);
+    padding: 8px 20px 4px; display: block;
+  }
+  .left-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    color: var(--sp-neutral-80); font-size: 13px;
+    cursor: pointer; transition: background .12s, color .12s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active {
+    background: var(--sp-blue-light);
+    color: var(--sp-blue-dark);
+    border-left-color: var(--sp-blue);
+    font-weight: 600;
+  }
+
+  /* ── MAIN ── */
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* ── HERO ── */
+  .page-hero {
+    background: linear-gradient(135deg, var(--sp-blue-dark) 0%, var(--sp-blue) 60%, #1b9fe4 100%);
+    padding: 40px 48px 36px; color: white;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::after {
+    content:''; position: absolute; right: -60px; top: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,.05); border-radius: 50%;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .1em; opacity: .8; margin-bottom: 8px;
+  }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 8px; }
+  .hero-title strong { font-weight: 700; }
+  .hero-meta {
+    font-size: 12px; opacity: .75;
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    border-radius: 12px; padding: 3px 10px;
+    font-size: 11px; font-weight: 600; margin-top: 14px;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+
+  /* ── CONTENT ── */
+  .content-area { padding: 32px 48px; max-width: 960px; }
+
+  .alert {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px 20px; border-radius: 2px; margin-bottom: 28px;
+  }
+  .alert-info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); }
+  .alert-warning { background: #fff4ce; border-left: 4px solid #f7c948; }
+  .alert-success { background: #dff6dd; border-left: 4px solid var(--sp-green); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-body { font-size: 13px; color: var(--sp-neutral-80); }
+  .alert-body strong { display: block; font-size: 14px; color: var(--sp-neutral-90); margin-bottom: 4px; }
+
+  .sp-section { margin-bottom: 36px; }
+  .section-heading {
+    font-size: 20px; font-weight: 600; color: var(--sp-neutral-90);
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--sp-blue);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-heading .sec-num {
+    background: var(--sp-blue); color: white;
+    font-size: 12px; font-weight: 700;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .subsection-heading {
+    font-size: 15px; font-weight: 600; color: var(--sp-blue-dark);
+    margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .subsection-heading::before {
+    content:''; display: inline-block; width: 3px; height: 16px;
+    background: var(--sp-blue); border-radius: 2px; flex-shrink: 0;
+  }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li {
+    font-size: 13.5px; color: var(--sp-neutral-80);
+    padding: 5px 0 5px 20px; position: relative; line-height: 1.5;
+  }
+  .sp-list li::before {
+    content:''; position: absolute; left: 4px; top: 12px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue);
+  }
+
+  .cards-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .sp-card {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; padding: 16px;
+    transition: box-shadow .2s, border-color .2s; cursor: default;
+  }
+  .sp-card:hover { box-shadow: 0 2px 8px rgba(0,120,212,.15); border-color: var(--sp-blue); }
+  .card-icon { font-size: 22px; margin-bottom: 8px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 4px; }
+  .card-desc { font-size: 12px; color: var(--sp-neutral-60); line-height: 1.4; }
+
+  .property-bag {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; overflow: hidden; margin-bottom: 20px;
+  }
+  .property-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row:last-child { border-bottom: none; }
+  .property-key {
+    background: var(--sp-neutral-10); padding: 10px 16px;
+    font-size: 12px; font-weight: 600; color: var(--sp-neutral-60);
+    text-transform: uppercase; letter-spacing: .05em;
+    display: flex; align-items: center; border-right: 1px solid var(--sp-neutral-20);
+  }
+  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  .tag { display: inline-flex; align-items: center; background: var(--sp-blue-light); color: var(--sp-blue-dark); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .tag.green  { background: #dff6dd; color: #107c10; }
+  .tag.orange { background: #fff4ce; color: #986f0b; }
+  .tag.red    { background: #fde7e9; color: var(--sp-red); }
+
+  .callout {
+    background: var(--sp-blue-light); border: 1px solid #c7e0f4;
+    border-radius: 2px; padding: 14px 18px; margin: 12px 0;
+    font-size: 13px; color: var(--sp-blue-dark);
+  }
+
+  .flow-steps { display: flex; flex-direction: column; gap: 0; margin: 16px 0 20px; }
+  .flow-step { display: flex; align-items: flex-start; gap: 16px; padding: 14px 0; }
+  .flow-step:not(:last-child) { border-bottom: 1px dashed var(--sp-neutral-30); }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sp-blue); color: white;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 2px; }
+  .step-desc  { font-size: 12px; color: var(--sp-neutral-60); }
+
+  .glossary-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; overflow: hidden;
+  }
+  .glossary-table thead tr { background: var(--sp-blue); color: white; }
+  .glossary-table th { padding: 10px 16px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+  .glossary-table td { padding: 10px 16px; border-bottom: 1px solid var(--sp-neutral-20); vertical-align: top; }
+  .glossary-table tr:last-child td { border-bottom: none; }
+  .glossary-table tr:nth-child(even) { background: var(--sp-neutral-10); }
+  .glossary-table tr:hover { background: var(--sp-blue-light); }
+  .glossary-term { font-weight: 700; color: var(--sp-blue-dark); white-space: nowrap; }
+
+  .sp-link { color: var(--sp-blue); text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; transition: border-color .15s; }
+  .sp-link:hover { border-bottom-color: var(--sp-blue); }
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+
+  #scrollTop {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--sp-blue); color: white; border: none;
+    font-size: 18px; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    display: none; align-items: center; justify-content: center; z-index: 900;
+  }
+  #scrollTop:hover { background: var(--sp-blue-dark); }
+  #scrollTop.visible { display: flex; }
+
+  @media (max-width: 768px) {
+    .left-nav { display: none; }
+    .main-content { margin-left: 0; }
+    .content-area { padding: 20px; }
+    .page-hero { padding: 24px 20px; }
+    .property-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#resumo"       class="left-nav-item active">📌 Resumo</a>
+    <a href="#governanca"   class="left-nav-item">🏛️ Governança</a>
+    <a href="#principios"   class="left-nav-item">⚙️ Princípios</a>
+    <a href="#modelos"      class="left-nav-item">🏗️ Modelos Arquiteturais</a>
+    <a href="#microservicos" class="left-nav-item">🔀 Microserviços</a>
+    <a href="#sistemas"     class="left-nav-item">💻 Sistemas Estratégicos</a>
+    <a href="#integracoes"  class="left-nav-item">🔗 Integrações</a>
+    <a href="#api"          class="left-nav-item">📄 API-First</a>
+    <a href="#tecnologias"  class="left-nav-item">🛠️ Tecnologias</a>
+    <a href="#qualidade"    class="left-nav-item">✅ Qualidade</a>
+    <a href="#documentacao" class="left-nav-item">📐 Documentação C4</a>
+    <a href="#branching"    class="left-nav-item">🌿 Branching</a>
+    <a href="#seguranca"    class="left-nav-item">🔒 Segurança</a>
+    <a href="#evolucao"     class="left-nav-item">📈 Evolução</a>
+    <a href="#conformidade" class="left-nav-item">⚖️ Conformidade</a>
+    <a href="#fluxo"        class="left-nav-item">🔄 Fluxo de Entrega</a>
+    <a href="#glossario"    class="left-nav-item">📖 Glossário</a>
+  </nav>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <div class="hero-eyebrow">Norma Técnica Institucional</div>
+      <div class="hero-title"><strong>Norma Técnica de Engenharia</strong><br>de Software e Arquitetura de Sistemas</div>
+      <div class="hero-badge"><span class="dot"></span> Versão 1.0.0 · Documento Institucional Obrigatório</div>
+      <div class="hero-meta">
+        <span>📅 Publicado: 2025</span>
+        <span>👤 Arquitetura &amp; COTIC</span>
+        <span>🔒 Cumprimento Obrigatório</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <div class="alert alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-body">
+          <strong>Documento Normativo Obrigatório</strong>
+          Após aprovação institucional, o cumprimento desta norma é obrigatório para todos os times de desenvolvimento. Não conformidade pode bloquear deploys e exigir refatoração formal.
+        </div>
+      </div>
+
+      <!-- 1. Resumo -->
+      <div class="sp-section" id="resumo">
+        <h2 class="section-heading"><span class="sec-num">📌</span> Resumo Executivo</h2>
+        <p class="sp-text">Esta norma define como os sistemas da instituição devem ser construídos, integrados e evoluídos. É um instrumento de organização institucional — não imposição tecnológica, não proibição de inovação, não burocracia sem propósito.</p>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">🎯</div><div class="card-title">Padronizar Desenvolvimento</div><div class="card-desc">Processos e práticas uniformes em todos os times</div></div>
+          <div class="sp-card"><div class="card-icon">🔐</div><div class="card-title">Garantir Segurança</div><div class="card-desc">Critérios mínimos de segurança da informação</div></div>
+          <div class="sp-card"><div class="card-icon">🔗</div><div class="card-title">Preservar Integrações</div><div class="card-desc">Compatibilidade com sistemas existentes</div></div>
+          <div class="sp-card"><div class="card-icon">📈</div><div class="card-title">Evolução Controlada</div><div class="card-desc">Modernização planejada e incremental</div></div>
+          <div class="sp-card"><div class="card-icon">🏛️</div><div class="card-title">Governança Técnica</div><div class="card-desc">Quem decide e como as decisões são tomadas</div></div>
+          <div class="sp-card"><div class="card-icon">📄</div><div class="card-title">Contratos de API</div><div class="card-desc">Como sistemas devem se comunicar formalmente</div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 2. Governança -->
+      <div class="sp-section" id="governanca">
+        <h2 class="section-heading"><span class="sec-num">2</span> Estrutura de Governança</h2>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">🏗️ Arquitetura</div><div class="property-val">Estrutura padrões técnicos · Define modelo arquitetural · Produz documentação C4 · Propõe ADRs · Atualiza documentação em cada alteração relevante · Função evangelizadora técnica</div></div>
+          <div class="property-row"><div class="property-key">🏛️ COTIC</div><div class="property-val">Consolida e prioriza demandas · Valida padrões · Endossa decisões técnicas · Garante aderência institucional <span class="tag">Instância de Validação</span></div></div>
+          <div class="property-row"><div class="property-key">🏢 Coordenadorias</div><div class="property-val">Definem regras de negócio · Validam funcionalidades · Aprovam semântica de contratos <span class="tag orange">Clientes de Arquitetura</span></div></div>
+          <div class="property-row"><div class="property-key">👨‍💻 Dev / Liderança</div><div class="property-val">Implementam conforme a norma · Co-constroem contratos · Garantem aderência técnica · Participam de revisões e refinamentos</div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3. Princípios -->
+      <div class="sp-section" id="principios">
+        <h2 class="section-heading"><span class="sec-num">3</span> Princípios Arquiteturais Oficiais</h2>
+        <div class="callout"><strong>Arquitetura é decisão técnica baseada em contexto, não tendência de mercado.</strong></div>
+        <div class="cards-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:16px">
+          <div class="sp-card"><div class="card-icon">🥇</div><div class="card-title">API-First</div></div>
+          <div class="sp-card"><div class="card-icon">📃</div><div class="card-title">Contract-First</div></div>
+          <div class="sp-card"><div class="card-icon">🏛️</div><div class="card-title">Governança Centralizada</div></div>
+          <div class="sp-card"><div class="card-icon">📈</div><div class="card-title">Evolução Controlada</div></div>
+          <div class="sp-card"><div class="card-icon">🧩</div><div class="card-title">Modularidade</div></div>
+          <div class="sp-card"><div class="card-icon">🔐</div><div class="card-title">Segurança por Padrão</div></div>
+          <div class="sp-card"><div class="card-icon">🔌</div><div class="card-title">Baixo Acoplamento</div></div>
+          <div class="sp-card"><div class="card-icon">🎯</div><div class="card-title">Alta Coesão</div></div>
+          <div class="sp-card"><div class="card-icon">👁️</div><div class="card-title">Observabilidade</div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4. Modelos -->
+      <div class="sp-section" id="modelos">
+        <h2 class="section-heading"><span class="sec-num">4</span> Modelos Arquiteturais Permitidos</h2>
+        <h3 class="subsection-heading">4.1 Monólito Modular</h3>
+        <p class="sp-text"><span class="tag green">✅ Permitido e Recomendado</span> quando definido pela Arquitetura.</p>
+        <ul class="sp-list">
+          <li>Separação clara por domínio</li>
+          <li>Services layer obrigatória</li>
+          <li>Proibição de dependência cruzada informal</li>
+          <li>Preparação para futura extração</li>
+        </ul>
+        <h3 class="subsection-heading">4.2 Microserviços Orientados a Domínio</h3>
+        <p class="sp-text"><span class="tag orange">⚠️ Permitido com Justificativa Formal</span></p>
+        <ul class="sp-list">
+          <li>Banco de dados isolado por serviço</li>
+          <li>Contrato versionado</li>
+          <li>Testes de contrato obrigatórios</li>
+          <li>Observabilidade implementada</li>
+          <li>Documentação C4 com boundary explícito</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5. Microserviços -->
+      <div class="sp-section" id="microservicos">
+        <h2 class="section-heading"><span class="sec-num">5</span> Diretriz para Adoção de Microserviços</h2>
+        <div class="alert alert-info">
+          <div class="alert-icon">ℹ️</div>
+          <div class="alert-body"><strong>Arquitetura distribuída não é objetivo em si</strong>A adoção de microserviços deve decorrer de necessidade estrutural comprovada — necessária em grandes sistemas e processamentos, visando escalabilidade horizontal e computação distribuída.</div>
+        </div>
+        <ul class="sp-list">
+          <li>Coerência com o ecossistema existente</li>
+          <li>Capacidade operacional do time</li>
+          <li>Compatibilidade com legados</li>
+          <li>Sustentabilidade de longo prazo</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 6. Sistemas Estratégicos -->
+      <div class="sp-section" id="sistemas">
+        <h2 class="section-heading"><span class="sec-num">6</span> Sistemas Estratégicos</h2>
+        <p class="sp-text">Aplica-se a: <span class="tag">NovoSGP</span> <span class="tag">Novo Pedagógico</span> <span class="tag">SME Identity</span></p>
+        <h3 class="subsection-heading">6.1 Fatiamento por Domínio</h3>
+        <ul class="sp-list">
+          <li>Corte orientado a domínio funcional</li>
+          <li>Boundary explícito obrigatório</li>
+          <li><strong>Proibido</strong> fracionamento técnico artificial</li>
+        </ul>
+        <h3 class="subsection-heading">6.2 Compatibilidade com Legados</h3>
+        <ul class="sp-list">
+          <li>Manutenção de contratos compatíveis</li>
+          <li>Versionamento controlado</li>
+          <li>Não interrupção de integrações existentes</li>
+          <li>Evolução incremental</li>
+        </ul>
+        <h3 class="subsection-heading">6.3 Camada Anticorrupção</h3>
+        <p class="sp-text"><span class="tag red">⛔ Obrigatória</span> quando houver integração com modelo legado incompatível, exposição de ferramenta como endpoint, ETL, divergência semântica ou necessidade de isolamento.</p>
+        <div class="callout">A camada anticorrupção deve proteger o domínio interno e ser <strong>documentada no C4</strong>.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 7. Integrações -->
+      <div class="sp-section" id="integracoes">
+        <h2 class="section-heading"><span class="sec-num">7</span> Integrações</h2>
+        <h3 class="subsection-heading">7.1 Síncronas</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Protocolo</div><div class="property-val"><span class="tag">REST</span></div></div>
+          <div class="property-row"><div class="property-key">Especificação</div><div class="property-val"><span class="tag">OpenAPI 3.x</span></div></div>
+          <div class="property-row"><div class="property-key">Versionamento</div><div class="property-val"><span class="tag red">Obrigatório</span></div></div>
+        </div>
+        <h3 class="subsection-heading">7.2 Assíncronas</h3>
+        <p class="sp-text"><span class="tag orange">Permitidas</span> quando houver necessidade de desacoplamento, processamento não crítico em tempo real ou escalabilidade independente.</p>
+        <ul class="sp-list">
+          <li>Eventos versionados</li>
+          <li>Payload documentado</li>
+          <li>Idempotência garantida</li>
+          <li>Estratégia de retry definida</li>
+          <li>Rastreabilidade implementada</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 8. API First -->
+      <div class="sp-section" id="api">
+        <h2 class="section-heading"><span class="sec-num">8</span> API-First e Contract-First</h2>
+        <div class="alert alert-success">
+          <div class="alert-icon">📄</div>
+          <div class="alert-body"><strong>Contrato é ativo institucional.</strong>APIs são definidas em conjunto com negócio, arquitetura e liderança técnica. Independente da modernização tecnológica, os contratos devem ser preservados.</div>
+        </div>
+        <ul class="sp-list">
+          <li>Contrato construído colaborativamente</li>
+          <li>Responsáveis registrados formalmente</li>
+          <li>Versionamento obrigatório</li>
+          <li>Validação formal antes de publicação</li>
+          <li><strong>Breaking change (major)</strong> exige nova versão obrigatoriamente</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 9. Tecnologias -->
+      <div class="sp-section" id="tecnologias">
+        <h2 class="section-heading"><span class="sec-num">9</span> Versionamento Tecnológico</h2>
+        <h3 class="subsection-heading">9.1 .NET</h3>
+        <ul class="sp-list">
+          <li>Sistemas novos → versão LTS mais recente aprovada institucionalmente</li>
+          <li>Sistemas legados (v2, v5 ou anteriores) → plano de progressão obrigatório</li>
+          <li>Migração deve preservar contratos</li>
+          <li>Refatoração incremental obrigatória</li>
+          <li><span class="tag red">Proibido</span> reescrita integral sem justificativa formal</li>
+        </ul>
+        <h3 class="subsection-heading">9.2 Python</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Versão</div><div class="property-val">Estável oficialmente suportada (preferencialmente a mais recente aprovada)</div></div>
+          <div class="property-row"><div class="property-key">Frameworks</div><div class="property-val"><span class="tag">Django</span> monólitos e microserviços existentes &nbsp; <span class="tag green">FastAPI</span> preferencial para novos microserviços</div></div>
+          <div class="property-row"><div class="property-key">Django Admin</div><div class="property-val"><span class="tag red">⛔ Proibido em novos projetos</span></div></div>
+          <div class="property-row"><div class="property-key">Tipagem</div><div class="property-val"><span class="tag red">Obrigatória</span> — type hints (PEP 484)</div></div>
+          <div class="property-row"><div class="property-key">PEPs Obrigatórias</div><div class="property-val"><span class="tag">PEP 8</span> Estilo &nbsp; <span class="tag">PEP 257</span> Docstrings &nbsp; <span class="tag">PEP 484</span> Type Hints</div></div>
+          <div class="property-row"><div class="property-key">Boas Práticas</div><div class="property-val">SOLID · Clean Code · Design Patterns GOF · Camada de serviços explícita</div></div>
+        </div>
+        <h3 class="subsection-heading">9.3 Frontend — React + Next.js</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Componentes</div><div class="property-val">Functional components obrigatório</div></div>
+          <div class="property-row"><div class="property-key">Linguagem</div><div class="property-val"><span class="tag red">TypeScript Obrigatório</span></div></div>
+          <div class="property-row"><div class="property-key">Organização</div><div class="property-val">Por domínio · App Router moderno · Separação server/client</div></div>
+          <div class="property-row"><div class="property-key">Variáveis Sensíveis</div><div class="property-val"><span class="tag red">Nunca em repositório</span></div></div>
+          <div class="property-row"><div class="property-key">Arquivos .lock</div><div class="property-val"><span class="tag red">⛔ Proibido commitar</span></div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 10. Qualidade -->
+      <div class="sp-section" id="qualidade">
+        <h2 class="section-heading"><span class="sec-num">10</span> Qualidade de Código</h2>
+        <p class="sp-text">Qualidade medida via <strong>SonarQube</strong> integrado à esteira CI/CD (Jenkins). Quality Gate bloqueia o merge em caso de não conformidade.</p>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Coverage</div><div class="property-val"><span class="tag green">≥ 80%</span></div></div>
+          <div class="property-row"><div class="property-key">Vulnerabilidades</div><div class="property-val"><span class="tag red">Zero críticas</span></div></div>
+          <div class="property-row"><div class="property-key">Complexidade</div><div class="property-val">Controlada</div></div>
+          <div class="property-row"><div class="property-key">Code Review</div><div class="property-val"><span class="tag red">Obrigatório</span></div></div>
+          <div class="property-row"><div class="property-key">Quality Gate</div><div class="property-val"><span class="tag orange">Bloqueia merge em não conformidade</span></div></div>
+        </div>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://spassuti.sharepoint.com/sites/DemandasDEVOPS/SitePages/Fluxo-de-Publica%C3%A7%C3%A3o-nos-Ambientes-SME.aspx" target="_blank">Fluxo de Publicação nos Ambientes SME</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 11. C4 -->
+      <div class="sp-section" id="documentacao">
+        <h2 class="section-heading"><span class="sec-num">11</span> Documentação Arquitetural (C4)</h2>
+        <p class="sp-text">Modelo oficial: <strong>C4</strong>. Microserviços devem explicitar boundaries.</p>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">🗺️</div><div class="card-title">Diagrama de Contexto</div><div class="card-desc">Visão macro do sistema e atores externos</div></div>
+          <div class="sp-card"><div class="card-icon">📦</div><div class="card-title">Diagrama de Contêiner</div><div class="card-desc">Serviços, bancos e frontends</div></div>
+          <div class="sp-card"><div class="card-icon">🧩</div><div class="card-title">Diagrama de Componentes</div><div class="card-desc">Módulos internos e responsabilidades</div></div>
+        </div>
+        <p class="sp-text">Em casos específicos: contexto de negócio com fluxograma · diagrama de sequência · modelagem de banco de dados · contrato de base não relacional.</p>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://c4model.com/" target="_blank">Documentação oficial do modelo C4</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 12. Branching -->
+      <div class="sp-section" id="branching">
+        <h2 class="section-heading"><span class="sec-num">12</span> Branching</h2>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">🌳 master</div><div class="property-val">Branch de produção <span class="tag red">Commit direto proibido</span></div></div>
+          <div class="property-row"><div class="property-key">🔶 hom</div><div class="property-val">Ambiente de homologação</div></div>
+          <div class="property-row"><div class="property-key">🔷 teste</div><div class="property-val">Ambiente de testes</div></div>
+          <div class="property-row"><div class="property-key">🌿 feature/*</div><div class="property-val">Branch local do dev (substitui develop)</div></div>
+          <div class="property-row"><div class="property-key">🐛 bugfix/*</div><div class="property-val">Correção de bugs (fluxo igual ao feature)</div></div>
+          <div class="property-row"><div class="property-key">🔥 hotfix/*</div><div class="property-val">Correção urgente em produção</div></div>
+        </div>
+        <p class="sp-text">🔗 <a class="sp-link" href="https://spassuti.sharepoint.com/sites/DemandasDEVOPS/SitePages/Fluxo-de-Publica%C3%A7%C3%A3o-nos-Ambientes-SME.aspx" target="_blank">Pull Requests e aprovações — documentação completa</a></p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 13. Segurança -->
+      <div class="sp-section" id="seguranca">
+        <h2 class="section-heading"><span class="sec-num">13</span> Segurança</h2>
+        <div class="alert alert-warning">
+          <div class="alert-icon">🔒</div>
+          <div class="alert-body"><strong>Responsabilidade do Desenvolvedor</strong>O desenvolvedor deve ser cuidadoso e responsável para que seu código esteja em conformidade com os padrões elevados de segurança da informação.</div>
+        </div>
+        <ul class="sp-list">
+          <li>Observância ao <strong>OWASP Top 10</strong></li>
+          <li>Autenticação centralizada</li>
+          <li>Validação server-side obrigatória</li>
+          <li>Logs estruturados</li>
+          <li>Mascaramento / criptografia de dados sensíveis</li>
+          <li><span class="tag red">⛔</span> <strong>Não commitar</strong> arquivos de variáveis de ambiente</li>
+          <li><span class="tag red">⛔</span> <strong>Não commitar</strong> arquivos lock</li>
+          <li>Auditoria de dependências via <strong>GitHub Dependabot</strong></li>
+          <li>Política de atualização de bibliotecas críticas</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 14. Evolução -->
+      <div class="sp-section" id="evolucao">
+        <h2 class="section-heading"><span class="sec-num">14</span> Modelo de Evolução Tecnológica</h2>
+        <h3 class="subsection-heading">14.1 Estratégia Geral</h3>
+        <p class="sp-text">Evolução deve ser <strong>incremental</strong>, <strong>compatível</strong> e <strong>planejada</strong>. Toda decisão que impacte contrato público exige <span class="tag">ADR aprovado por Arquitetura</span> e validado por COTIC.</p>
+        <h3 class="subsection-heading">14.2 Roadmap .NET</h3>
+        <ul class="sp-list">
+          <li>LTS vigente para novos sistemas</li>
+          <li>Plano de migração para versões legadas</li>
+          <li>Compatibilidade de API durante upgrades</li>
+          <li>Evitar reescritas disruptivas</li>
+          <li>Clean Code · SOLID · Design Patterns GOF obrigatórios</li>
+          <li>Minimizar débitos técnicos sempre que possível</li>
+        </ul>
+        <h3 class="subsection-heading">14.3 Roadmap Python</h3>
+        <ul class="sp-list">
+          <li>Versões oficialmente suportadas</li>
+          <li>Obedecer premissas das PEP e suas atualizações</li>
+          <li>Garantir compatibilidade de contrato</li>
+          <li>Clean Code · SOLID · Design Patterns GOF obrigatórios</li>
+          <li>Minimizar débitos técnicos sempre que possível</li>
+        </ul>
+        <h3 class="subsection-heading">14.4 Modernização de Legados</h3>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">✅</div><div class="card-title">Sustentável</div><div class="card-desc">Sistema estável, sem necessidade de intervenção imediata</div></div>
+          <div class="sp-card"><div class="card-icon">🔧</div><div class="card-title">Em Modularização</div><div class="card-desc">Processo de separação em módulos em andamento</div></div>
+          <div class="sp-card"><div class="card-icon">🔄</div><div class="card-title">Em Substituição Planejada</div><div class="card-desc">Roadmap definido para substituição gradual</div></div>
+        </div>
+        <div class="callout">Modernização motivada por necessidade técnica ou institucional: performance, resiliência ou alta disponibilidade.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 15. Conformidade -->
+      <div class="sp-section" id="conformidade">
+        <h2 class="section-heading"><span class="sec-num">15</span> Conformidade</h2>
+        <p class="sp-text">Esta norma é <strong>obrigatória</strong> após aprovação institucional. Não conformidade pode:</p>
+        <ul class="sp-list">
+          <li><span class="tag red">Bloquear deploy</span></li>
+          <li>Exigir refatoração formal</li>
+          <li>Gerar revisão técnica formal</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- Fluxo de Entrega -->
+      <div class="sp-section" id="fluxo">
+        <h2 class="section-heading"><span class="sec-num">🔄</span> Fluxo de Entrega</h2>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div><div class="step-title">Arquitetura estrutura</div><div class="step-desc">Define padrões técnicos e modelo arquitetural</div></div></div>
+          <div class="flow-step"><div class="step-num">2</div><div><div class="step-title">COTIC valida</div><div class="step-desc">Consolida e prioriza demandas</div></div></div>
+          <div class="flow-step"><div class="step-num">3</div><div><div class="step-title">Design de Serviços escreve histórias</div><div class="step-desc">Documentação de requisitos e critérios de aceite</div></div></div>
+          <div class="flow-step"><div class="step-num">4</div><div><div class="step-title">PO prioriza</div><div class="step-desc">Product Owner define ordem de execução</div></div></div>
+          <div class="flow-step"><div class="step-num">5</div><div><div class="step-title">Time DEV (Squad) refina e planeja</div><div class="step-desc">Refinamento técnico e planejamento de sprints</div></div></div>
+          <div class="flow-step"><div class="step-num">6</div><div><div class="step-title">Times atuam em sprints ou ciclos</div><div class="step-desc">SCRUM ou KANBAN conforme o time</div></div></div>
+          <div class="flow-step"><div class="step-num">7</div><div><div class="step-title">Desenvolvimento executa</div><div class="step-desc">Implementação conforme esta norma</div></div></div>
+          <div class="flow-step"><div class="step-num">8</div><div><div class="step-title">QA testa</div><div class="step-desc">Validação de qualidade e critérios de aceite</div></div></div>
+          <div class="flow-step"><div class="step-num">9</div><div><div class="step-title">PO homologa</div><div class="step-desc">Aprovação funcional pelo Product Owner</div></div></div>
+          <div class="flow-step"><div class="step-num">10</div><div><div class="step-title">Entrega automatizada com plano de rollback</div><div class="step-desc">Deploy em produção com estratégia de reversão garantida</div></div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- Glossário -->
+      <div class="sp-section" id="glossario">
+        <h2 class="section-heading"><span class="sec-num">📖</span> Glossário</h2>
+        <table class="glossary-table">
+          <thead><tr><th>Termo</th><th>Definição</th></tr></thead>
+          <tbody>
+            <tr><td class="glossary-term">Arquitetura</td><td>Área que define padrões técnicos e estrutura dos sistemas.</td></tr>
+            <tr><td class="glossary-term">COTIC</td><td>Instância que valida e prioriza decisões técnicas.</td></tr>
+            <tr><td class="glossary-term">Contrato (API)</td><td>Regras formais que definem como um sistema conversa com outro.</td></tr>
+            <tr><td class="glossary-term">API-First</td><td>Primeiro define-se o contrato, depois implementa-se o sistema.</td></tr>
+            <tr><td class="glossary-term">Microserviço</td><td>Sistema pequeno e independente, usado quando há necessidade real de escala ou isolamento.</td></tr>
+            <tr><td class="glossary-term">Monólito Modular</td><td>Sistema único, mas organizado por partes bem separadas.</td></tr>
+            <tr><td class="glossary-term">Legado</td><td>Sistema já existente que precisa continuar funcionando.</td></tr>
+            <tr><td class="glossary-term">Versionamento</td><td>Controle de mudanças para não quebrar integrações existentes.</td></tr>
+            <tr><td class="glossary-term">C4</td><td>Modelo padrão de documentação arquitetural. <a class="sp-link" href="https://c4model.com/" target="_blank">c4model.com</a></td></tr>
+            <tr><td class="glossary-term">ADR</td><td>Registro formal de decisão técnica (Architecture Decision Record).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- /content-area -->
+  </main>
+</div><!-- /page-wrapper -->
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

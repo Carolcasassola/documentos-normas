@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papéis e Responsabilidades – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4;
+    --sp-blue-dark: #005a9e;
+    --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff;
+    --sp-neutral-10: #f3f2f1;
+    --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce;
+    --sp-neutral-60: #605e5c;
+    --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e;
+    --sp-sidebar-width: 260px;
+    --role-po: #0078d4;
+    --role-gp: #5c2d91;
+    --role-sm: #038387;
+    --role-ds: #e6700a;
+    --role-ux: #b146c2;
+    --role-dev: #107c10;
+    --role-qa: #d83b01;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 0; bottom: 0; left: 0; overflow-y: auto; z-index: 50; }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s, color .12s; }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active { background: var(--sp-blue-light); color: var(--sp-blue-dark); border-left-color: var(--sp-blue); font-weight: 600; }
+
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  .page-hero { background: linear-gradient(135deg, #003f6b 0%, var(--sp-blue-dark) 50%, var(--sp-blue) 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: 600; margin-top: 14px; position: relative; z-index: 1; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta { font-size: 12px; opacity: .75; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; position: relative; z-index: 1; }
+
+  .content-area { padding: 32px 48px; max-width: 1100px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-blue); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-num { background: var(--sp-blue); color: white; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
+  .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue); }
+
+  /* ROLES GRID */
+  .roles-overview { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 20px 0 28px; }
+  .role-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; transition: box-shadow .2s; }
+  .role-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+  .role-card-head { padding: 14px 16px 10px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--sp-neutral-20); }
+  .role-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; color: white; font-weight: 700; }
+  .role-name { font-size: 14px; font-weight: 700; color: var(--sp-neutral-90); }
+  .role-tagline { font-size: 12px; color: var(--sp-neutral-60); line-height: 1.4; margin-top: 2px; }
+  .role-card-body { padding: 12px 16px; }
+  .role-card-body ul { list-style: none; padding: 0; }
+  .role-card-body ul li { font-size: 12.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 16px; position: relative; line-height: 1.45; border-bottom: 1px solid var(--sp-neutral-20); }
+  .role-card-body ul li:last-child { border-bottom: none; }
+  .role-card-body ul li::before { content:'›'; position: absolute; left: 2px; color: var(--sp-blue); font-weight: 700; font-size: 14px; line-height: 1.3; }
+
+  /* RACI */
+  .raci-legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sp-neutral-80); }
+  .raci-wrapper { overflow-x: auto; margin: 16px 0 24px; border-radius: 2px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .raci-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--sp-neutral-0); min-width: 820px; }
+  .raci-table thead tr th { padding: 11px 8px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: white; border-right: 1px solid rgba(255,255,255,.2); white-space: nowrap; }
+  .raci-table thead tr th:first-child { text-align: left; padding-left: 14px; background: var(--sp-neutral-90); min-width: 240px; }
+  .th-po  { background: var(--role-po)  !important; }
+  .th-gp  { background: var(--role-gp)  !important; }
+  .th-sm  { background: var(--role-sm)  !important; }
+  .th-ds  { background: var(--role-ds)  !important; }
+  .th-ux  { background: var(--role-ux)  !important; }
+  .th-dev { background: var(--role-dev) !important; }
+  .th-qa  { background: var(--role-qa)  !important; }
+  .raci-table tbody tr td { padding: 9px 8px; text-align: center; border-bottom: 1px solid var(--sp-neutral-20); border-right: 1px solid var(--sp-neutral-20); vertical-align: middle; }
+  .raci-table tbody tr td:first-child { text-align: left; padding-left: 14px; font-size: 13px; color: var(--sp-neutral-80); font-weight: 500; background: var(--sp-neutral-10); border-right: 2px solid var(--sp-neutral-30); }
+  .raci-table tbody tr:last-child td { border-bottom: none; }
+  .raci-table tbody tr:hover td { background: #f0f6fc; }
+  .raci-table tbody tr:hover td:first-child { background: #e5f0f8; }
+  .raci-badge { display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 10px; white-space: nowrap; letter-spacing: .03em; }
+  .raci-r { background: #dff6dd; color: #107c10; border: 1px solid #9ed89a; }
+  .raci-a { background: #fff4ce; color: #7a5000; border: 1px solid #f0d080; }
+  .raci-c { background: var(--sp-blue-light); color: var(--sp-blue-dark); border: 1px solid #c7e0f4; }
+  .raci-i { background: var(--sp-neutral-20); color: var(--sp-neutral-60); border: 1px solid var(--sp-neutral-30); }
+
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-blue); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: var(--sp-blue-dark); }
+  #scrollTop.visible { display: flex; }
+
+  @media (max-width: 768px) { .left-nav { display: none; } .main-content { margin-left: 0; } .content-area { padding: 20px; } .page-hero { padding: 24px 20px; } .roles-overview { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#visao-geral" class="left-nav-item active">🧩 Visão Geral</a>
+    <span class="left-nav-label">Papéis</span>
+    <a href="#po"  class="left-nav-item">🎯 Product Owner</a>
+    <a href="#gp"  class="left-nav-item">📊 Gerente de Portfólio</a>
+    <a href="#sm"  class="left-nav-item">🔄 Scrum Master</a>
+    <a href="#ds"  class="left-nav-item">🗺️ Designer de Serviços</a>
+    <a href="#ux"  class="left-nav-item">🎨 UX/UI</a>
+    <a href="#dev" class="left-nav-item">💻 Desenvolvedores</a>
+    <a href="#qa"  class="left-nav-item">🧪 QAs</a>
+    <span class="left-nav-label">Matriz</span>
+    <a href="#raci" class="left-nav-item">📋 Matriz RACI</a>
+  </nav>
+
+  <main class="main-content">
+    <div class="page-hero">
+      <div class="hero-eyebrow">Governança · SME – Spassu · Documento Oficial</div>
+      <div class="hero-title"><strong>Papéis e Responsabilidades</strong></div>
+      <div class="hero-badge"><span class="dot"></span> Matriz RACI · Ateliê de Software</div>
+      <div class="hero-meta">
+        <span>👥 Todos os times</span>
+        <span>🏛️ SME – Spassu</span>
+        <span>📌 Referência institucional</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- VISÃO GERAL -->
+      <div class="sp-section" id="visao-geral">
+        <h2 class="section-heading"><span class="sec-num">🧩</span> Visão Geral dos Papéis</h2>
+        <div class="callout info">
+          <span class="callout-icon">ℹ️</span>
+          <div>
+            <strong>PO</strong> é o dono do produto e das decisões de valor ·
+            <strong>Gerente de Portfólio</strong> atua no nível estratégico e de priorização entre iniciativas ·
+            <strong>Scrum Master</strong> garante o processo, fluxo e melhoria contínua ·
+            <strong>Designer de Serviços</strong> olha para a experiência ponta a ponta ·
+            <strong>UX/UI</strong> foca na usabilidade, experiência e interface ·
+            <strong>Desenvolvedor</strong> é responsável pela implementação técnica ·
+            <strong>QA</strong> garante a qualidade e conformidade das entregas.
+          </div>
+        </div>
+        <div class="roles-overview">
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-po)">🎯</div>
+              <div><div class="role-name">Product Owner</div><div class="role-tagline">Dono do produto e das decisões de valor</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Ponte do negócio da área</li>
+              <li>Priorizar o backlog</li>
+              <li>Definir a visão do produto</li>
+              <li>Avaliar e aceitar as entregas</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-gp)">📊</div>
+              <div><div class="role-name">Gerente de Portfólio</div><div class="role-tagline">Visão estratégica entre iniciativas</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Visão estratégica do produto</li>
+              <li>Alinhar negócio e portfólio</li>
+              <li>Acompanhar métricas e resultados</li>
+              <li>Medir eficiência e eficácia</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-sm)">🔄</div>
+              <div><div class="role-name">Scrum Master</div><div class="role-tagline">Processo, fluxo e melhoria contínua</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Promover cultura ágil</li>
+              <li>Facilitar cerimônias Scrum</li>
+              <li>Remover impedimentos</li>
+              <li>Acompanhar boards e capacity</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-ds)">🗺️</div>
+              <div><div class="role-name">Designer de Serviços</div><div class="role-tagline">Experiência ponta a ponta</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Ponte entre PO e time de dev</li>
+              <li>Detalhar histórias e critérios</li>
+              <li>Documentar requisitos</li>
+              <li>Apoiar construção do backlog</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-ux)">🎨</div>
+              <div><div class="role-name">UX/UI</div><div class="role-tagline">Usabilidade, experiência e interface</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Criar fluxos e jornadas</li>
+              <li>Wireframes, protótipos e layouts</li>
+              <li>Garantir consistência visual</li>
+              <li>Validar usabilidade</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-dev)">💻</div>
+              <div><div class="role-name">Desenvolvedores</div><div class="role-tagline">Implementação técnica</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Analisar e estimar histórias</li>
+              <li>Implementar conforme critérios</li>
+              <li>Garantir qualidade de código</li>
+              <li>Identificar riscos técnicos</li>
+            </ul></div>
+          </div>
+          <div class="role-card">
+            <div class="role-card-head">
+              <div class="role-avatar" style="background:var(--role-qa)">🧪</div>
+              <div><div class="role-name">QAs</div><div class="role-tagline">Qualidade e conformidade</div></div>
+            </div>
+            <div class="role-card-body"><ul>
+              <li>Elaborar cenários de teste</li>
+              <li>Executar testes funcionais</li>
+              <li>Registrar e acompanhar defeitos</li>
+              <li>Garantir rastreabilidade</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- PO -->
+      <div class="sp-section" id="po">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-po)">🎯</span> Product Owner</h2>
+        <ul class="sp-list">
+          <li>Ser a ponte do negócio da área</li>
+          <li>Apresentar as demandas</li>
+          <li>Detalhar critérios</li>
+          <li>Levantar necessidades</li>
+          <li>Escrever histórias (com apoio do DS se necessário)</li>
+          <li>Tirar dúvidas do negócio</li>
+          <li>Definir a visão do produto</li>
+          <li>Priorizar o backlog</li>
+          <li>Avaliar e aceitar as entregas realizadas</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- GP -->
+      <div class="sp-section" id="gp">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-gp)">📊</span> Gerente de Portfólio</h2>
+        <ul class="sp-list">
+          <li>Auxiliar na visão estratégica do produto ou solução</li>
+          <li>Alinhar o negócio e o portfólio dos produtos</li>
+          <li>Acompanhar métricas e resultados</li>
+          <li>Acompanhar as entregas realizadas</li>
+          <li>Medir eficiência, eficácia e satisfação do projeto</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- SM -->
+      <div class="sp-section" id="sm">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-sm)">🔄</span> Scrum Master</h2>
+        <ul class="sp-list">
+          <li>Promover a cultura ágil</li>
+          <li>Facilitar todas as cerimônias Scrum</li>
+          <li>Ser a ponte entre time de desenvolvimento e negócio</li>
+          <li>Remover impedimentos</li>
+          <li>Alinhar comunicações</li>
+          <li>Acompanhar o desenvolvimento em direção à meta da sprint</li>
+          <li>Acompanhar a saúde dos boards, capacity, velocity, lançamento de horas e gestão de tempo</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- DS -->
+      <div class="sp-section" id="ds">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-ds)">🗺️</span> Designer de Serviços</h2>
+        <ul class="sp-list">
+          <li>Auxiliar o PO no entendimento do negócio e escrita de histórias</li>
+          <li>Identificar as necessidades do produto e auxiliar no entendimento técnico junto ao time</li>
+          <li>Ser a voz e a ponte entre o PO e o time de desenvolvimento</li>
+          <li>Documentar requisitos funcionais e não funcionais</li>
+          <li>Auxiliar na definição de regras de negócio, fluxos e processos</li>
+          <li>Auxiliar na criação de roadmaps do projeto</li>
+          <li>Apoiar o PO na construção e refinamento do backlog</li>
+          <li>Detalhar histórias e critérios de aceite</li>
+          <li>Apresentar ao time, estimar e planejar sprints</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- UX -->
+      <div class="sp-section" id="ux">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-ux)">🎨</span> UX/UI</h2>
+        <ul class="sp-list">
+          <li>Entender as necessidades e comportamentos dos usuários</li>
+          <li>Traduzir requisitos de negócio em soluções de experiência e interface</li>
+          <li>Criar fluxos de navegação e jornadas do usuário</li>
+          <li>Elaborar wireframes, protótipos e layouts das telas</li>
+          <li>Garantir consistência visual e aderência ao design system dos sistemas</li>
+          <li>Validar usabilidade das soluções propostas</li>
+          <li>Apoiar o time na compreensão da experiência esperada</li>
+          <li>Participar dos refinamentos para garantir clareza na experiência do usuário</li>
+          <li>Apoiar validações de interface durante o desenvolvimento</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- DEV -->
+      <div class="sp-section" id="dev">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-dev)">💻</span> Desenvolvedores</h2>
+        <ul class="sp-list">
+          <li>Analisar tecnicamente as histórias priorizadas no backlog</li>
+          <li>Estimar esforço de implementação junto ao time</li>
+          <li>Implementar as funcionalidades conforme histórias e critérios de aceite</li>
+          <li>Garantir qualidade de código, padrões e boas práticas de desenvolvimento</li>
+          <li>Realizar testes unitários e apoiar testes integrados</li>
+          <li>Participar de refinamentos para esclarecer dúvidas técnicas</li>
+          <li>Colaborar com UX/UI para garantir fidelidade da interface implementada</li>
+          <li>Identificar riscos técnicos e propor soluções</li>
+          <li>Atualizar documentação técnica quando necessário</li>
+          <li>Apoiar correções de bugs e melhorias evolutivas do sistema</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- QA -->
+      <div class="sp-section" id="qa">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-qa)">🧪</span> QAs</h2>
+        <ul class="sp-list">
+          <li>Definir estratégias de teste para as funcionalidades desenvolvidas</li>
+          <li>Analisar histórias e critérios de aceite sob a ótica de qualidade</li>
+          <li>Elaborar cenários e casos de teste</li>
+          <li>Executar testes funcionais, exploratórios e de regressão</li>
+          <li>Validar se as entregas atendem aos critérios definidos</li>
+          <li>Registrar, documentar e acompanhar defeitos encontrados</li>
+          <li>Apoiar o time na prevenção de falhas e melhoria da qualidade</li>
+          <li>Contribuir para a automação de testes quando aplicável</li>
+          <li>Garantir rastreabilidade entre requisitos, testes e resultados</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- RACI -->
+      <div class="sp-section" id="raci">
+        <h2 class="section-heading"><span class="sec-num">📋</span> Matriz RACI</h2>
+        <div class="raci-legend">
+          <strong style="font-size:12px;color:var(--sp-neutral-60)">Legenda:</strong>
+          <div class="legend-item"><span class="raci-badge raci-r">R</span> Responsável (executa)</div>
+          <div class="legend-item"><span class="raci-badge raci-a">A</span> Aprovador (decide/valida)</div>
+          <div class="legend-item"><span class="raci-badge raci-c">C</span> Consultado</div>
+          <div class="legend-item"><span class="raci-badge raci-i">I</span> Informado</div>
+        </div>
+        <div class="raci-wrapper">
+          <table class="raci-table">
+            <thead>
+              <tr>
+                <th>Atividade</th>
+                <th class="th-po">🎯 PO</th>
+                <th class="th-gp">📊 Ger. Portfólio</th>
+                <th class="th-sm">🔄 Scrum Master</th>
+                <th class="th-ds">🗺️ Design. Serviços</th>
+                <th class="th-ux">🎨 UX/UI</th>
+                <th class="th-dev">💻 Dev</th>
+                <th class="th-qa">🧪 QA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Definição de visão do produto</td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Alinhamento estratégico / portfólio</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Priorização do backlog</td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Escrita e detalhamento de histórias</td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Planejamento de Sprint</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Facilitação das cerimônias Scrum</td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Desenho da jornada do usuário</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Pesquisa com usuários</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Design de interfaces (UI)</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Validação de usabilidade</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Desenvolvimento da solução</td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td></tr>
+              <tr><td>Revisão técnica / código</td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td></tr>
+              <tr><td>Testes funcionais e não funcionais</td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td></tr>
+              <tr><td>Garantia da qualidade da entrega</td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td></tr>
+              <tr><td>Gestão de impedimentos</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td></tr>
+              <tr><td>Acompanhamento de métricas e resultados</td><td><span class="raci-badge raci-a">A/C</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td></tr>
+              <tr><td>Aceite da entrega</td><td><span class="raci-badge raci-r">R</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-c">C/I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-i">I</span></td><td><span class="raci-badge raci-c">C/I</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
