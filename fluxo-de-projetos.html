@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluxo de Projetos – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4; --sp-blue-dark: #005a9e; --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff; --sp-neutral-10: #f3f2f1; --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce; --sp-neutral-60: #605e5c; --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e; --sp-green: #107c10; --sp-orange: #986f0b;
+    --sp-purple: #5c2d91; --sp-teal: #038387; --sp-red: #a4262c;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* TOPBAR */
+  .sme-topbar { background: linear-gradient(90deg,#0f1923 0%,#162032 100%); height: 60px; display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.45); font-family: 'Segoe UI',sans-serif; border-bottom: 1px solid rgba(0,120,212,.3); }
+  .sme-topbar-logo { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; padding-right: 24px; border-right: 1px solid rgba(255,255,255,.12); margin-right: 16px; }
+  .sme-topbar-logo .logo-badge { background: #0078d4; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: .06em; }
+  .sme-topbar-logo .logo-text { color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+  .sme-topbar-nav { display: flex; align-items: stretch; gap: 4px; flex: 1; overflow-x: auto; height: 100%; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link { color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; text-decoration: none; padding: 0 14px; white-space: nowrap; transition: background .15s,color .15s,border-color .15s; display: flex; align-items: center; gap: 7px; border-bottom: 3px solid transparent; }
+  .sme-nav-link:hover { background: rgba(255,255,255,.07); color: #fff; border-bottom-color: rgba(0,120,212,.5); }
+  .sme-nav-link.active { color: #fff; font-weight: 600; background: rgba(0,120,212,.15); border-bottom-color: #0078d4; }
+  .sme-nav-link .nav-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* SIDEBAR */
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; z-index: 50; height: calc(100vh - 60px); }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s,color .12s; }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active { background: var(--sp-blue-light); color: var(--sp-blue-dark); border-left-color: var(--sp-blue); font-weight: 600; }
+
+  /* MAIN */
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* HERO */
+  .page-hero { background: linear-gradient(135deg,#003f6b 0%,var(--sp-blue-dark) 50%,var(--sp-blue) 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-sub { font-size: 14px; opacity: .8; position: relative; z-index: 1; margin-bottom: 14px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: 600; position: relative; z-index: 1; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta { font-size: 12px; opacity: .75; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; position: relative; z-index: 1; }
+
+  /* CONTENT */
+  .content-area { padding: 32px 48px; max-width: 980px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-blue); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-num { background: var(--sp-blue); color: white; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .subsection-heading { font-size: 15px; font-weight: 600; color: var(--sp-blue-dark); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .subsection-heading::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--sp-blue); border-radius: 2px; flex-shrink: 0; }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
+  .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue); }
+
+  /* FLOW STEPS */
+  .flow-steps { margin: 16px 0 24px; }
+  .flow-step { display: flex; gap: 16px; margin-bottom: 4px; }
+  .flow-step-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .flow-step-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; flex-shrink: 0; }
+  .flow-step-connector { width: 2px; flex: 1; min-height: 12px; background: var(--sp-neutral-30); margin: 2px 0; }
+  .flow-step:last-child .flow-step-connector { display: none; }
+  .flow-step-body { padding: 6px 0 16px; flex: 1; }
+  .flow-step-title { font-size: 14px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 4px; }
+  .flow-step-desc { font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+  .flow-sub { list-style: none; padding: 0; margin-top: 6px; }
+  .flow-sub li { font-size: 12.5px; color: var(--sp-neutral-60); padding: 2px 0 2px 16px; position: relative; line-height: 1.5; }
+  .flow-sub li::before { content:'›'; position: absolute; left: 2px; color: var(--sp-blue); font-weight: 700; }
+
+  /* TABS */
+  .tab-bar { display: flex; gap: 2px; border-bottom: 2px solid var(--sp-neutral-20); margin-bottom: 20px; overflow-x: auto; }
+  .tab-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--sp-neutral-60); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: color .15s,border-color .15s; font-family: 'Segoe UI',sans-serif; }
+  .tab-btn:hover { color: var(--sp-blue); }
+  .tab-btn.active { color: var(--sp-blue-dark); border-bottom-color: var(--sp-blue); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* PROPERTY BAG */
+  .property-bag { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 2px; overflow: hidden; margin-bottom: 20px; }
+  .property-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row:last-child { border-bottom: none; }
+  .property-key { background: var(--sp-neutral-10); padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--sp-neutral-60); text-transform: uppercase; letter-spacing: .04em; display: flex; align-items: center; border-right: 1px solid var(--sp-neutral-20); }
+  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout.warn    { background: #fff4ce; border-left: 4px solid #f7c948; color: #7a5000; }
+  .callout.danger  { background: #fde7e9; border-left: 4px solid var(--sp-red); color: #6b0e14; }
+  .callout.success { background: #dff6dd; border-left: 4px solid var(--sp-green); color: #1a5c1a; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .mini-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 16px; }
+  .mini-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--sp-blue-dark); margin-bottom: 10px; }
+
+  /* TAG */
+  .tag { display: inline-flex; align-items: center; background: var(--sp-blue-light); color: var(--sp-blue-dark); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin: 2px; }
+  .tag.green  { background: #dff6dd; color: #107c10; }
+  .tag.orange { background: #fff4ce; color: #986f0b; }
+  .tag.red    { background: #fde7e9; color: var(--sp-red); }
+  .tag.purple { background: #f0e6ff; color: var(--sp-purple); }
+  .tag.teal   { background: #e0f6fb; color: var(--sp-teal); }
+
+  /* RACI MINI */
+  .raci-mini { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); }
+  .raci-mini thead th { padding: 8px 10px; background: var(--sp-neutral-90); color: white; font-size: 11px; font-weight: 700; text-align: center; border-right: 1px solid rgba(255,255,255,.15); }
+  .raci-mini thead th:first-child { text-align: left; min-width: 180px; }
+  .raci-mini tbody td { padding: 7px 10px; text-align: center; border-bottom: 1px solid var(--sp-neutral-20); border-right: 1px solid var(--sp-neutral-20); font-size: 12px; }
+  .raci-mini tbody td:first-child { text-align: left; background: var(--sp-neutral-10); font-weight: 500; font-size: 12px; color: var(--sp-neutral-80); border-right: 2px solid var(--sp-neutral-30); }
+  .raci-mini tbody tr:last-child td { border-bottom: none; }
+  .raci-mini tbody tr:hover td { background: #f0f6fc; }
+  .raci-mini tbody tr:hover td:first-child { background: #e5f0f8; }
+  .rb { display: inline-flex; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+  .rb-r { background: #dff6dd; color: #107c10; border: 1px solid #9ed89a; }
+  .rb-a { background: #fff4ce; color: #7a5000; border: 1px solid #f0d080; }
+  .rb-c { background: var(--sp-blue-light); color: var(--sp-blue-dark); border: 1px solid #c7e0f4; }
+  .rb-i { background: var(--sp-neutral-20); color: var(--sp-neutral-60); border: 1px solid var(--sp-neutral-30); }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-blue); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: var(--sp-blue-dark); }
+  #scrollTop.visible { display: flex; }
+  @media(max-width:768px){ .left-nav{display:none} .main-content{margin-left:0} .content-area{padding:20px} .page-hero{padding:24px 20px} .two-col{grid-template-columns:1fr} .property-row{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<style>
+  .sme-topbar {background:linear-gradient(90deg,#0f1923 0%,#162032 100%);height:60px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.45);font-family:'Segoe UI',sans-serif;border-bottom:1px solid rgba(0,120,212,.3);}
+  .sme-topbar-logo {font-size:14px;font-weight:700;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;padding-right:24px;border-right:1px solid rgba(255,255,255,.12);margin-right:16px;}
+  .sme-topbar-logo .logo-badge {background:#0078d4;color:white;font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;letter-spacing:.06em;}
+  .sme-topbar-logo .logo-text {color:rgba(255,255,255,.85);font-size:13px;font-weight:500;}
+  .sme-topbar-nav {display:flex;align-items:stretch;gap:4px;flex:1;overflow-x:auto;height:100%;}
+  .sme-topbar-nav::-webkit-scrollbar {display:none;}
+  .sme-nav-link {color:rgba(255,255,255,.65);font-size:12.5px;font-weight:500;text-decoration:none;padding:0 14px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;display:flex;align-items:center;gap:7px;border-bottom:3px solid transparent;}
+  .sme-nav-link:hover {background:rgba(255,255,255,.07);color:#fff;border-bottom-color:rgba(0,120,212,.5);}
+  .sme-nav-link.active {color:#fff;font-weight:600;background:rgba(0,120,212,.15);border-bottom-color:#0078d4;}
+  .sme-nav-link .nav-icon {font-size:15px;flex-shrink:0;}
+  .left-nav {top:60px !important;height:calc(100vh - 60px) !important;}
+</style>
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link active"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+  </nav>
+</header>
+
+<!-- TOPBAR -->
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="#" class="sme-nav-link active"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+  </nav>
+</header>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#portfolio"    class="left-nav-item active">📊 Portfólio de Projetos</a>
+    <a href="#papeis"       class="left-nav-item">👥 Papéis por Etapa</a>
+    <span class="left-nav-label">Fluxos</span>
+    <a href="#fluxos"       class="left-nav-item">🔄 Novos Sistemas</a>
+    <a href="#fluxos"       class="left-nav-item">♻️ Evolução em Sustentação</a>
+    <a href="#fluxos"       class="left-nav-item">📈 Crescimento não previsto</a>
+    <span class="left-nav-label">Metodologia</span>
+    <a href="#metodologia"  class="left-nav-item">⚙️ Metodologia de Dev</a>
+    <a href="#trimestral"   class="left-nav-item">📅 Planejamento Trimestral</a>
+    <a href="#agenda"       class="left-nav-item">🗓️ Agenda Trimestral</a>
+    <a href="#criterios"    class="left-nav-item">✅ Critérios para Novos Sistemas</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <div class="hero-eyebrow">Ateliê de Software Spassu · SME · Documento Institucional</div>
+      <div class="hero-title"><strong>Fluxo de Projetos</strong></div>
+      <div class="hero-sub">Portfólio · Papéis · Fluxos de Novos Sistemas · Evolução · Metodologia de Desenvolvimento</div>
+      <div class="hero-badge"><span class="dot"></span> Referência oficial para todos os times</div>
+      <div class="hero-meta">
+        <span>👥 Ateliê Spassu</span>
+        <span>🏛️ COTIC / DISIS</span>
+        <span>📅 2025</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- PORTFÓLIO -->
+      <div class="sp-section" id="portfolio">
+        <h2 class="section-heading"><span class="sec-num">📊</span> Portfólio de Projetos</h2>
+        <p class="sp-text">O portfólio cumpre sua função de <strong>priorizar e balancear investimentos</strong> de todos os tipos de recursos, e não apenas consolidar projetos já em andamento. Será a referência para as tomadas de decisões.</p>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>📋 Etapas do Portfólio</h5>
+            <ul class="sp-list">
+              <li>Listar todas as iniciativas conhecidas (backlog, novos produtos, funcionalidades, melhorias)</li>
+              <li>Definir critérios de priorização e complexidade</li>
+              <li>Pontuar relevância das iniciativas × critérios</li>
+              <li>Ordenar as iniciativas por pontuação</li>
+              <li>Definir iniciativas priorizadas para o planejamento trimestral</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>📦 Entregáveis</h5>
+            <ul class="sp-list">
+              <li>Critérios de priorização do Portfólio definidos</li>
+              <li>Visão de planejamento estratégico dos próximos 3 meses</li>
+              <li>Portfólio elencado e pontuado</li>
+              <li>Portfólio priorizado</li>
+            </ul>
+            <div style="margin-top:10px">
+              <span class="tag teal">Revisão a cada 3 meses</span>
+              <span class="tag">DevOps usa para cronograma</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-icon">📅</span>
+          <div>Ao início de cada ano, verificar o <strong>calendário anual da SME</strong> para repriorização do portfólio considerando os eventos institucionais definidos.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- PAPÉIS POR ETAPA -->
+      <div class="sp-section" id="papeis">
+        <h2 class="section-heading"><span class="sec-num">👥</span> Papéis Envolvidos por Etapa</h2>
+
+        <div style="overflow-x:auto;margin-bottom:16px">
+          <table class="raci-mini">
+            <thead>
+              <tr>
+                <th>Etapa</th>
+                <th>PO</th>
+                <th>COTIC/GP</th>
+                <th>Usuários-Chave</th>
+                <th>Designer de Serviços</th>
+                <th>UX/UI</th>
+                <th>Desenvolvedores</th>
+                <th>QA</th>
+                <th>Infra/Arq/DBA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Descobertas</td>
+                <td><span class="rb rb-r">R/A*</span></td>
+                <td><span class="rb rb-i">I</span></td>
+                <td><span class="rb rb-c">C</span></td>
+                <td><span class="rb rb-c">C/I</span></td>
+                <td><span class="rb rb-c">C</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Prototipação e Infraestrutura</td>
+                <td><span class="rb rb-a">A</span></td>
+                <td><span class="rb rb-a">A</span></td>
+                <td><span class="rb rb-c">C</span></td>
+                <td><span class="rb rb-c">C/I</span></td>
+                <td><span class="rb rb-r">R</span></td>
+                <td><span class="rb rb-c">C</span></td>
+                <td>—</td>
+                <td><span class="rb rb-r">R/C</span></td>
+              </tr>
+              <tr>
+                <td>Desenvolvimento</td>
+                <td><span class="rb rb-a">A</span></td>
+                <td><span class="rb rb-i">I</span></td>
+                <td>—</td>
+                <td><span class="rb rb-c">C/I</span></td>
+                <td><span class="rb rb-c">C</span></td>
+                <td><span class="rb rb-r">R</span></td>
+                <td><span class="rb rb-c">C/I</span></td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:11px;color:var(--sp-neutral-60);margin-bottom:16px">
+          * Aprova quando o fluxo de projeto for existente · <span class="rb rb-r" style="font-size:10px">R</span> Responsável &nbsp; <span class="rb rb-a" style="font-size:10px">A</span> Aprovador &nbsp; <span class="rb rb-c" style="font-size:10px">C</span> Consultado &nbsp; <span class="rb rb-i" style="font-size:10px">I</span> Informado
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- FLUXOS COM TABS -->
+      <div class="sp-section" id="fluxos">
+        <h2 class="section-heading"><span class="sec-num">🔄</span> Fluxos de Projeto</h2>
+
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="showTab('novos', this)">🆕 Novos Sistemas</button>
+          <button class="tab-btn" onclick="showTab('evolucao', this)">♻️ Evolução em Sustentação</button>
+          <button class="tab-btn" onclick="showTab('crescimento', this)">📈 Crescimento não previsto</button>
+        </div>
+
+        <!-- TAB: NOVOS SISTEMAS -->
+        <div class="tab-panel active" id="tab-novos">
+          <div class="callout info">
+            <span class="callout-icon">ℹ️</span>
+            <div>Aplica-se a: <strong>áreas que não possuam sistemas</strong> ou áreas da SME que já possuam equipes e precisem de novo produto.</div>
+          </div>
+          <div class="flow-steps">
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#605e5c">1</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Área identifica necessidade</div>
+                <div class="flow-step-desc">Descobre um problema que precisa ser solucionado com a construção de um sistema. Antes de prosseguir, deve verificar:</div>
+                <ul class="flow-sub">
+                  <li>Existe programa de "Caixinha" que possa atender?</li>
+                  <li>Existe um SaaS que possa atender?</li>
+                  <li>Existe programa customizável para contratar?</li>
+                  <li>Se sim para qualquer um: TR e/ou contrato deve ser validado por COTIC</li>
+                </ul>
+                <div class="callout danger" style="margin-top:10px">
+                  <span class="callout-icon">⚠️</span>
+                  <div>Se a Área contratar o desenvolvimento externamente, só será possível <strong>sustentar e internalizar o sistema</strong> se: COTIC participou desde o início · roda em GNU/Linux Debian (preferencialmente Docker) · usa linguagem disponível na equipe · usa licença livre compatível com AGPLv3.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#0078d4">2</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Área envia e-mail à COTIC</div>
+                <div class="flow-step-desc">O e-mail deve conter:</div>
+                <ul class="flow-sub">
+                  <li>O que o sistema deve fazer</li>
+                  <li>Por que precisa ser desenvolvido do zero (respostas das verificações anteriores)</li>
+                  <li>Como contribui para cumprimento das Metas da SME</li>
+                  <li>Que a Área tem pessoal disponível imediatamente para atender os responsáveis</li>
+                  <li>Que aprovado, a Área tem uma pessoa e um substituto disponíveis por <strong>20h semanais</strong></li>
+                </ul>
+                <div class="callout warn" style="margin-top:8px">
+                  <span class="callout-icon">⚠️</span>
+                  <div>A <strong>indisponibilidade do PO torna o projeto inviável</strong>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#5c2d91">3</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Comitê de TI — Aprovação</div>
+                <div class="flow-step-desc">O pedido passa pelo Comitê de TI:</div>
+                <ul class="flow-sub">
+                  <li><span class="tag red">Reprovado</span> — não será feito; buscar alternativas</li>
+                  <li><span class="tag orange">Suspenso</span> — aguardar nova apreciação (possível após 3 meses)</li>
+                  <li><span class="tag green">Aprovado</span> — segue para as próximas fases</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#e6700a">4</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Design de Serviços — Mapeamento e Fluxos</div>
+                <div class="flow-step-desc">Entrevista a Área para mapear e desenhar os fluxos de trabalho. Não há prazo determinado — depende da complexidade, disponibilidade da Área e do Designer. Ao término, apresenta o resultado para validação da Área.</div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#a4262c">5</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Preenchimento da Ficha Vermelha</div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#038387">6</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Desenho de Arquitetura</div>
+                <ul class="flow-sub">
+                  <li>Criação de história para Desenho de Arquitetura</li>
+                  <li>Pedido feito pelo Design de Serviço ou Gerente Responsável</li>
+                  <li>COTIC/DISIS prioriza de acordo com necessidade e capacidade</li>
+                  <li>Área deve disponibilizar alguém para esclarecimentos ao Arquiteto</li>
+                  <li>Arquiteto entrega desenho da nova aplicação para COTIC/DISIS</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#b146c2">7</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">UX/UI — Prototipação</div>
+                <ul class="flow-sub">
+                  <li>Wireframe e validação de tela com a Área</li>
+                  <li>Protótipo navegável e testes de usabilidade com a Área</li>
+                  <li>Ajustes de tela se necessário</li>
+                  <li>Validação técnica do protótipo (DEV e QA)</li>
+                  <li>Validação e aprovação do protótipo pelo PO</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#107c10">8</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">COTIC/DISIS define o time</div>
+                <ul class="flow-sub">
+                  <li>Gerente de Portfólio · Scrum Master · Designer de Serviços do Projeto</li>
+                  <li>Treinamento do PO e seu substituto por COTIC/DISIS</li>
+                  <li>PO e substituto definidos pela Área</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#986f0b">9</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">RoadMap</div>
+                <ul class="flow-sub">
+                  <li>Área + Design de Serviço + Scrum Master definem o RoadMap</li>
+                  <li>Definição do MPV (Mínimo Produto Viável)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#0078d4">10</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">PO escreve as Histórias</div>
+                <ul class="flow-sub">
+                  <li>Com apoio do Designer de Serviços</li>
+                  <li>Planejamento inicial e priorização do backlog</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#605e5c">11</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">COTIC define tecnologia</div>
+                <div class="flow-step-desc">Define detalhes técnicos e tecnologia adotada pela aplicação.</div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#605e5c">12–13</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">OS e Contratação</div>
+                <ul class="flow-sub">
+                  <li>COTIC abre OS (Ordem de Serviço) para disponibilização de profissionais</li>
+                  <li>Spassu contrata desenvolvedores e/ou profissionais conforme especificado</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#0078d4">14</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Sprint 0</div>
+                <ul class="flow-sub">
+                  <li>Desenvolvedores estudam arquitetura e negócio</li>
+                  <li>Pedido de tarefas da fase 14</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#038387">15</div>
+                <div class="flow-step-connector"></div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Líder Técnico solicita infraestrutura ao DevOps</div>
+                <ul class="flow-sub">
+                  <li>Repositório da aplicação</li>
+                  <li>Ambiente de QA · Banco de Dados · Esteiras de Deploy</li>
+                  <li>Ao final da Sprint 0 ou início da Sprint 1: Ambiente de Homologação</li>
+                  <li>Antes da ponta começar a usar: Ambiente de Produção</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line">
+                <div class="flow-step-circle" style="background:#107c10">16</div>
+              </div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Sistema vai para Sustentação</div>
+                <div class="flow-step-desc">Terminado o RoadMap validado, o sistema vai para sustentação.</div>
+                <span class="tag green" style="margin-top:6px;display:inline-flex">Fim do fluxo de desenvolvimento</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB: EVOLUÇÃO -->
+        <div class="tab-panel" id="tab-evolucao">
+          <div class="callout info">
+            <span class="callout-icon">ℹ️</span>
+            <div>Aplica-se a sistemas que já estão em <strong>sustentação</strong> e precisam de novas funcionalidades.</div>
+          </div>
+          <div class="flow-steps">
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#605e5c">1</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Área identifica necessidade de evolução</div>
+                <div class="flow-step-desc">Descobre um problema a ser solucionado com a evolução de um sistema que está em sustentação.</div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#0078d4">2</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Área envia e-mail à COTIC</div>
+                <ul class="flow-sub">
+                  <li>O que o sistema deve fazer que ainda não faz</li>
+                  <li>Como contribui para cumprimento das Metas da SME</li>
+                  <li>Que a Área tem pessoal disponível para atender os responsáveis</li>
+                  <li>Que legislação mudou exigindo a evolução do sistema</li>
+                  <li>Que aprovado, a Área tem PO e substituto disponíveis por 20h semanais</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#5c2d91">3</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Comitê de TI — Aprovação</div>
+                <ul class="flow-sub">
+                  <li><span class="tag red">Reprovado</span> — buscar alternativas</li>
+                  <li><span class="tag orange">Suspenso</span> — nova apreciação após 6 meses</li>
+                  <li><span class="tag green">Aprovado</span> — segue para próximas fases</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#e6700a">4–5</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Design de Serviços + Atualização da Ficha Vermelha</div>
+                <ul class="flow-sub">
+                  <li>Mapeia e desenha fluxos da(s) nova(s) funcionalidade(s)</li>
+                  <li>Apresenta resultado para validação da Área</li>
+                  <li>Atualiza a Ficha Vermelha</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#038387">6</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Desenho de Arquitetura</div>
+                <ul class="flow-sub">
+                  <li>Pedido feito via ferramenta própria</li>
+                  <li>COTIC/DISIS prioriza e designa arquiteto</li>
+                  <li>Arquiteto entrega desenho e COTIC valida ou sugere ajustes</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#b146c2">7</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">UX/UI — Prototipação das novas telas</div>
+                <ul class="flow-sub">
+                  <li>Wireframe + validação · Protótipo navegável + testes de usabilidade</li>
+                  <li>Validação técnica (DEV e QA) · Aprovação pelo PO</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#107c10">8–9</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">COTIC define time · Atualização do RoadMap</div>
+                <ul class="flow-sub">
+                  <li>Gerente de Portfólio · Scrum Master · Design de Serviços</li>
+                  <li>Área + DS + SM definem novo RoadMap e limites da nova funcionalidade</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#0078d4">10–11</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Histórias + Tecnologia</div>
+                <ul class="flow-sub">
+                  <li>PO escreve histórias com apoio do DS · Priorização do backlog</li>
+                  <li>COTIC define detalhes técnicos e tecnologia</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#605e5c">12–13</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">OS ou realocação + Sprint de Reinício</div>
+                <ul class="flow-sub">
+                  <li>COTIC abre OS se necessário, ou realoca profissionais disponíveis</li>
+                  <li>Sprint de reinício: desenvolvedores estudam arquitetura e negócio</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#038387">15</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Líder Técnico — Ajustes de infraestrutura (se necessário)</div>
+                <ul class="flow-sub">
+                  <li>Ajustes no repositório · Atualização de QA, Banco de Dados, Esteiras</li>
+                  <li>Atualização de Homologação ao final do Sprint de reinício</li>
+                  <li>Atualização de Produção antes da ponta começar a usar</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#107c10">16</div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Sistema volta para Sustentação</div>
+                <div class="flow-step-desc">Terminado o novo RoadMap validado, o sistema volta para sustentação.</div>
+                <span class="tag green" style="margin-top:6px;display:inline-flex">Ciclo de evolução encerrado</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB: CRESCIMENTO -->
+        <div class="tab-panel" id="tab-crescimento">
+          <div class="callout info">
+            <span class="callout-icon">ℹ️</span>
+            <div>Aplica-se a <strong>sistemas em desenvolvimento</strong> que precisam crescer com funcionalidades não previstas inicialmente.</div>
+          </div>
+          <div class="flow-steps">
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#605e5c">1</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Verificar aderência ao Plano de Metas</div>
+                <ul class="flow-sub">
+                  <li>Se a mudança não atende ao Plano de Metas → cancelar</li>
+                  <li>Se a mudança não está no RoadMap → RoadMap deve ser atualizado</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#e6700a">2</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Design de Serviços — Desenho dos processos</div>
+                <ul class="flow-sub">
+                  <li>Se não há desenho → fazê-lo antes de prosseguir</li>
+                  <li>Analisar se há necessidade de atualização dos desenhos existentes</li>
+                  <li>Design valida o desenho com a Área e insere no board do Projeto no Azure</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#038387">3</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Desenho de Arquitetura</div>
+                <ul class="flow-sub">
+                  <li>Se não existe → solicitar à COTIC para designar arquiteto</li>
+                  <li>Arquiteto valida com COTIC e insere no board do Projeto no Azure</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#a4262c">4–5</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Ficha Vermelha</div>
+                <ul class="flow-sub">
+                  <li>Validar necessidade de refazer a Ficha Vermelha</li>
+                  <li>Preencher se necessário</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#b146c2">6</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">UX/UI — Prototipação</div>
+                <ul class="flow-sub">
+                  <li>Wireframe + validação · Protótipo navegável + testes de usabilidade</li>
+                  <li>Validação técnica (DEV e QA) · Aprovação pelo PO</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#986f0b">7</div><div class="flow-step-connector"></div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Atualização do RoadMap</div>
+                <div class="flow-step-desc">Área + Design de Serviço + Scrum Master atualizam o RoadMap considerando as mudanças.</div>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-step-line"><div class="flow-step-circle" style="background:#0078d4">8–9</div></div>
+              <div class="flow-step-body">
+                <div class="flow-step-title">Histórias e Tecnologia</div>
+                <ul class="flow-sub">
+                  <li>PO escreve histórias com apoio do DS · Planejamento da evolução e priorização do backlog</li>
+                  <li>COTIC define detalhes técnicos e tecnologia adotada para a melhoria</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- METODOLOGIA -->
+      <div class="sp-section" id="metodologia">
+        <h2 class="section-heading"><span class="sec-num">⚙️</span> Metodologia de Desenvolvimento</h2>
+
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">Responsabilidade do PO</div>
+            <div class="property-val">Apoio: Designer de Serviços · UX/UI · Scrum Master</div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Responsabilidade do Time Técnico</div>
+            <div class="property-val">Apoio: Designer de Serviços · UX/UI · Scrum Master<br>Validação e aceites: Dono do Produto (PO)</div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Envolvidos gerais</div>
+            <div class="property-val">COTIC e GP Spassu · Designer de Serviços · UX/UI · Scrum Master · Gerente do Produto (PM) · Usuários-chave</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- PLANEJAMENTO TRIMESTRAL -->
+      <div class="sp-section" id="trimestral">
+        <h2 class="section-heading"><span class="sec-num">📅</span> Planejamento Trimestral</h2>
+        <p class="sp-text">O planejamento trimestral organiza o ciclo de desenvolvimento em <strong>upstream</strong> (estratégia e backlog) e <strong>downstream</strong> (execução e entrega).</p>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>⬆️ Upstream</h5>
+            <ul class="sp-list">
+              <li><strong>Revisão Estratégica</strong> — acompanhamento focado na estratégia, objetivos e implementação</li>
+              <li><strong>Portfolio Sync</strong> — progresso em relação aos planos e resultados do Portfólio</li>
+              <li><strong>Governança das Iniciativas</strong> — perfis alocados × projetos em andamento · total de profissionais previsto × projetos futuros</li>
+              <li><strong>SoS — Quinzenal</strong></li>
+              <li><strong>PO Sync — Quinzenal</strong> (PM, PO, SM, DS)</li>
+              <li><strong>PM Sync — Quinzenal</strong></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>⬇️ Downstream</h5>
+            <ul class="sp-list">
+              <li><strong>Revisão quinzenal do backlog</strong> a cada 2 sprints</li>
+              <li>Planejamento orientado ao Portfolio Backlog e seus objetivos/indicadores</li>
+              <li>Planejamento do backlog do Quarter</li>
+              <li>Mapeamento de dependências e riscos</li>
+              <li>Melhoria contínua das práticas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- AGENDA TRIMESTRAL -->
+      <div class="sp-section" id="agenda">
+        <h2 class="section-heading"><span class="sec-num">🗓️</span> Agenda Trimestral</h2>
+
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">Semana 0 — Final do trimestre anterior</div>
+            <div class="property-val">
+              <strong>Pré-alinhamento de Demandas:</strong> atualizar portfólio com todas as iniciativas identificadas · análise do trimestre anterior (entregas, débitos técnicos, pendências) · revisar indicadores · alinhamento dos aprendizados e ajustes estratégicos.
+            </div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Semana 1 — Início do trimestre</div>
+            <div class="property-val">
+              <strong>Planejamento Trimestral:</strong> reavaliar e repriorizar iniciativas · garantir alinhamento entre áreas e visão do portfólio · identificar impactos e dependências.<br><br>
+              <strong>Sprint Planning 1:</strong> refinamento das demandas · definição de metas por squad · alocação de recursos · quebra das prioridades do trimestre em histórias para a 1ª sprint.
+            </div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Semanas 2 a 12 — Execução</div>
+            <div class="property-val">
+              <strong>Sprints (2 semanas cada):</strong> Planning · Daily · Review · Retrospectiva — 6 sprints de 2 semanas.<br><br>
+              <strong>Checkpoints Mensais</strong> (fim das semanas 4 e 8): reunião executiva com COTIC · verificar alinhamento de entregas × expectativas · ajustar prioridades caso haja mudanças legais, solicitações do gabinete ou incidentes críticos.
+            </div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Semana 12 — Fechamento do trimestre</div>
+            <div class="property-val">
+              <strong>Review Trimestral com Stakeholders:</strong> apresentar o que foi entregue em termos de valor · comparar planejado × realizado · ouvir feedback para o próximo ciclo.<br><br>
+              <strong>Retrospectiva Trimestral (Spassu):</strong> squad + liderança · lições aprendidas de gestão, técnica e colaboração · definição de melhorias para o próximo trimestre.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- CRITÉRIOS TÉCNICOS -->
+      <div class="sp-section" id="criterios">
+        <h2 class="section-heading"><span class="sec-num">✅</span> Critérios para Sustentação de Sistemas Contratados Externamente</h2>
+        <p class="sp-text">Para que a COTIC possa sustentar e internalizar um sistema desenvolvido por terceiros, <strong>todas</strong> as condições abaixo devem ser atendidas:</p>
+
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">i — Participação da COTIC</div>
+            <div class="property-val">COTIC participou das definições <strong>desde o início</strong> do projeto.</div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">ii — Ambiente de execução</div>
+            <div class="property-val">O programa roda em <strong>GNU/Linux Debian</strong>, preferencialmente em <strong>Docker</strong>.</div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">iii — Linguagem disponível</div>
+            <div class="property-val">Usa uma linguagem de programação para a qual há <strong>desenvolvedor disponível na equipe de sustentação</strong>.</div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">iv — Licença livre</div>
+            <div class="property-val">O sistema usa alguma <strong>licença livre compatível com AGPLv3</strong> (Affero GNU Public License versão 3).</div>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div>Ausentes as condições i a iv, a <strong>responsabilidade de sustentação é da própria Área</strong> contratante — não da COTIC/Spassu.</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
