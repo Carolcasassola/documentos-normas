@@ -24,6 +24,10 @@
     --role-ux: #b146c2;
     --role-dev: #107c10;
     --role-qa: #d83b01;
+    --role-arq: #0b6a0b;
+    --role-inf: #004e8c;
+    --role-db: #7719aa;
+    --role-sec: #8e192e;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
@@ -54,7 +58,7 @@
   .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
   .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue); }
 
-  /* ROLES GRID */
+/* ROLES GRID */
   .roles-overview { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 20px 0 28px; }
   .role-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; transition: box-shadow .2s; }
   .role-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.1); }
@@ -68,6 +72,7 @@
   .role-card-body ul li:last-child { border-bottom: none; }
   .role-card-body ul li::before { content:'›'; position: absolute; left: 2px; color: var(--sp-blue); font-weight: 700; font-size: 14px; line-height: 1.3; }
 
+  
   /* RACI */
   .raci-legend { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; align-items: center; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sp-neutral-80); }
