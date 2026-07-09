@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atuação dos Scrum Masters – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4; --sp-blue-dark: #005a9e; --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff; --sp-neutral-10: #f3f2f1; --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce; --sp-neutral-60: #605e5c; --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e; --sp-green: #107c10; --sp-orange: #986f0b;
+    --sp-purple: #5c2d91; --sp-teal: #038387; --sp-red: #a4262c;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* TOPBAR */
+  .sme-topbar { background: linear-gradient(90deg,#0f1923 0%,#162032 100%); height: 60px; display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.45); font-family: 'Segoe UI',sans-serif; border-bottom: 1px solid rgba(0,120,212,.3); }
+  .sme-topbar-logo { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; padding-right: 24px; border-right: 1px solid rgba(255,255,255,.12); margin-right: 16px; }
+  .sme-topbar-logo .logo-badge { background: #0078d4; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: .06em; }
+  .sme-topbar-logo .logo-text { color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+  .sme-topbar-nav { display: flex; align-items: stretch; gap: 4px; flex: 1; overflow-x: auto; height: 100%; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link { color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; text-decoration: none; padding: 0 14px; white-space: nowrap; transition: background .15s,color .15s,border-color .15s; display: flex; align-items: center; gap: 7px; border-bottom: 3px solid transparent; }
+  .sme-nav-link:hover { background: rgba(255,255,255,.07); color: #fff; border-bottom-color: rgba(0,120,212,.5); }
+  .sme-nav-link.active { color: #fff; font-weight: 600; background: rgba(0,120,212,.15); border-bottom-color: #0078d4; }
+  .sme-nav-link .nav-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* SIDEBAR */
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; z-index: 50; height: calc(100vh - 60px); }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s,color .12s; }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active { background: var(--sp-blue-light); color: var(--sp-blue-dark); border-left-color: var(--sp-blue); font-weight: 600; }
+
+  /* MAIN */
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* HERO */
+  .page-hero { background: linear-gradient(135deg,#003f6b 0%,var(--sp-blue-dark) 50%,var(--sp-blue) 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-sub { font-size: 14px; opacity: .8; margin-bottom: 14px; position: relative; z-index: 1; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: 600; position: relative; z-index: 1; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta { font-size: 12px; opacity: .75; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; position: relative; z-index: 1; }
+
+  /* CONTENT */
+  .content-area { padding: 32px 48px; max-width: 980px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-blue); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-num { background: var(--sp-blue); color: white; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .subsection-heading { font-size: 15px; font-weight: 600; color: var(--sp-blue-dark); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .subsection-heading::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--sp-blue); border-radius: 2px; flex-shrink: 0; }
+  .sub2-heading { font-size: 13px; font-weight: 700; color: var(--sp-neutral-80); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
+  .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-blue); }
+
+  /* MISSION BOX */
+  .mission-box { background: linear-gradient(135deg,var(--sp-blue-dark),var(--sp-blue)); color: white; border-radius: 6px; padding: 24px 28px; margin: 20px 0 28px; position: relative; overflow: hidden; }
+  .mission-box::after { content:''; position: absolute; right: -30px; top: -30px; width: 160px; height: 160px; background: rgba(255,255,255,.06); border-radius: 50%; }
+  .mission-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; opacity: .75; margin-bottom: 8px; }
+  .mission-text { font-size: 15px; line-height: 1.65; font-weight: 300; position: relative; z-index: 1; }
+  .mission-text strong { font-weight: 600; }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout.warn    { background: #fff4ce; border-left: 4px solid #f7c948; color: #7a5000; }
+  .callout.danger  { background: #fde7e9; border-left: 4px solid var(--sp-red); color: #6b0e14; }
+  .callout.success { background: #dff6dd; border-left: 4px solid var(--sp-green); color: #1a5c1a; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .mini-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 16px; }
+  .mini-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--sp-blue-dark); margin-bottom: 10px; }
+
+  /* PROPERTY BAG */
+  .property-bag { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 2px; overflow: hidden; margin-bottom: 20px; }
+  .property-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row:last-child { border-bottom: none; }
+  .property-key { background: var(--sp-neutral-10); padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--sp-neutral-60); text-transform: uppercase; letter-spacing: .04em; display: flex; align-items: center; border-right: 1px solid var(--sp-neutral-20); }
+  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+
+  /* CHECKLIST */
+  .checklist-section { margin: 12px 0 20px; }
+  .check-group { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+  .check-group-title { padding: 10px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--sp-neutral-20); }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 16px; font-size: 13px; color: var(--sp-neutral-80); border-bottom: 1px solid var(--sp-neutral-20); line-height: 1.5; }
+  .check-item:last-child { border-bottom: none; }
+  .check-box { width: 16px; height: 16px; border: 2px solid var(--sp-neutral-30); border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+
+  /* VALIDATION TABLE */
+  .val-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); margin: 12px 0 20px; }
+  .val-table thead th { padding: 10px 14px; background: var(--sp-neutral-90); color: white; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; }
+  .val-table tbody td { padding: 10px 14px; border-bottom: 1px solid var(--sp-neutral-20); vertical-align: top; line-height: 1.55; }
+  .val-table tbody td:first-child { font-weight: 600; color: var(--sp-neutral-90); background: var(--sp-neutral-10); border-right: 1px solid var(--sp-neutral-20); width: 240px; }
+  .val-table tbody tr:last-child td { border-bottom: none; }
+  .val-table tbody tr:hover td { background: #f0f6fc; }
+  .val-table tbody tr:hover td:first-child { background: #e5f0f8; }
+
+  /* CADENCIAS TABLE */
+  .cad-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); margin: 12px 0; }
+  .cad-table thead th { padding: 10px 14px; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; color: white; }
+  .cad-table thead th:first-child { background: var(--sp-blue-dark); width: 130px; }
+  .cad-table thead th:last-child { background: var(--sp-neutral-80); }
+  .cad-table tbody td { padding: 9px 14px; border-bottom: 1px solid var(--sp-neutral-20); font-size: 13px; color: var(--sp-neutral-80); vertical-align: top; }
+  .cad-table tbody td:first-child { font-weight: 600; color: var(--sp-blue-dark); background: var(--sp-blue-light); border-right: 1px solid var(--sp-neutral-20); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .cad-table tbody tr:last-child td { border-bottom: none; }
+
+  /* PYRAMID */
+  .pyramid { display: flex; flex-direction: column; gap: 6px; margin: 16px 0; }
+  .pyramid-row { display: flex; justify-content: center; }
+  .pyramid-block { display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600; border-radius: 4px; padding: 10px 20px; text-align: center; }
+
+  /* TEAM GRID */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; margin: 14px 0; }
+  .team-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-top: 3px solid var(--sp-blue); border-radius: 4px; padding: 14px; }
+  .team-icon { font-size: 22px; margin-bottom: 6px; }
+  .team-role { font-size: 13px; font-weight: 700; color: var(--sp-neutral-90); margin-bottom: 3px; }
+  .team-desc { font-size: 11px; color: var(--sp-neutral-60); line-height: 1.4; }
+
+  .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .tag-blue   { background: var(--sp-blue-light); color: var(--sp-blue-dark); }
+  .tag-green  { background: #dff6dd; color: #107c10; }
+  .tag-orange { background: #fff4ce; color: #7a5000; }
+  .tag-teal   { background: #e0f6fb; color: var(--sp-teal); }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-blue); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: var(--sp-blue-dark); }
+  #scrollTop.visible { display: flex; }
+  @media(max-width:768px){ .left-nav{display:none} .main-content{margin-left:0} .content-area{padding:20px} .page-hero{padding:24px 20px} .two-col{grid-template-columns:1fr} .property-row{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<style>
+  .sme-topbar {background:linear-gradient(90deg,#0f1923 0%,#162032 100%);height:60px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.45);font-family:'Segoe UI',sans-serif;border-bottom:1px solid rgba(0,120,212,.3);}
+  .sme-topbar-logo {font-size:14px;font-weight:700;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;padding-right:24px;border-right:1px solid rgba(255,255,255,.12);margin-right:16px;}
+  .sme-topbar-logo .logo-badge {background:#0078d4;color:white;font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;letter-spacing:.06em;}
+  .sme-topbar-logo .logo-text {color:rgba(255,255,255,.85);font-size:13px;font-weight:500;}
+  .sme-topbar-nav {display:flex;align-items:stretch;gap:4px;flex:1;overflow-x:auto;height:100%;}
+  .sme-topbar-nav::-webkit-scrollbar {display:none;}
+  .sme-nav-link {color:rgba(255,255,255,.65);font-size:12.5px;font-weight:500;text-decoration:none;padding:0 14px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;display:flex;align-items:center;gap:7px;border-bottom:3px solid transparent;}
+  .sme-nav-link:hover {background:rgba(255,255,255,.07);color:#fff;border-bottom-color:rgba(0,120,212,.5);}
+  .sme-nav-link.active {color:#fff;font-weight:600;background:rgba(0,120,212,.15);border-bottom-color:#0078d4;}
+  .sme-nav-link .nav-icon {font-size:15px;flex-shrink:0;}
+  .left-nav {top:60px !important;height:calc(100vh - 60px) !important;}
+</style>
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="sme-nav-link active"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+  </nav>
+</header>
+
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="#" class="sme-nav-link active"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+  </nav>
+</header>
+
+<div class="page-wrapper">
+
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#apresentacao"   class="left-nav-item active">📌 Apresentação</a>
+    <a href="#competencias"   class="left-nav-item">🎯 Competências</a>
+    <span class="left-nav-label">Responsabilidades</span>
+    <a href="#azure-setup"    class="left-nav-item">⚙️ Setup no Azure DevOps</a>
+    <a href="#portfolio"      class="left-nav-item">📊 Suporte ao GP</a>
+    <a href="#po-ds"          class="left-nav-item">🤝 Suporte a PO e DS</a>
+    <a href="#cerimonias"     class="left-nav-item">🔄 Cerimônias Scrum</a>
+    <a href="#saude"          class="left-nav-item">💚 Saúde dos Projetos</a>
+    <a href="#boards"         class="left-nav-item">🗂️ Gestão dos Boards</a>
+    <span class="left-nav-label">Times e Cadências</span>
+    <a href="#composicao"     class="left-nav-item">👥 Composição dos Times</a>
+    <a href="#cadencias"      class="left-nav-item">📅 Rotinas e Cadências</a>
+    <a href="#contrato"       class="left-nav-item">📜 Regras Contratuais</a>
+    <a href="#boas-praticas"  class="left-nav-item">💡 Boas Práticas</a>
+    <span class="left-nav-label">Checklists</span>
+    <a href="#checklists"     class="left-nav-item">☑️ Checklists de Apoio</a>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow">Ateliê de Software Spassu · SME · Documento Institucional</div>
+      <div class="hero-title"><strong>Atuação dos Scrum Masters</strong><br>na SME</div>
+      <div class="hero-sub">Responsabilidades, rotinas, boas práticas e checklists de apoio para SMs no contexto público-contratual da SME</div>
+      <div class="hero-badge"><span class="dot"></span> Guia Oficial de Referência para Scrum Masters</div>
+      <div class="hero-meta">
+        <span>🏃 Scrum Masters</span>
+        <span>📊 Gestores de Portfólio</span>
+        <span>🏛️ COTIC / Spassu</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- 1. APRESENTAÇÃO -->
+      <div class="sp-section" id="apresentacao">
+        <h2 class="section-heading"><span class="sec-num">1</span> Apresentação</h2>
+        <p class="sp-text">Este documento tem como objetivo orientar a atuação dos Scrum Masters (SMs) no contexto da Secretaria Municipal de Educação (SME), descrevendo suas responsabilidades, rotinas e boas práticas de acordo com as especificidades do ambiente público e contratual em que os projetos são conduzidos.</p>
+        <p class="sp-text">Na SME, o papel do Scrum Master vai além da facilitação de cerimônias e da remoção de impedimentos típicos de um contexto puramente ágil. Aqui, o SM atua como um <strong>elo estratégico</strong> entre os times, o Gestor de Portfólio, os Designers de Serviços e os Product Owners, garantindo que os projetos avancem de forma saudável, dentro das regras contratuais e com a aplicação consistente das melhores práticas de agilidade.</p>
+
+        <div class="mission-box">
+          <div class="mission-label">Missão do Scrum Master na SME</div>
+          <div class="mission-text">Ser o <strong>guardião do processo ágil</strong> e do saudável andamento dos projetos, atuando de forma proativa no suporte ao Gestor de Portfólio, Designers de Serviços e Product Owners, garantindo clareza das regras contratuais, qualidade das entregas e sustentabilidade dos times.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 2. COMPETÊNCIAS -->
+      <div class="sp-section" id="competencias">
+        <h2 class="section-heading"><span class="sec-num">2</span> Competências Esperadas</h2>
+        <p class="sp-text">O Scrum Master da SME deve reunir competências técnicas de agilidade com habilidades de gestão, comunicação e entendimento de contextos contratuais complexos.</p>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>🛠️ Competências Técnicas</h5>
+            <ul class="sp-list">
+              <li>Conhecimento do framework Scrum e metodologias ágeis correlatas</li>
+              <li>Capacidade de leitura, interpretação e aplicação de regras e rotinas contratuais</li>
+              <li>Habilidade para acompanhar indicadores de projeto (prazo, escopo, qualidade e impedimentos)</li>
+              <li>Familiaridade com ferramentas de gestão ágil (Azure DevOps)</li>
+              <li>Conhecimento básico em gestão de portfólio e roadmaps de produto</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>🤝 Competências Comportamentais</h5>
+            <ul class="sp-list">
+              <li>Comunicação clara e assertiva com diferentes níveis hierárquicos</li>
+              <li>Capacidade de mediação e resolução de conflitos</li>
+              <li>Proatividade na identificação e escalada de riscos</li>
+              <li>Organização e disciplina para acompanhamento de múltiplos projetos</li>
+              <li>Postura de <strong>liderança servidora</strong> — facilita, apoia e remove obstáculos sem exercer autoridade direta sobre o time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.1 AZURE SETUP -->
+      <div class="sp-section" id="azure-setup">
+        <h2 class="section-heading"><span class="sec-num">3.1</span> Setup no Azure DevOps</h2>
+        <p class="sp-text">A atuação do SM tem início <strong>antes mesmo da primeira sprint</strong>. Em conjunto com o Gestor de Portfólio, o SM participa do entendimento do projeto, da organização dos profissionais e da preparação completa do ambiente de trabalho no Azure DevOps.</p>
+
+        <div class="callout info">
+          <span class="callout-icon">📌</span>
+          <div><strong>Ponto de partida: alinhamento com o Gestor de Portfólio</strong><br>
+          Antes de qualquer configuração técnica, o SM deve alinhar com o GP e Designers de Serviços para compreender: escopo e objetivos do projeto · profissionais alocados e seus perfis · prazos, marcos contratuais e restrições · expectativas de reporte e visibilidade do portfólio.</div>
+        </div>
+
+        <h3 class="subsection-heading">3.1.1 Configuração do Board no Azure DevOps</h3>
+        <ul class="sp-list">
+          <li>Configurar o projeto com nomenclatura padronizada e acessível ao GP, COTIC, PO, membros do time e Preposto do contrato</li>
+          <li>Adicionar todos os membros do time com os perfis e permissões adequados</li>
+          <li>Configurar as colunas do board refletindo o fluxo de trabalho do time</li>
+          <li>Criar e organizar as áreas e iterações (sprints) com datas de início e término definidas por pelo menos um trimestre do roadmap</li>
+          <li>Solicitar ao DS a configuração do backlog inicial com os épicos e features mapeados a partir do escopo definido com o PO</li>
+          <li>Acompanhar se a Wiki do Projeto contém todas as informações relevantes: membros, desenho arquitetural, definições de negócio e demais itens relevantes</li>
+        </ul>
+
+        <h3 class="subsection-heading">3.1.2 Previsão de Sprints</h3>
+        <ul class="sp-list">
+          <li>Calcular o número de sprints disponíveis até cada marco contratual relevante</li>
+          <li>Configurar as sprints no Azure DevOps com datas definidas por pelo menos um trimestre</li>
+          <li>Comunicar a previsão de sprints e documentação na wiki ao time e ao GP no kick-off do projeto</li>
+        </ul>
+
+        <h3 class="subsection-heading">3.1.3 Dashboard de Métricas e Acompanhamento</h3>
+        <p class="sp-text">O SM é responsável por configurar um dashboard no Azure DevOps garantindo visibilidade em tempo real para o GP e stakeholders. O dashboard deve conter ao menos:</p>
+
+        <table class="val-table">
+          <thead><tr><th>Elemento do Dashboard</th><th>Finalidade</th></tr></thead>
+          <tbody>
+            <tr><td>Burndown da Sprint</td><td>Acompanhar o ritmo de conclusão dos itens planejados na sprint vigente.</td></tr>
+            <tr><td>Velocity do Time</td><td>Histórico da capacidade de entrega por sprint, base para previsões futuras.</td></tr>
+            <tr><td>Horas do Time por Sprint</td><td>Identificar horas lançadas para acompanhar a meta do mês no fechamento.</td></tr>
+            <tr><td>Tasks e Histórias</td><td>Acompanhar tasks sem descrição, sem horas lançadas ou sem atribuições para mitigar problemas no fechamento.</td></tr>
+          </tbody>
+        </table>
+        <p class="sp-text" style="font-size:12px;color:var(--sp-neutral-60)">O dashboard deve ser revisado e atualizado pelo SM ao final de cada sprint e sempre que houver alteração relevante no status do projeto.</p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.2 SUPORTE GP -->
+      <div class="sp-section" id="portfolio">
+        <h2 class="section-heading"><span class="sec-num">3.2</span> Suporte ao Gestor de Portfólio</h2>
+        <p class="sp-text">O SM atua como <strong>braço operacional do Gestor de Portfólio</strong> no acompanhamento dos projetos sob sua responsabilidade, provendo visibilidade, sinalizando desvios e contribuindo para a tomada de decisão.</p>
+        <ul class="sp-list">
+          <li>Consolidar e reportar o status dos projetos acompanhados em periodicidade acordada</li>
+          <li>Identificar e escalar impedimentos que ultrapassem a alçada do time ou do SM</li>
+          <li>Mapear riscos ao andamento dos projetos e propor planos de contingência</li>
+          <li>Participar de reuniões de alinhamento de portfólio, contribuindo com visão de processo e saúde dos times</li>
+          <li>Garantir que os marcos e entregáveis contratuais estejam refletidos no planejamento dos times</li>
+          <li>Apoiar a elaboração de relatórios gerenciais e dashboards de acompanhamento</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.3 SUPORTE PO/DS -->
+      <div class="sp-section" id="po-ds">
+        <h2 class="section-heading"><span class="sec-num">3.3</span> Suporte a Designers de Serviços e Product Owners</h2>
+        <p class="sp-text">O SM apoia Designers de Serviços e POs no entendimento das regras e rotinas do contrato, bem como na aplicação de boas práticas ágeis.</p>
+        <ul class="sp-list">
+          <li>Orientar POs e Designers sobre as obrigações e prazos relevantes ao projeto</li>
+          <li>Auxiliar na construção e refinamento do backlog, garantindo que os itens reflitam os requisitos previstos no planejamento</li>
+          <li>Facilitar o alinhamento entre POs e times sobre prioridades, escopo e critérios de aceite</li>
+          <li>Promover boas práticas de escrita de histórias de usuário, Definição de Pronto (DoD) e critérios de aceite</li>
+          <li>Apoiar a comunicação entre os Designers de Serviços e os times de desenvolvimento ou qualidade</li>
+          <li>Sinalizar quando há desalinhamento entre o que está sendo planejado e o que o contrato prevê</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.4 CERIMÔNIAS -->
+      <div class="sp-section" id="cerimonias">
+        <h2 class="section-heading"><span class="sec-num">3.4</span> Facilitação das Cerimônias Scrum</h2>
+        <p class="sp-text">O SM é o responsável pela realização e qualidade das cerimônias ágeis dos times que acompanha, assegurando que sejam objetivas, produtivas e gerem valor real.</p>
+
+        <table class="val-table" style="margin-bottom:20px">
+          <thead><tr><th>Cerimônia</th><th>Responsabilidade do SM</th></tr></thead>
+          <tbody>
+            <tr><td>Sprint Planning</td><td>Facilitar o planejamento, garantindo que os itens selecionados estejam alinhados com as prioridades do projeto e que o time tenha clareza sobre os objetivos da sprint.</td></tr>
+            <tr><td>Daily Scrum</td><td>Assegurar que a daily seja breve e focada em impedimentos; acompanhar o progresso e registrar bloqueios.</td></tr>
+            <tr><td>Sprint Review</td><td>Facilitar a apresentação das entregas ao PO e demais stakeholders; garantir o registro formal das evidências de entrega quando exigido pelo contrato.</td></tr>
+            <tr><td>Sprint Retrospectiva</td><td>Conduzir o momento de reflexão do time; garantir que os planos de melhoria sejam acompanhados.</td></tr>
+            <tr><td>Refinamento de Backlog</td><td>Apoiar o PO e o DS na preparação e priorização dos itens; garantir que as histórias estejam com critérios de aceite, atividades, estimativas e atribuídas antes da planning.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-heading">3.4.1 Validações na Sprint Planning</h3>
+        <p class="sp-text">Antes de encerrar a planning e liberar o time, o SM deve verificar todos os itens abaixo. <strong>A sprint só deve ser considerada pronta quando todos estiverem atendidos.</strong></p>
+
+        <table class="val-table">
+          <thead><tr><th>Ponto de Validação</th><th>O que verificar</th></tr></thead>
+          <tbody>
+            <tr><td>Histórias estimadas</td><td>Todas as histórias da sprint possuem estimativa de esforço registrada. Histórias sem estimativa não devem entrar na sprint.</td></tr>
+            <tr><td>Tasks criadas</td><td>Cada história tem ao menos uma task associada, descrevendo o trabalho concreto a ser realizado.</td></tr>
+            <tr><td>Tasks atribuídas</td><td>Todas as tasks estão atribuídas a um responsável nominado. Tasks sem responsável são impedimento imediato.</td></tr>
+            <tr><td>Trabalho distribuído</td><td>O trabalho está equilibrado entre os membros do time — todos têm tarefas alocadas. Nenhum membro deve ficar sem trabalho planejado.</td></tr>
+            <tr><td>Capacity dentro do limite</td><td>A soma das horas planejadas está dentro da capacidade real do time. O capacity do Azure deve estar configurado e refletir o tempo de trabalho da sprint.</td></tr>
+            <tr><td>Tasks de cerimônias</td><td>Foram criadas tasks para planning, dailies, review, retrospectiva e refinamento, com horas reservadas e atribuídas a cada participante.</td></tr>
+            <tr><td>Objetivo da sprint definido</td><td>A sprint tem um objetivo claro e compreendido por todo o time.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div><strong>Atenção: a planning não está encerrada enquanto houver pendência.</strong> O SM não deve liberar a sprint para execução se qualquer um dos pontos acima estiver em aberto. Uma planning mal concluída gera ruído durante toda a sprint: tasks órfãs, membros sem trabalho, risco de transbordo.</div>
+        </div>
+
+        <h3 class="subsection-heading">3.4.2 Validações nas Dailies</h3>
+
+        <table class="val-table">
+          <thead><tr><th>Ponto de Validação</th><th>O que observar</th></tr></thead>
+          <tbody>
+            <tr><td>Histórias ativas e em andamento</td><td>O time está trabalhando nas histórias da sprint — os cards refletem atividade real, não estão todos no status inicial.</td></tr>
+            <tr><td>Avanço no objetivo da sprint</td><td>O que os membros reportam demonstra progresso concreto. Relatos vagos ou sem conexão com os itens planejados são sinal de alerta.</td></tr>
+            <tr><td>Impedimentos identificados</td><td>O SM pergunta ativamente se há impedimentos — bloqueios técnicos, dependências externas, dúvidas não resolvidas. Todo impedimento deve ser anotado e tratado.</td></tr>
+            <tr><td>Horas sendo lançadas</td><td>As horas trabalhadas estão sendo registradas nas tasks ao longo dos dias, sem acumular para o final da sprint.</td></tr>
+            <tr><td>Viabilidade do objetivo</td><td>Com base no progresso e no que resta, o SM avalia se ainda é possível cumprir o objetivo. Se houver risco, aciona o time e o PO para decisão antecipada.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Regra de ouro da daily:</strong> Se o board não mudou desde a última daily, algo está errado. Ou o time não está atualizando o Azure DevOps — o que precisa ser corrigido — ou o trabalho está travado — o que precisa ser investigado e tratado como impedimento.</div>
+        </div>
+
+        <h3 class="subsection-heading">3.4.3 Validações para a Sprint Review</h3>
+        <p class="sp-text">Antes de iniciar a review, o SM deve garantir que o board e as histórias estejam em condições de demonstração. Uma review com evidências incompletas compromete o aceite formal das entregas.</p>
+
+        <table class="val-table">
+          <thead><tr><th>Ponto de Validação</th><th>O que verificar</th></tr></thead>
+          <tbody>
+            <tr><td>Histórias em Resolved</td><td>Todas as histórias a apresentar estão com status <strong>Resolved</strong>. Histórias em andamento ou em teste não devem ir à review sem alinhamento prévio com o PO.</td></tr>
+            <tr><td>Tasks com horas lançadas</td><td>Todas as tasks das histórias apresentadas estão com as horas trabalhadas registradas. Tasks com zero horas indicam que o trabalho não foi documentado.</td></tr>
+            <tr><td>Tasks em Done</td><td>Todas as tasks das histórias estão com status Done. Tasks em aberto são inconsistência a resolver antes da cerimônia.</td></tr>
+            <tr><td>Descrição nas tasks</td><td>As tasks possuem descrição do trabalho realizado, permitindo que qualquer pessoa entenda o que foi feito.</td></tr>
+            <tr><td>Evidências nas histórias</td><td>Cada história apresentada tem evidências do que foi entregue — prints de tela, logs, resultados de teste, documentos ou links relevantes.</td></tr>
+            <tr><td>Links de PRs registrados</td><td>Os links dos Pull Requests aprovados estão registrados nos campos adequados da história, garantindo rastreabilidade entre entrega e código.</td></tr>
+            <tr><td>Entrega demonstrável</td><td>O que está sendo apresentado é possível de ser validado e demonstrado ao vivo para o PO. Se não for demonstrável, alinhar previamente com o PO o aceite.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <span class="callout-icon">💡</span>
+          <div><strong>Se a review não estiver pronta — o que fazer:</strong><br>
+          1. Comunicar o GP e o PO sobre o que não estará disponível para aceite.<br>
+          2. Avaliar com o time o que pode ser regularizado em tempo hábil.<br>
+          3. Registrar formalmente na Discussion das histórias que não puderam ser entregues na sprint.<br>
+          4. Escalar ao GP quando o não-cumprimento impactar um marco do projeto.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.5 SAÚDE DOS PROJETOS -->
+      <div class="sp-section" id="saude">
+        <h2 class="section-heading"><span class="sec-num">3.5</span> Acompanhamento Saudável dos Projetos</h2>
+        <p class="sp-text">O SM monitora a saúde dos projetos de ponta a ponta, atuando preventivamente para evitar desvios de prazo, qualidade e relacionamento.</p>
+        <ul class="sp-list">
+          <li>Monitorar continuamente o andamento das sprints e comparar com o planejado</li>
+          <li>Acompanhar indicadores de desempenho do time (velocity, burndown, taxa de entregas)</li>
+          <li>Identificar sinais de desmotivação, sobrecarga ou conflitos internos e agir proativamente</li>
+          <li>Garantir que o time tenha clareza sobre o que precisa ser entregue e quando</li>
+          <li>Promover uma cultura de melhoria contínua, registrando aprendizados de cada sprint</li>
+          <li>Zelar pelo cumprimento dos ritos e processos definidos, sem engessar a adaptação necessária</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.6 BOARDS -->
+      <div class="sp-section" id="boards">
+        <h2 class="section-heading"><span class="sec-num">3.6</span> Gestão da Saúde dos Boards e Equilíbrio de Capacidade</h2>
+        <p class="sp-text">O SM é responsável direto pela saúde e organização dos boards no Azure DevOps. Boards desatualizados ou sem rastreabilidade comprometem a visibilidade do portfólio e a capacidade de tomada de decisão do GP.</p>
+        <ul class="sp-list">
+          <li>Garantir que os boards reflitam fielmente o estado real do trabalho: itens atualizados, responsáveis atribuídos e status corretos</li>
+          <li>Verificar regularmente se os itens do backlog estão com descrição, critérios de aceite e estimativas preenchidos</li>
+          <li>Identificar itens travados, sem movimentação ou sem responsável e agir para desbloqueá-los</li>
+          <li>Assegurar que as sprints estejam corretamente configuradas (datas, objetivos e itens planejados)</li>
+          <li>Validar que evidências e comentários relevantes estão registrados nos cards, servindo como histórico rastreável</li>
+          <li>Consolidar visão de capacidade dos times e reportar desvios ao Gestor de Portfólio</li>
+        </ul>
+
+        <h3 class="subsection-heading">Equilíbrio de Capacidade — Sinal de Alerta para o Gestor</h3>
+        <p class="sp-text">O SM deve monitorar continuamente o volume de trabalho alocado e reportar ao GP sempre que identificar desequilíbrio:</p>
+
+        <div class="two-col">
+          <div class="mini-card" style="border-left:4px solid var(--sp-red)">
+            <h5 style="color:var(--sp-red)">⬆️ Capacidade ACIMA da disponibilidade</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Time com mais demanda do que membros conseguem absorver — <strong>risco de atraso, queda de qualidade e esgotamento da equipe</strong>.</p>
+          </div>
+          <div class="mini-card" style="border-left:4px solid var(--sp-orange)">
+            <h5 style="color:var(--sp-orange)">⬇️ Capacidade ABAIXO da disponibilidade</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Time com ociosidade ou subutilização — <strong>oportunidade de rebalancear a alocação ou antecipar entregas</strong>.</p>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-icon">📋</span>
+          <div>O reporte de desequilíbrio deve incluir: <strong>time afetado</strong> · <strong>desvio identificado</strong> · <strong>causa provável</strong> · <strong>sugestão de ação</strong>.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4. COMPOSIÇÃO DOS TIMES -->
+      <div class="sp-section" id="composicao">
+        <h2 class="section-heading"><span class="sec-num">4</span> Composição Ideal dos Times de Projeto</h2>
+        <p class="sp-text">A SME adota uma estrutura de times referencial. Cabe ao SM conhecer esse modelo, verificar se os times estão adequadamente compostos e sinalizar ao GP sempre que houver desvio relevante.</p>
+
+        <h3 class="subsection-heading">4.1 Estrutura de Referência</h3>
+        <div class="team-grid">
+          <div class="team-card" style="border-top-color:#107c10">
+            <div class="team-icon">💻</div>
+            <div class="team-role">5 Desenvolvedores</div>
+            <div class="team-desc">Núcleo técnico. Seguem a política da pirâmide invertida de senioridade.</div>
+          </div>
+          <div class="team-card" style="border-top-color:#d83b01">
+            <div class="team-icon">🧪</div>
+            <div class="team-role">1 QA</div>
+            <div class="team-desc">Qualidade das entregas. Pode ser compartilhado entre times.</div>
+          </div>
+          <div class="team-card" style="border-top-color:#e6700a">
+            <div class="team-icon">🗺️</div>
+            <div class="team-role">1 Designer de Serviços</div>
+            <div class="team-desc">Concepção e melhoria dos serviços. Pode ser compartilhado entre times.</div>
+          </div>
+          <div class="team-card" style="border-top-color:#b146c2">
+            <div class="team-icon">🎨</div>
+            <div class="team-role">1 UX/UI</div>
+            <div class="team-desc">Experiência do usuário e prototipação. Pode ser compartilhado entre times.</div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Sobre o compartilhamento de perfis:</strong> QA, Designer de Serviços e UX podem ser compartilhados entre diferentes times. Quando compartilhados, o SM deve acompanhar a alocação real e garantir que a divisão de tempo não gere gargalos. Qualquer desequilíbrio deve ser reportado ao GP.</div>
+        </div>
+
+        <h3 class="subsection-heading">4.2 Pirâmide Invertida de Senioridade</h3>
+        <p class="sp-text">A SME adota a política da pirâmide invertida: a maioria dos desenvolvedores deve ter perfil sênior ou pleno, com menor proporção de juniores.</p>
+
+        <div class="pyramid">
+          <div class="pyramid-row">
+            <div class="pyramid-block" style="background:var(--sp-blue-dark);width:300px">
+              👑 Dev Sênior — máx. 2
+            </div>
+          </div>
+          <div class="pyramid-row">
+            <div class="pyramid-block" style="background:var(--sp-blue);width:240px">
+              ⚡ Dev Pleno — máx. 2
+            </div>
+          </div>
+          <div class="pyramid-row">
+            <div class="pyramid-block" style="background:#038387;width:180px">
+              🌱 Dev Júnior — máx. 1
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-heading">4.3 Papel do SM na Gestão da Composição</h3>
+        <p class="sp-text">O SM deve monitorar ativamente e reportar ao GP nas seguintes situações:</p>
+        <ul class="sp-list">
+          <li>QA, Designer ou UX sobrecarregados pelo excesso de compartilhamento entre projetos — risco de gargalo</li>
+          <li>Saída ou substituição de membros do time sem reposição — comunicar <strong>imediatamente</strong> ao GP</li>
+          <li>Novo membro integrado ao time sem onboarding adequado às regras contratuais e ao processo do projeto</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5. CADÊNCIAS -->
+      <div class="sp-section" id="cadencias">
+        <h2 class="section-heading"><span class="sec-num">5</span> Rotinas e Cadências Sugeridas</h2>
+
+        <table class="cad-table">
+          <thead>
+            <tr>
+              <th>Frequência</th>
+              <th>Atividade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Diária</td><td>Acompanhar a Daily Scrum dos times sob sua responsabilidade.</td></tr>
+            <tr><td>Diária</td><td>Registrar e monitorar impedimentos identificados, verificando evolução.</td></tr>
+            <tr><td>Semanal</td><td>Consolidar status dos projetos e atualizar o Gestor de Portfólio.</td></tr>
+            <tr><td>Semanal</td><td>Reunião de alinhamento com POs e/ou Designers de Serviços.</td></tr>
+            <tr><td>Por Sprint</td><td>Facilitar Planning, Review e Retrospectiva de cada time.</td></tr>
+            <tr><td>Por Sprint</td><td>Apoiar o refinamento do backlog com o PO antes do próximo planning.</td></tr>
+            <tr><td>Mensal</td><td>Elaborar ou contribuir com relatório gerencial de portfólio.</td></tr>
+            <tr><td>Contínua</td><td>Monitorar indicadores de desempenho e saúde do projeto.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 6. CONTRATO -->
+      <div class="sp-section" id="contrato">
+        <h2 class="section-heading"><span class="sec-num">6</span> Entendimento e Aplicação das Regras Contratuais</h2>
+        <p class="sp-text">Um diferencial crítico do SM na SME é seu papel no entendimento e na disseminação das regras contratuais dos projetos que acompanha. O desconhecimento das obrigações do contrato é um dos principais vetores de risco em projetos da secretaria.</p>
+
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Por que isso é responsabilidade do SM?</strong> O SM não é o responsável jurídico pelo contrato, mas é o guardião do processo. Cabe ao SM garantir que POs, Designers e times compreendam as entregas previstas, os prazos, as obrigações de evidência e as regras de aceitação formal, prevenindo desvios que comprometam o projeto ou gerem passivos para a Secretaria.</div>
+        </div>
+
+        <div class="two-col" style="margin-top:16px">
+          <div class="mini-card">
+            <h5>📜 O que o SM deve conhecer</h5>
+            <ul class="sp-list">
+              <li><strong>Escopo contratado:</strong> quais entregas estão previstas e quais não estão</li>
+              <li><strong>Prazos e marcos:</strong> datas de entrega, marcos e vigências das entregas</li>
+              <li><strong>Critérios de aceite formais:</strong> o que precisa ser apresentado para uma entrega ser concluída</li>
+              <li><strong>Penalidades e riscos:</strong> o que acontece em caso de descumprimento</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>⚙️ Como aplicar esse conhecimento</h5>
+            <ul class="sp-list">
+              <li>Incluir marcos dos projetos no backlog e no planejamento das sprints</li>
+              <li>Alertar o time e o PO sempre que um item puder impactar um compromisso estabelecido</li>
+              <li>Garantir que evidências de entrega (prints, relatórios, homologações) sejam produzidas e arquivadas nos locais corretos</li>
+              <li>Participar ativamente das reuniões de alinhamento com a fiscalização, quando convocado</li>
+              <li>Propagar o entendimento do contrato para novos membros quando houver troca de equipe</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 7. BOAS PRÁTICAS -->
+      <div class="sp-section" id="boas-praticas">
+        <h2 class="section-heading"><span class="sec-num">7</span> Boas Práticas de Agilidade no Contexto da SME</h2>
+
+        <h3 class="subsection-heading">7.1 Adaptação do Scrum ao contexto público</h3>
+        <ul class="sp-list">
+          <li>Mantenha sprints regulares mesmo quando há descontinuidades de agenda ou férias — ajuste o planejamento, não abandone a cadência</li>
+          <li>Documente decisões e acordos de forma mais formal do que o típico ambiente de startup — planning, review e retrospectiva são aliadas em contratos públicos</li>
+          <li>Envolva a fiscalização contratual como stakeholder legítima nas reviews, plannings e alinhamentos do projeto</li>
+          <li>Use o conceito de <strong>Definition of Done</strong> alinhado ao contrato: uma entrega não está concluída até estar formalmente aceita</li>
+        </ul>
+
+        <h3 class="subsection-heading">7.2 Comunicação e Transparência</h3>
+        <ul class="sp-list">
+          <li>Mantenha quadros de acompanhamento sempre atualizados e acessíveis</li>
+          <li>Comunique riscos e desvios de forma proativa — não espere a crise para escalar</li>
+          <li>Prefira comunicação escrita e rastreável para decisões importantes — use e-mail ou ferramentas de gestão</li>
+          <li>Produza relatórios de status sucintos, mas completos, focando em: o que foi entregue · o que está em risco · o que será entregue na próxima sprint</li>
+        </ul>
+
+        <h3 class="subsection-heading">7.3 Desenvolvimento dos Times</h3>
+        <ul class="sp-list">
+          <li>Invista em momentos de capacitação e alinhamento sobre agilidade com os times</li>
+          <li>Use retrospectivas reais para identificar e remover impedimentos — não apenas como ritual</li>
+          <li>Reconheça e valorize boas práticas adotadas pelos times para criar cultura de melhoria contínua</li>
+          <li>Esteja atento ao bem-estar do time: sobrecarga constante é um risco de qualidade e de perda de talentos</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 8. CHECKLISTS -->
+      <div class="sp-section" id="checklists">
+        <h2 class="section-heading"><span class="sec-num">8</span> Checklists de Apoio</h2>
+
+        <h3 class="subsection-heading">8.1 Checklist de Início de Projeto</h3>
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-blue-dark);background:var(--sp-blue-light)">🚀 Ao iniciar um novo projeto, o SM deve verificar:</div>
+          <div class="check-item"><div class="check-box"></div>Realizar sessão(ões) de alinhamento com o GP: escopo, time, prazos e marcos contratuais.</div>
+          <div class="check-item"><div class="check-box"></div>Verificar a composição do time: 5 devs (pirâmide invertida), QA, Designer e UX alocados.</div>
+          <div class="check-item"><div class="check-box"></div>Configurar o projeto no Azure DevOps com nomenclatura padronizada.</div>
+          <div class="check-item"><div class="check-box"></div>Adicionar todos os membros do time com perfis e permissões corretos.</div>
+          <div class="check-item"><div class="check-box"></div>Configurar as colunas do board refletindo o fluxo de trabalho do time.</div>
+          <div class="check-item"><div class="check-box"></div>Cadastrar as sprints previstas com datas de início e término até o primeiro marco do projeto.</div>
+          <div class="check-item"><div class="check-box"></div>Estruturar o backlog inicial com épicos e features mapeados a partir do escopo do projeto.</div>
+          <div class="check-item"><div class="check-box"></div>Registrar a Definition of Done (DoD) do projeto na Wiki do Azure DevOps.</div>
+          <div class="check-item"><div class="check-box"></div>Configurar o dashboard de métricas: burndown, velocity, etc.</div>
+          <div class="check-item"><div class="check-box"></div>Garantir que o GP tem acesso e visualização ao board e ao dashboard.</div>
+          <div class="check-item"><div class="check-box"></div>Alinhar com o GP a frequência e formato de report de capacidade e status.</div>
+          <div class="check-item"><div class="check-box"></div>Realizar o kick-off do projeto com o time, apresentando escopo, sprints e processos.</div>
+        </div>
+
+        <h3 class="subsection-heading">8.2 Checklist de Saúde do Board (Azure DevOps)</h3>
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-teal);background:#e0f6fb">🗂️ O SM deve verificar periodicamente:</div>
+          <div class="check-item"><div class="check-box"></div>Todos os cards ativos têm responsável atribuído.</div>
+          <div class="check-item"><div class="check-box"></div>Todos os itens em andamento têm status atualizado.</div>
+          <div class="check-item"><div class="check-box"></div>A sprint ativa tem data de início e término configuradas corretamente.</div>
+          <div class="check-item"><div class="check-box"></div>Itens concluídos estão marcados como Done e com evidência registrada quando necessário.</div>
+          <div class="check-item"><div class="check-box"></div>A capacidade planejada na sprint é compatível com os membros disponíveis no período.</div>
+        </div>
+
+        <h3 class="subsection-heading">8.3 Checklists de Cerimônias</h3>
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-purple);background:#f0e6ff">📅 Sprint Planning — validações antes de encerrar:</div>
+          <div class="check-item"><div class="check-box"></div>Todas as histórias da sprint estão estimadas.</div>
+          <div class="check-item"><div class="check-box"></div>Todas as histórias têm tasks criadas.</div>
+          <div class="check-item"><div class="check-box"></div>Todas as tasks estão atribuídas a um responsável.</div>
+          <div class="check-item"><div class="check-box"></div>O trabalho está distribuído entre todos os membros do time.</div>
+          <div class="check-item"><div class="check-box"></div>O capacity está dentro do limite — sem excesso e sem ociosidade expressiva.</div>
+          <div class="check-item"><div class="check-box"></div>Tasks de cerimônias (planning, dailies, review, retro, refinamento) criadas e atribuídas.</div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-teal);background:#e0f6fb">☀️ Daily — observações do SM a cada cerimônia:</div>
+          <div class="check-item"><div class="check-box"></div>Histórias ativas e com movimentação real no board desde a última daily.</div>
+          <div class="check-item"><div class="check-box"></div>O que o time relata demonstra avanço no objetivo da sprint.</div>
+          <div class="check-item"><div class="check-box"></div>Impedimentos foram perguntados ativamente e encaminhados.</div>
+          <div class="check-item"><div class="check-box"></div>Horas estão sendo lançadas nas tasks ao longo dos dias (sem acúmulo).</div>
+          <div class="check-item"><div class="check-box"></div>O SM avaliou se o objetivo da sprint ainda é alcançável no prazo.</div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-green);background:#dff6dd">🎯 Sprint Review — validações antes de iniciar a cerimônia:</div>
+          <div class="check-item"><div class="check-box"></div>Todas as histórias a apresentar estão com status Resolved.</div>
+          <div class="check-item"><div class="check-box"></div>Todas as tasks das histórias estão com horas lançadas.</div>
+          <div class="check-item"><div class="check-box"></div>Todas as tasks das histórias estão com status Done.</div>
+          <div class="check-item"><div class="check-box"></div>Tasks possuem descrição do trabalho realizado.</div>
+          <div class="check-item"><div class="check-box"></div>Histórias possuem evidências das entregas (prints, logs, documentos, links).</div>
+          <div class="check-item"><div class="check-box"></div>Links dos PRs aprovados estão registrados nos campos adequados das histórias.</div>
+          <div class="check-item"><div class="check-box"></div>As entregas são possíveis de demonstrar ao vivo para o PO.</div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="color:var(--sp-orange);background:#fff4ce">🔁 Retrospectiva — o SM deve garantir:</div>
+          <div class="check-item"><div class="check-box"></div>Ambiente seguro e participativo para o time.</div>
+          <div class="check-item"><div class="check-box"></div>Aprendizados e pontos de melhoria identificados e registrados.</div>
+          <div class="check-item"><div class="check-box"></div>Ações de melhoria definidas com responsável.</div>
+          <div class="check-item"><div class="check-box"></div>Ações da retrospectiva anterior foram acompanhadas.</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
