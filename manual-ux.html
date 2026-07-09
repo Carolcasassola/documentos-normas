@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Padronização UX – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4; --sp-blue-dark: #005a9e; --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff; --sp-neutral-10: #f3f2f1; --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce; --sp-neutral-60: #605e5c; --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e; --sp-green: #107c10; --sp-orange: #986f0b;
+    --sp-purple: #b146c2; --sp-teal: #038387; --sp-red: #a4262c;
+    --sp-ux: #b146c2;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* TOPBAR */
+  .sme-topbar { background: linear-gradient(90deg,#0f1923 0%,#162032 100%); height: 60px; display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.45); font-family: 'Segoe UI',sans-serif; border-bottom: 1px solid rgba(0,120,212,.3); }
+  .sme-topbar-logo { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; padding-right: 24px; border-right: 1px solid rgba(255,255,255,.12); margin-right: 16px; }
+  .sme-topbar-logo .logo-badge { background: #0078d4; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: .06em; }
+  .sme-topbar-logo .logo-text { color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+  .sme-topbar-nav { display: flex; align-items: stretch; gap: 4px; flex: 1; overflow-x: auto; height: 100%; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link { color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; text-decoration: none; padding: 0 14px; white-space: nowrap; transition: background .15s,color .15s,border-color .15s; display: flex; align-items: center; gap: 7px; border-bottom: 3px solid transparent; }
+  .sme-nav-link:hover { background: rgba(255,255,255,.07); color: #fff; border-bottom-color: rgba(0,120,212,.5); }
+  .sme-nav-link.active { color: #fff; font-weight: 600; background: rgba(0,120,212,.15); border-bottom-color: #0078d4; }
+  .sme-nav-link .nav-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* SIDEBAR */
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; z-index: 50; height: calc(100vh - 60px); }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s,color .12s; }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active { background: var(--sp-blue-light); color: var(--sp-blue-dark); border-left-color: var(--sp-blue); font-weight: 600; }
+
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* HERO */
+  .page-hero { background: linear-gradient(135deg,#3a0a5c 0%,#6b1fa8 50%,#b146c2 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .page-hero::after { content:''; position: absolute; right: 100px; bottom: -60px; width: 200px; height: 200px; background: rgba(177,70,194,.25); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-sub { font-size: 14px; opacity: .8; margin-bottom: 14px; position: relative; z-index: 1; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: 600; position: relative; z-index: 1; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta { font-size: 12px; opacity: .75; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; position: relative; z-index: 1; }
+
+  /* CONTENT */
+  .content-area { padding: 32px 48px; max-width: 980px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-ux); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-num { background: var(--sp-ux); color: white; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .subsection-heading { font-size: 15px; font-weight: 600; color: #6b1fa8; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .subsection-heading::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--sp-ux); border-radius: 2px; flex-shrink: 0; }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
+  .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-ux); }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout.warn    { background: #fff4ce; border-left: 4px solid #f7c948; color: #7a5000; }
+  .callout.danger  { background: #fde7e9; border-left: 4px solid var(--sp-red); color: #6b0e14; }
+  .callout.success { background: #dff6dd; border-left: 4px solid var(--sp-green); color: #1a5c1a; }
+  .callout.purple  { background: #f5e6ff; border-left: 4px solid var(--sp-ux); color: #4a0e6b; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .mini-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 16px; }
+  .mini-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b1fa8; margin-bottom: 10px; }
+
+  /* PROPERTY BAG */
+  .property-bag { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 2px; overflow: hidden; margin-bottom: 20px; }
+  .property-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row:last-child { border-bottom: none; }
+  .property-key { background: var(--sp-neutral-10); padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--sp-neutral-60); text-transform: uppercase; letter-spacing: .04em; display: flex; align-items: center; border-right: 1px solid var(--sp-neutral-20); }
+  .property-val { padding: 10px 16px; font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+
+  /* GENERIC TABLE */
+  .sp-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); margin: 12px 0 20px; }
+  .sp-table thead th { padding: 10px 14px; background: var(--sp-neutral-90); color: white; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; border-right: 1px solid rgba(255,255,255,.1); }
+  .sp-table thead th:last-child { border-right: none; }
+  .sp-table tbody td { padding: 10px 14px; border-bottom: 1px solid var(--sp-neutral-20); border-right: 1px solid var(--sp-neutral-20); vertical-align: top; line-height: 1.55; color: var(--sp-neutral-80); }
+  .sp-table tbody td:last-child { border-right: none; }
+  .sp-table tbody tr:last-child td { border-bottom: none; }
+  .sp-table tbody tr:hover td { background: #faf5ff; }
+  .sp-table td.col-head { font-weight: 600; color: var(--sp-neutral-90); background: var(--sp-neutral-10); min-width: 160px; }
+
+  /* TAG */
+  .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .tag-blue   { background: var(--sp-blue-light); color: var(--sp-blue-dark); }
+  .tag-green  { background: #dff6dd; color: #107c10; }
+  .tag-orange { background: #fff4ce; color: #7a5000; }
+  .tag-purple { background: #f5e6ff; color: #6b1fa8; }
+  .tag-red    { background: #fde7e9; color: var(--sp-red); }
+
+  /* DOUBLE DIAMOND */
+  .diamond-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin: 20px 0; }
+  .diamond-card { border-radius: 6px; padding: 18px 14px; color: white; position: relative; overflow: hidden; }
+  .diamond-card::after { content:''; position: absolute; right: -20px; bottom: -20px; width: 80px; height: 80px; background: rgba(255,255,255,.08); border-radius: 50%; }
+  .diamond-phase { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; opacity: .75; margin-bottom: 6px; }
+  .diamond-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .diamond-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+  .diamond-desc { font-size: 11.5px; opacity: .85; line-height: 1.5; }
+
+  /* FLOW STEPS */
+  .flow-steps { margin: 16px 0; }
+  .flow-step { display: flex; gap: 16px; margin-bottom: 4px; }
+  .flow-step-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .flow-step-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; flex-shrink: 0; background: var(--sp-ux); }
+  .flow-step-connector { width: 2px; flex: 1; min-height: 12px; background: var(--sp-neutral-30); margin: 2px 0; }
+  .flow-step:last-child .flow-step-connector { display: none; }
+  .flow-step-body { padding: 4px 0 16px; flex: 1; }
+  .flow-step-title { font-size: 14px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 4px; }
+  .flow-step-desc { font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+  .flow-sub { list-style: none; padding: 0; margin-top: 6px; }
+  .flow-sub li { font-size: 12.5px; color: var(--sp-neutral-60); padding: 2px 0 2px 16px; position: relative; line-height: 1.5; }
+  .flow-sub li::before { content:'›'; position: absolute; left: 2px; color: var(--sp-ux); font-weight: 700; }
+
+  /* ACCESS TABLE */
+  .access-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); margin: 12px 0; }
+  .access-table thead th { padding: 10px 14px; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; color: white; border-right: 1px solid rgba(255,255,255,.1); }
+  .access-table thead th:nth-child(1) { background: var(--sp-neutral-90); }
+  .access-table thead th:nth-child(2) { background: #6b1fa8; }
+  .access-table thead th:nth-child(3) { background: var(--sp-teal); }
+  .access-table tbody td { padding: 10px 14px; border-bottom: 1px solid var(--sp-neutral-20); border-right: 1px solid var(--sp-neutral-20); vertical-align: top; line-height: 1.55; font-size: 13px; color: var(--sp-neutral-80); }
+  .access-table tbody tr:last-child td { border-bottom: none; }
+  .access-table td:first-child { font-weight: 600; color: var(--sp-neutral-90); background: var(--sp-neutral-10); }
+
+  /* CHECKLIST */
+  .check-group { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+  .check-group-title { padding: 10px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--sp-neutral-20); background: #f5e6ff; color: #4a0e6b; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 16px; font-size: 13px; color: var(--sp-neutral-80); border-bottom: 1px solid var(--sp-neutral-20); line-height: 1.5; }
+  .check-item:last-child { border-bottom: none; }
+  .check-box { width: 16px; height: 16px; border: 2px solid var(--sp-neutral-30); border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-ux); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: #6b1fa8; }
+  #scrollTop.visible { display: flex; }
+  @media(max-width:768px){ .left-nav{display:none} .main-content{margin-left:0} .content-area{padding:20px} .page-hero{padding:24px 20px} .two-col{grid-template-columns:1fr} .diamond-grid{grid-template-columns:1fr 1fr} .property-row{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<style>
+  .sme-topbar {background:linear-gradient(90deg,#0f1923 0%,#162032 100%);height:60px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.45);font-family:'Segoe UI',sans-serif;border-bottom:1px solid rgba(0,120,212,.3);}
+  .sme-topbar-logo {font-size:14px;font-weight:700;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;padding-right:24px;border-right:1px solid rgba(255,255,255,.12);margin-right:16px;}
+  .sme-topbar-logo .logo-badge {background:#0078d4;color:white;font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;letter-spacing:.06em;}
+  .sme-topbar-logo .logo-text {color:rgba(255,255,255,.85);font-size:13px;font-weight:500;}
+  .sme-topbar-nav {display:flex;align-items:stretch;gap:4px;flex:1;overflow-x:auto;height:100%;}
+  .sme-topbar-nav::-webkit-scrollbar {display:none;}
+  .sme-nav-link {color:rgba(255,255,255,.65);font-size:12.5px;font-weight:500;text-decoration:none;padding:0 14px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;display:flex;align-items:center;gap:7px;border-bottom:3px solid transparent;}
+  .sme-nav-link:hover {background:rgba(255,255,255,.07);color:#fff;border-bottom-color:rgba(0,120,212,.5);}
+  .sme-nav-link.active {color:#fff;font-weight:600;background:rgba(0,120,212,.15);border-bottom-color:#0078d4;}
+  .sme-nav-link .nav-icon {font-size:15px;flex-shrink:0;}
+  .left-nav {top:60px !important;height:calc(100vh - 60px) !important;}
+</style>
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="sme-nav-link"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/manual-ux.html" class="sme-nav-link active"><span class="nav-icon">🎨</span><span>Manual UX</span></a>
+  </nav>
+</header>
+
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="sme-nav-link"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+    <a href="#" class="sme-nav-link active"><span class="nav-icon">🎨</span><span>Manual UX</span></a>
+  </nav>
+</header>
+
+<div class="page-wrapper">
+
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#objetivo"      class="left-nav-item active">🎯 Objetivo</a>
+    <a href="#alocacao"      class="left-nav-item">👥 Alocação nos Times</a>
+    <span class="left-nav-label">Entendimento e Projeto</span>
+    <a href="#parceria-ds"   class="left-nav-item">🤝 Parceria com DS</a>
+    <a href="#descoberta"    class="left-nav-item">🔍 Descoberta</a>
+    <a href="#comunicacao"   class="left-nav-item">💬 Comunicação Ativa</a>
+    <a href="#prototipos-ux" class="left-nav-item">🖼️ Tipos de Protótipo</a>
+    <a href="#fluxo-geral"   class="left-nav-item">🔄 Fluxo de Trabalho</a>
+    <a href="#sistemas-novos" class="left-nav-item">🆕 Sistemas Novos</a>
+    <span class="left-nav-label">Design e Entrega</span>
+    <a href="#double-diamond" class="left-nav-item">💎 Double Diamond</a>
+    <a href="#requisitos-proto" class="left-nav-item">📐 Requisitos de Prototipação</a>
+    <a href="#padroes-visuais" class="left-nav-item">🎨 Padrões Visuais</a>
+    <a href="#acesso"        class="left-nav-item">🔒 Controle de Acesso</a>
+    <a href="#comprovacao"   class="left-nav-item">✅ Comprovação de Entrega</a>
+    <span class="left-nav-label">Responsabilidades</span>
+    <a href="#responsabilidades" class="left-nav-item">📋 Responsabilidades</a>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow">Ateliê de Software Spassu · SME · Versão 1.0 · 2026</div>
+      <div class="hero-title"><strong>Manual de Padronização</strong></div>
+      <div class="hero-sub">Designers de Experiência do Usuário (UX) — Diretrizes de alocação, operação e colaboração</div>
+      <div class="hero-badge"><span class="dot"></span> Documento interno — uso restrito aos profissionais do contrato</div>
+      <div class="hero-meta">
+        <span>🎨 Designers UX</span>
+        <span>📅 Versão 1.0 · 2026</span>
+        <span>🏛️ SME – Spassu</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- 1. OBJETIVO -->
+      <div class="sp-section" id="objetivo">
+        <h2 class="section-heading"><span class="sec-num">1</span> Objetivo</h2>
+        <p class="sp-text">Este manual tem como objetivo estabelecer diretrizes claras para alocação, operação e colaboração dos profissionais de UX vinculados ao contrato da SME, garantindo <strong>qualidade, consistência e eficiência</strong> nas entregas.</p>
+
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Versão</div><div class="property-val">1.0</div></div>
+          <div class="property-row"><div class="property-key">Público-alvo</div><div class="property-val">Designers UX</div></div>
+          <div class="property-row"><div class="property-key">Data de criação</div><div class="property-val">2026</div></div>
+          <div class="property-row"><div class="property-key">Classificação</div><div class="property-val">Documento interno — uso restrito aos profissionais do contrato</div></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 2. ALOCAÇÃO -->
+      <div class="sp-section" id="alocacao">
+        <h2 class="section-heading"><span class="sec-num">2</span> Alocação nos Times de Projeto</h2>
+        <p class="sp-text">Os UXs do contrato serão alocados em times de projeto conforme necessidade, podendo atender um ou mais times e projetos conforme tempo e disponibilidade.</p>
+
+        <h3 class="subsection-heading">2.1 Critérios de Alocação</h3>
+        <ul class="sp-list">
+          <li>Demanda e prioridade dos projetos ativos</li>
+          <li>Capacidade disponível de cada profissional</li>
+          <li>Competências técnicas e afinidade com o contexto do projeto</li>
+          <li>Distribuição equilibrada de carga de trabalho entre os UXs</li>
+        </ul>
+
+        <h3 class="subsection-heading">2.2 Modelos de Atuação</h3>
+        <table class="sp-table">
+          <thead><tr><th>Modelo</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td class="col-head">Compartilhamento de times</td><td>O UX divide sua capacidade entre dois ou mais times, conforme disponibilidade acordada.</td></tr>
+            <tr><td class="col-head">Suporte pontual</td><td>O profissional é acionado para demandas específicas sem vínculo contínuo com o time.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.1 PARCERIA DS -->
+      <div class="sp-section" id="parceria-ds">
+        <h2 class="section-heading"><span class="sec-num">3.1</span> Parceria com o Designer de Serviços</h2>
+        <p class="sp-text">O UX deve atuar como <strong>parceiro direto do Designer de Serviços</strong>. Em conjunto, os dois perfis são responsáveis por construir uma visão compartilhada do sistema e assegurar que as perspectivas de negócio e de experiência do usuário estejam integradas desde o início do projeto.</p>
+        <ul class="sp-list">
+          <li>Colaborar na criação e refinamento da visão do produto e sistema</li>
+          <li>Alinhar o entendimento do contexto de negócio com as necessidades dos usuários</li>
+          <li>Compartilhar achados de pesquisa que impactem decisões de serviço ou produto</li>
+          <li>Manter comunicação contínua para garantir coerência entre as camadas de negócio e experiência dos usuários</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.2 DESCOBERTA -->
+      <div class="sp-section" id="descoberta">
+        <h2 class="section-heading"><span class="sec-num">3.2</span> Descoberta</h2>
+        <p class="sp-text">O UX deve participar ativamente das principais reuniões de descoberta e refinamento do produto, contribuindo com sua visão centrada no usuário:</p>
+
+        <table class="sp-table">
+          <thead><tr><th>Cerimônia / Atividade</th><th>Papel do UX</th></tr></thead>
+          <tbody>
+            <tr><td class="col-head">Entendimento do Projeto</td><td>Compreender o contexto do negócio, os objetivos e as restrições do projeto em parceria com o Designer de Serviços.</td></tr>
+            <tr><td class="col-head">Refinamento</td><td>Contribuir com questionamentos centrados no usuário, identificar lacunas de experiência e validar requisitos.</td></tr>
+            <tr><td class="col-head">Sessões de Descoberta</td><td>Participar ativamente de entrevistas, workshops e dinâmicas para mapear necessidades e oportunidades.</td></tr>
+            <tr><td class="col-head">Criação da Visão do Sistema</td><td>Colaborar na definição da visão do sistema, garantindo que a experiência do usuário seja considerada desde a concepção.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.3 COMUNICAÇÃO -->
+      <div class="sp-section" id="comunicacao">
+        <h2 class="section-heading"><span class="sec-num">3.3</span> Comunicação Ativa com DS e PO</h2>
+        <p class="sp-text">O UX deve manter comunicação ativa e contínua com o Designer de Serviços e o Product Owner. Essa tríade é responsável por garantir que as decisões de produto sejam informadas tanto pela visão de negócio quanto pela perspectiva do usuário.</p>
+        <ul class="sp-list">
+          <li>Participar de alinhamentos regulares com o PO para entender prioridades e backlog</li>
+          <li>Colaborar com o Designer de Serviços na identificação de fluxos e processos</li>
+          <li>Contribuir ativamente no mapeamento de jornadas, fluxos de navegação e processos de negócio</li>
+          <li>Levantar dúvidas e hipóteses que impactem a experiência durante refinamentos</li>
+          <li>Garantir que os requisitos funcionais estejam traduzidos em soluções visuais compreensíveis</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- TIPOS DE PROTÓTIPO -->
+      <div class="sp-section" id="prototipos-ux">
+        <h2 class="section-heading"><span class="sec-num">3.4</span> Tipos de Protótipo</h2>
+        <p class="sp-text">Com base no entendimento do negócio, dos fluxos e dos processos mapeados, o UX é responsável por elaborar protótipos visuais que representem as soluções para o produto e o sistema.</p>
+
+        <table class="sp-table">
+          <thead><tr><th>Tipo de Protótipo</th><th>Objetivo</th><th>Quando usar</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="col-head">🖊️ Wireframe (baixa fidelidade)</td>
+              <td>Representar estrutura e fluxo sem preocupação estética</td>
+              <td>Início do projeto, validações rápidas com PO e usuários</td>
+            </tr>
+            <tr>
+              <td class="col-head">🎨 Alta fidelidade</td>
+              <td>Representar o produto final com visual e interações detalhadas</td>
+              <td>Aprovações, handoff para desenvolvimento, testes com usuários</td>
+            </tr>
+            <tr>
+              <td class="col-head">🖱️ Protótipo navegável</td>
+              <td>Simular a experiência de uso e validar fluxos com stakeholders</td>
+              <td>Refinamentos, testes de usabilidade</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.5 FLUXO GERAL -->
+      <div class="sp-section" id="fluxo-geral">
+        <h2 class="section-heading"><span class="sec-num">3.5</span> Fluxo de Trabalho do UX</h2>
+        <p class="sp-text">O fluxo de trabalho do UX segue uma sequência estruturada que parte do entendimento do negócio e evolui até a entrega de protótipos validados.</p>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle">1</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Identificação de necessidades</div>
+              <div class="flow-step-desc">Em conjunto com o DS e o PO, o UX participa de refinamentos e sessões de descoberta para identificar necessidades do negócio e do usuário.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle">2</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">História de Design</div>
+              <div class="flow-step-desc">Para iniciar o trabalho de prototipação, é imprescindível que exista uma <strong>história de Design formalmente destinada ao UX</strong>, garantindo espaço no planejamento do time.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle">3</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Prototipação</div>
+              <div class="flow-step-desc">Com a história de Design aprovada, o UX trabalha durante uma ou mais sprints na visão do produto, produzindo protótipos que representem as soluções identificadas.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle">4</div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Validação e entrega</div>
+              <div class="flow-step-desc">Os protótipos são validados com o DS e o time de desenvolvimento antes da apresentação formal ao PO e stakeholders.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.6 SISTEMAS NOVOS -->
+      <div class="sp-section" id="sistemas-novos">
+        <h2 class="section-heading"><span class="sec-num">3.6</span> Fluxo de Trabalho em Sistemas Novos</h2>
+        <p class="sp-text">Em projetos de sistemas novos, o UX inicia sua atuação ainda na fase de descoberta, antes da definição de qualquer solução.</p>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle" style="background:#6b1fa8">1</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Condução de entrevistas</div>
+              <div class="flow-step-desc">Em conjunto com o Designer de Serviços, o UX conduz entrevistas com usuários-chave e Product Owners para capturar necessidades reais, dores e expectativas diretamente dos envolvidos no negócio.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle" style="background:#6b1fa8">2</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Canvas de Descoberta</div>
+              <div class="flow-step-desc">Com base nas sessões de descoberta, o UX elabora um Canvas de Descoberta consolidando os principais pontos levantados. O canvas deve contemplar:</div>
+              <ul class="flow-sub">
+                <li>Principais necessidades e dores dos usuários e do negócio</li>
+                <li>Fluxos e processos mapeados durante as entrevistas</li>
+                <li>Perfis e tipos de usuários do sistema (personas iniciais)</li>
+                <li>Oportunidades e hipóteses de solução identificadas</li>
+              </ul>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle" style="background:#6b1fa8">3</div><div class="flow-step-connector"></div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Mapeamento de Fluxos e Processos</div>
+              <div class="flow-step-desc">A partir das informações coletadas, o UX documenta os fluxos e processos do negócio, criando uma base visual que sustente as decisões de design e sirva de referência para todo o time.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-line"><div class="flow-step-circle" style="background:#6b1fa8">4</div></div>
+            <div class="flow-step-body">
+              <div class="flow-step-title">Jornada do Usuário</div>
+              <div class="flow-step-desc">Com fluxos e usuários mapeados, o UX desenha a jornada do usuário dentro do sistema, representando passo a passo a experiência de cada perfil ao interagir com o produto. A jornada é um artefato central para alinhar o time em torno da experiência desejada e orientar a prototipação.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.7 DOUBLE DIAMOND -->
+      <div class="sp-section" id="double-diamond">
+        <h2 class="section-heading"><span class="sec-num">3.7</span> Método Double Diamond</h2>
+        <p class="sp-text">O processo de design segue o método do <strong>Duplo Diamante (Double Diamond)</strong>, que organiza o trabalho do UX em quatro fases principais. Cada fase deve ter histórias de Design correspondentes no backlog do time, garantindo que o UX tenha capacidade planejada para executar todas as etapas com qualidade.</p>
+
+        <div class="diamond-grid">
+          <div class="diamond-card" style="background:linear-gradient(135deg,#0f6cbd,#0078d4)">
+            <span class="diamond-icon">🔍</span>
+            <div class="diamond-phase">Fase 1</div>
+            <div class="diamond-name">Descobrir</div>
+            <div class="diamond-desc">Kick-off · Entrevistas · Desk Research · Canvas de entendimento · Jornada atual</div>
+          </div>
+          <div class="diamond-card" style="background:linear-gradient(135deg,#6b1fa8,#b146c2)">
+            <span class="diamond-icon">🎯</span>
+            <div class="diamond-phase">Fase 2</div>
+            <div class="diamond-name">Definir</div>
+            <div class="diamond-desc">Ideação · Proto-personas · Fluxos e sitemap · Validação com PO · Mapeamento de navegação e permissões</div>
+          </div>
+          <div class="diamond-card" style="background:linear-gradient(135deg,#038387,#00b7c3)">
+            <span class="diamond-icon">🖥️</span>
+            <div class="diamond-phase">Fase 3</div>
+            <div class="diamond-name">Prototipar</div>
+            <div class="diamond-desc">Desenho de telas e interações · Validação técnica com DEV e QA · Ajustes conforme necessário</div>
+          </div>
+          <div class="diamond-card" style="background:linear-gradient(135deg,#107c10,#3da83d)">
+            <span class="diamond-icon">🧪</span>
+            <div class="diamond-phase">Fase 4</div>
+            <div class="diamond-name">Testar</div>
+            <div class="diamond-desc">Testes de usabilidade · Relatório de melhorias · Acompanhamento da implementação</div>
+          </div>
+        </div>
+
+        <div class="callout purple">
+          <span class="callout-icon">💡</span>
+          <div>Após as sessões de descoberta, o UX deve ter <strong>tempo e histórias de Design formalmente alocadas</strong> para aperfeiçoar os entendimentos iniciais e os wireframes elaborados, evoluindo a solução de forma estruturada.</div>
+        </div>
+
+        <!-- TABELA DETALHADA DO DOUBLE DIAMOND -->
+        <table class="sp-table" style="margin-top:16px">
+          <thead><tr><th>Fase</th><th>Atividades</th><th>Descrição e Entregas</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="col-head" style="color:#0078d4">🔍 DESCOBRIR</td>
+              <td>Kick-off · Entrevistas · Desk Research</td>
+              <td><strong>Kick-off:</strong> Entendimento da demanda com POs e levantamento de contexto inicial.<br><strong>Entrevistas:</strong> Canvas de entendimento, conversas com key-users, jornada atual e levantamentos.<br><strong>Desk Research:</strong> Análise de documentos de referência, benchmarking e estudo de dados e soluções existentes.</td>
+            </tr>
+            <tr>
+              <td class="col-head" style="color:#6b1fa8">🎯 DEFINIR</td>
+              <td>Ideação · Validação das ideias · User Experience</td>
+              <td><strong>Ideação:</strong> Elaboração da jornada inicial, proto-personas e fluxos e sitemap.<br><strong>Validação:</strong> Apresentação e validação da solução inicial com PO e stakeholders.<br><strong>User Experience:</strong> Mapeamento de fluxos nos sistemas, usuários de acesso, navegação e permissões.</td>
+            </tr>
+            <tr>
+              <td class="col-head" style="color:#038387">🖥️ PROTOTIPAR</td>
+              <td>Prototipação · Validação técnica</td>
+              <td><strong>Prototipação:</strong> Desenho das telas e interação dos usuários nos sistemas, com base nos fluxos definidos. Ver requisitos detalhados na Seção 3.8.<br><strong>Validação técnica:</strong> Validação dos fluxos com a equipe técnica de desenvolvimento e ajustes quando necessário.</td>
+            </tr>
+            <tr>
+              <td class="col-head" style="color:#107c10">🧪 TESTAR</td>
+              <td>Testes de usabilidade · Relatório · Acompanhamento</td>
+              <td><strong>Testes de usabilidade:</strong> Testes com usuários nos protótipos, sistemas e/ou soluções visuais criadas.<br><strong>Relatório e melhorias:</strong> Relatório de melhorias percebidas nos testes e aplicação das sugestões.<br><strong>Acompanhamento:</strong> Acompanhamento da implementação e mapeamento de melhorias conforme utilização dos usuários.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.8 REQUISITOS DE PROTOTIPAÇÃO -->
+      <div class="sp-section" id="requisitos-proto">
+        <h2 class="section-heading"><span class="sec-num">3.8</span> Requisitos de Prototipação</h2>
+        <p class="sp-text">Na fase de Prototipar, o UX deve seguir diretrizes específicas para garantir que o protótipo entregue seja completo, compreensível e utilizável por todos os envolvidos.</p>
+
+        <h3 class="subsection-heading">1. Cobertura completa do fluxo do sistema</h3>
+        <p class="sp-text">O protótipo deve demonstrar todo o fluxo do sistema de forma integral, sem omissões. A navegação deve iniciar pelas telas de login e telas iniciais do sistema, cobrindo obrigatoriamente:</p>
+        <ul class="sp-list">
+          <li>Telas de login, autenticação e controle de acesso</li>
+          <li>Menus de navegação principal e secundária</li>
+          <li>Telas de transição entre módulos e funcionalidades</li>
+          <li>Indicadores de carregamento e estados intermediários do sistema</li>
+          <li>Todos os estados necessários para que qualquer envolvido consiga navegar e compreender o fluxo sem ambiguidades</li>
+        </ul>
+
+        <h3 class="subsection-heading">2. Detalhamento de telas, campos e ações</h3>
+        <p class="sp-text">O protótipo deve detalhar todas as telas e interações necessárias para o desenvolvimento, incluindo:</p>
+        <ul class="sp-list">
+          <li>Todos os campos de formulários, com rótulos, tipos de entrada e validações</li>
+          <li>Ações disponíveis em cada tela (botões, links, gestos, menus contextuais)</li>
+          <li>Comportamentos condicionais e variações de estado (campo obrigatório, erro, sucesso, desabilitado)</li>
+          <li>Mensagens de feedback, alertas, confirmações e erros</li>
+          <li>Caminhos alternativos e exceções do fluxo principal</li>
+        </ul>
+        <div class="callout info">
+          <span class="callout-icon">ℹ️</span>
+          <div>Esse nível de detalhamento é fundamental para que desenvolvedores possam implementar com fidelidade e para que PO e DS possam validar a usabilidade e a aderência ao negócio <strong>antes do início do desenvolvimento</strong>.</div>
+        </div>
+
+        <h3 class="subsection-heading">3. Entrega obrigatória como protótipo navegável</h3>
+        <p class="sp-text">Todo protótipo deve ser obrigatoriamente finalizado e entregue no <strong>formato navegável</strong>, com interações funcionais entre as telas. O protótipo navegável é o padrão mínimo de entrega desta fase pois:</p>
+        <ul class="sp-list">
+          <li>Permite que qualquer stakeholder simule o uso real do sistema sem necessidade de mediação do UX</li>
+          <li>Dá a dimensão real de como o sistema se comportará com as interações propostas</li>
+          <li>Facilita a identificação de inconsistências de fluxo antes do desenvolvimento</li>
+          <li>Serve como referência oficial para o time de desenvolvimento durante a implementação</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.9 PADRÕES VISUAIS -->
+      <div class="sp-section" id="padroes-visuais">
+        <h2 class="section-heading"><span class="sec-num">3.9</span> Padrões Visuais nos Protótipos</h2>
+        <p class="sp-text">Todo protótipo deve ter os padrões visuais do sistema formalmente definidos e aplicados, servindo como fonte para Designer de Serviços e desenvolvedores. Os seguintes elementos devem estar documentados e utilizados de forma consistente em todas as telas:</p>
+
+        <table class="sp-table">
+          <thead><tr><th>Elemento</th><th>O que deve estar definido</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="col-head">🎨 Paleta de cores</td>
+              <td>Cores primárias, secundárias, de estado (sucesso, erro, alerta, informação), tons neutros e suas aplicações em cada contexto do sistema.</td>
+            </tr>
+            <tr>
+              <td class="col-head">🔤 Tipografia</td>
+              <td>Família(s) tipográfica(s), hierarquia de tamanhos (títulos, subtítulos, corpo, labels, captions) e pesos de fonte para cada nível.</td>
+            </tr>
+            <tr>
+              <td class="col-head">📐 Espaçamentos</td>
+              <td>Sistema de espaçamento (grid, margens, paddings internos de componentes) aplicado de forma consistente em todas as telas.</td>
+            </tr>
+            <tr>
+              <td class="col-head">🧩 Design System</td>
+              <td>Componentes reutilizáveis documentados (botões, inputs, cards, tabelas, modais, etc.) com todas as suas variações e estados definidos.</td>
+            </tr>
+            <tr>
+              <td class="col-head">🔣 Iconografia</td>
+              <td>Biblioteca de ícones adotada, tamanhos padrão e regras de uso em cada contexto.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.9 CONTROLE DE ACESSO -->
+      <div class="sp-section" id="acesso">
+        <h2 class="section-heading"><span class="sec-num">3.9</span> Controle de Acesso aos Protótipos</h2>
+        <p class="sp-text">O acesso aos protótipos deve ser gerenciado com critério, separando claramente quem pode visualizar e quem pode editar. As regras abaixo são de <strong>cumprimento obrigatório</strong>:</p>
+
+        <table class="access-table">
+          <thead>
+            <tr>
+              <th>Perfil</th>
+              <th>Acesso</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🎨 UX com conta da Secretaria</td>
+              <td><span class="tag tag-purple">Visualização + Edição</span></td>
+              <td>Único perfil autorizado a editar protótipos. Utiliza licença educacional vinculada à conta institucional da Secretaria.</td>
+            </tr>
+            <tr>
+              <td>🗺️ Designer de Serviços / PO</td>
+              <td><span class="tag tag-blue">Somente visualização</span></td>
+              <td>Pode navegar e consultar o protótipo para validação e referência, sem permissão de edição.</td>
+            </tr>
+            <tr>
+              <td>💻 Desenvolvedores</td>
+              <td><span class="tag tag-blue">Somente visualização</span></td>
+              <td>Acesso permanente ao protótipo navegável para consulta durante o desenvolvimento. Nunca com permissão de edição.</td>
+            </tr>
+            <tr>
+              <td>👥 Demais stakeholders</td>
+              <td><span class="tag tag-blue">Somente visualização</span></td>
+              <td>Acesso concedido conforme necessidade de validação, sempre restrito à visualização.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div><strong>Importante:</strong> Somente UXs com conta institucional da SME podem editar os protótipos, pois a ferramenta opera sob licença educacional vinculada a essas contas. <strong>Nunca conceda permissão de edição a perfis externos ou a contas pessoais.</strong></div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3.10 COMPROVAÇÃO DE ENTREGA -->
+      <div class="sp-section" id="comprovacao">
+        <h2 class="section-heading"><span class="sec-num">3.10</span> Comprovação de Entrega das Histórias de Design</h2>
+        <p class="sp-text">Para que uma história de Design seja considerada concluída, não basta que os critérios de aceite tenham sido atendidos no protótipo. É obrigatório que a história contenha, de forma registrada e acessível, o <strong>link do protótipo em formato navegável</strong>.</p>
+
+        <h3 class="subsection-heading">Critérios obrigatórios para conclusão</h3>
+        <div class="check-group">
+          <div class="check-group-title">✅ A história só pode ser considerada concluída quando:</div>
+          <div class="check-item"><div class="check-box"></div>Todos os critérios de aceite definidos na história foram atendidos no protótipo.</div>
+          <div class="check-item"><div class="check-box"></div>O link do protótipo em formato navegável está registrado na própria história.</div>
+          <div class="check-item"><div class="check-box"></div>O link concede acesso de visualização a todos os envolvidos no projeto, sem necessidade de solicitação adicional.</div>
+          <div class="check-item"><div class="check-box"></div>O protótipo acessado pelo link reflete a versão final aprovada, correspondente aos critérios de aceite da história.</div>
+        </div>
+
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div>O link do protótipo navegável é o <strong>comprovante oficial de entrega</strong> da história de Design. Histórias sem esse registro <strong>não devem ser movidas para o status de concluídas</strong>, independentemente da qualidade do trabalho realizado.</div>
+        </div>
+
+        <h3 class="subsection-heading">O que deve constar na história de Design</h3>
+        <table class="sp-table">
+          <thead><tr><th>Item obrigatório</th><th>Referência</th></tr></thead>
+          <tbody>
+            <tr><td class="col-head">Critérios de aceite atendidos</td><td>Definidos no momento da criação da história, validados com PO e DS antes da atuação.</td></tr>
+            <tr><td class="col-head">Link do protótipo navegável</td><td>URL de acesso direto ao protótipo na ferramenta de design (ex: Figma), em modo de visualização.</td></tr>
+            <tr><td class="col-head">Permissão de acesso configurada</td><td>Link acessível a todos os envolvidos sem necessidade de login ou solicitação de permissão.</td></tr>
+            <tr><td class="col-head">Versão do protótipo correspondente</td><td>O link deve apontar para a versão que atende aos critérios da história, não a um frame genérico do projeto.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4. RESPONSABILIDADES -->
+      <div class="sp-section" id="responsabilidades">
+        <h2 class="section-heading"><span class="sec-num">4</span> Responsabilidades</h2>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>🎨 Profissional de UX</h5>
+            <ul class="sp-list">
+              <li>Comunicar proativamente sua disponibilidade e eventuais impedimentos</li>
+              <li>Priorizar as demandas conforme alinhamento com a gestão e os times</li>
+              <li>Garantir a qualidade e consistência das entregas em todos os projetos atendidos</li>
+              <li>Participar das cerimônias e rituais dos times nos quais está alocado</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>📊 Gestão e Scrum Masters</h5>
+            <ul class="sp-list">
+              <li>Mapear a demanda dos times e distribuir os profissionais de forma estratégica</li>
+              <li>Monitorar a carga de trabalho e realocar recursos quando necessário</li>
+              <li>Mediar conflitos de prioridade entre times que compartilham o mesmo profissional</li>
+              <li>Garantir que as diretrizes deste manual sejam aplicadas consistentemente</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
