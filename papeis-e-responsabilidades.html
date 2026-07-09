@@ -223,7 +223,7 @@
 
       <!-- VISÃO GERAL -->
       <div class="sp-section" id="visao-geral">
-        <h2 class="section-heading"><span class="sec-num">🧩</span> Visão Geral dos Papéis</h2>
+        <h2 class="section-heading"><span class="sec-num">🧩</span> Visão Geral Resumida do Papéis</h2>
         <div class="callout info">
           <span class="callout-icon">ℹ️</span>
           <div>
@@ -234,6 +234,10 @@
             <strong>UX/UI</strong> foca na usabilidade, experiência e interface ·
             <strong>Desenvolvedor</strong> é responsável pela implementação técnica ·
             <strong>QA</strong> garante a qualidade e conformidade das entregas.
+            <strong>Arquitetura</strong> define padrões arquiteturais e boas práticas.
+            <strong>Infraestrutura</strong> provisiona e mantém ambientes.
+            <strong>DBAs</strong> modelam e mantém estruturas de banco.
+            <strong>Segurança</strong> garante a segurança e conformidade.
           </div>
         </div>
         <div class="roles-overview">
@@ -271,8 +275,9 @@
               <li>Facilitar cerimônias Scrum</li>
               <li>Remover impedimentos</li>
               <li>Acompanhar boards e capacity</li>
+              <li><a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html">Ver todas as Responsabilidades</a></li>
             </ul>
-            <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="role-card-body">Ver todas as Responsabilidades</a>
+            
             </div>
           </div>
           <div class="role-card">
@@ -342,8 +347,8 @@
               <div><div class="role-name">Analista de Infraestrutura</div><div class="role-tagline">Ambientes, deploy e esteiras de CI/CD</div></div>
             </div>
             <div class="role-card-body"><ul>
-              <li>Provisionar e manter ambientes (QA, HOM, PROD)</li>
-              <li>Configurar esteiras de deploy (DevOps)</li>
+              <li>Provisionar e manter ambientes</li>
+              <li>Configurar esteiras de deploy</li>
               <li>Monitorar disponibilidade e performance</li>
               <li>Garantir continuidade operacional</li>
             </ul></div>
@@ -366,7 +371,7 @@
               <div><div class="role-name">Analista de Segurança</div><div class="role-tagline">Proteção, conformidade e OWASP</div></div>
             </div>
             <div class="role-card-body"><ul>
-              <li>Auditar segurança das aplicações (OWASP Top 10)</li>
+              <li>Auditar segurança das aplicações</li>
               <li>Definir políticas de acesso e autenticação</li>
               <li>Avaliar vulnerabilidades e propor correções</li>
               <li>Garantir conformidade com LGPD</li>
@@ -496,6 +501,79 @@
         </ul>
       </div>
 
+<hr class="sp-divider">
+
+      <!-- ARQUITETO -->
+      <div class="sp-section" id="arq">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-arq)">🏛️</span> Arquiteto de Software</h2>
+        <ul class="sp-list">
+          <li>Definir a arquitetura técnica das novas soluções e evoluções de sistemas</li>
+          <li>Estruturar padrões técnicos institucionais em conjunto com a COTIC</li>
+          <li>Produzir documentação arquitetural no modelo C4 (Contexto, Contêiner, Componente)</li>
+          <li>Propor e registrar ADRs (Architecture Decision Records)</li>
+          <li>Validar aderência das implementações aos padrões definidos</li>
+          <li>Participar do desenho de integrações entre sistemas</li>
+          <li>Orientar desenvolvedores e líderes técnicos nas decisões estruturais</li>
+          <li>Garantir que novas aplicações atendam às premissas de sustentabilidade (GNU/Linux, licença livre, linguagem suportada)</li>
+          <li>Atualizar obrigatoriamente a documentação a cada alteração arquitetural relevante</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- INFRA -->
+      <div class="sp-section" id="inf">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-inf)">🖥️</span> Analista de Infraestrutura</h2>
+        <ul class="sp-list">
+          <li>Provisionar e manter os ambientes de QA, Homologação, Treinamento e Produção</li>
+          <li>Criar e configurar repositórios de código (GitHub) conforme solicitado pelo Líder Técnico</li>
+          <li>Configurar e manter esteiras de CI/CD (deploy automático)</li>
+          <li>Garantir disponibilidade, performance e monitoramento dos ambientes</li>
+          <li>Realizar ajustes de infraestrutura necessários entre sprints</li>
+          <li>Provisionar contêineres Docker e ambientes GNU/Linux Debian conforme padrão COTIC</li>
+          <li>Apoiar a equipe de desenvolvimento em questões de ambiente e conectividade</li>
+          <li>Documentar a infraestrutura provisionada e manter registros atualizados</li>
+          <li>Garantir continuidade operacional e planos de recuperação</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- DBA -->
+      <div class="sp-section" id="db">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-db)">🗄️</span> Analista de Banco de Dados</h2>
+        <ul class="sp-list">
+          <li>Modelar e documentar a estrutura de banco de dados das aplicações</li>
+          <li>Criar e versionar schemas, migrations e scripts de banco</li>
+          <li>Otimizar queries, índices e performance do banco de dados</li>
+          <li>Garantir integridade referencial e consistência dos dados</li>
+          <li>Planejar e executar backups e estratégias de recuperação</li>
+          <li>Apoiar a equipe de desenvolvimento em decisões de modelagem</li>
+          <li>Realizar migrações de dados entre versões e ambientes</li>
+          <li>Monitorar o desempenho do banco e propor melhorias proativas</li>
+          <li>Garantir conformidade com requisitos de privacidade e LGPD na camada de dados</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- SEGURANÇA -->
+      <div class="sp-section" id="sec">
+        <h2 class="section-heading"><span class="sec-num" style="background:var(--role-sec)">🔒</span> Analista de Segurança</h2>
+        <ul class="sp-list">
+          <li>Auditar a segurança das aplicações com base no OWASP Top 10</li>
+          <li>Definir e revisar políticas de autenticação, autorização e controle de acesso</li>
+          <li>Identificar e avaliar vulnerabilidades em código, infraestrutura e integrações</li>
+          <li>Propor e acompanhar a correção de vulnerabilidades críticas</li>
+          <li>Garantir que variáveis sensíveis e credenciais nunca sejam expostas em repositórios</li>
+          <li>Apoiar a equipe na configuração segura de ambientes e pipelines</li>
+          <li>Realizar análise de dependências e bibliotecas via Dependabot e ferramentas similares</li>
+          <li>Garantir conformidade com a LGPD na coleta, tratamento e armazenamento de dados</li>
+          <li>Orientar o time sobre boas práticas de segurança no desenvolvimento (Secure by Design)</li>
+          <li>Participar de revisões de arquitetura com foco em segurança</li>
+        </ul>
+      </div>
+      
       <hr class="sp-divider">
 
       <!-- RACI -->
