@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Django SME – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4; --sp-blue-dark: #005a9e; --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff; --sp-neutral-10: #f3f2f1; --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce; --sp-neutral-60: #605e5c; --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e; --sp-green: #107c10; --sp-orange: #986f0b;
+    --sp-teal: #038387; --sp-red: #a4262c; --sp-python: #1a6b3c;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* TOPBAR */
+  .sme-topbar { background: linear-gradient(90deg,#0f1923 0%,#162032 100%); height: 60px; display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.45); font-family: 'Segoe UI',sans-serif; border-bottom: 1px solid rgba(0,120,212,.3); }
+  .sme-topbar-logo { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; padding-right: 24px; border-right: 1px solid rgba(255,255,255,.12); margin-right: 16px; }
+  .sme-topbar-logo .logo-badge { background: #0078d4; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: .06em; }
+  .sme-topbar-logo .logo-text { color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+  .sme-topbar-nav { display: flex; align-items: stretch; gap: 4px; flex: 1; overflow-x: auto; height: 100%; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link { color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; text-decoration: none; padding: 0 14px; white-space: nowrap; transition: background .15s,color .15s,border-color .15s; display: flex; align-items: center; gap: 7px; border-bottom: 3px solid transparent; }
+  .sme-nav-link:hover { background: rgba(255,255,255,.07); color: #fff; border-bottom-color: rgba(0,120,212,.5); }
+  .sme-nav-link.active { color: #fff; font-weight: 600; background: rgba(0,120,212,.15); border-bottom-color: #0078d4; }
+  .sme-nav-link .nav-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* SIDEBAR */
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; z-index: 50; height: calc(100vh - 60px); }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s,color .12s; }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-python); }
+  .left-nav-item.active { background: #e6f4ec; color: var(--sp-python); border-left-color: var(--sp-python); font-weight: 600; }
+
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* HERO */
+  .page-hero { background: linear-gradient(135deg,#0a2e1a 0%,#0f5132 50%,#1a6b3c 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .page-hero::after { content:''; position: absolute; right: 100px; bottom: -60px; width: 200px; height: 200px; background: rgba(26,107,60,.3); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-sub { font-size: 14px; opacity: .8; margin-bottom: 14px; position: relative; z-index: 1; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: 600; position: relative; z-index: 1; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta { font-size: 12px; opacity: .75; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; position: relative; z-index: 1; }
+
+  /* CONTENT */
+  .content-area { padding: 32px 48px; max-width: 980px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-python); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-num { background: var(--sp-python); color: white; font-size: 12px; font-weight: 700; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0 6px; }
+  .subsection-heading { font-size: 15px; font-weight: 600; color: var(--sp-python); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .subsection-heading::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--sp-python); border-radius: 2px; flex-shrink: 0; }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+  .sp-list { list-style: none; padding: 0; margin-bottom: 12px; }
+  .sp-list li { font-size: 13.5px; color: var(--sp-neutral-80); padding: 4px 0 4px 20px; position: relative; line-height: 1.55; }
+  .sp-list li::before { content:''; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sp-python); }
+
+  /* CODE BLOCKS */
+  .code-block { background: #1e1e1e; border-radius: 6px; overflow: hidden; margin: 12px 0 20px; }
+  .code-block-header { background: #2d2d2d; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .code-block-lang { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #858585; }
+  .code-block-copy { font-size: 11px; color: #858585; cursor: pointer; background: none; border: none; font-family: inherit; transition: color .15s; }
+  .code-block-copy:hover { color: #cccccc; }
+  .code-block pre { padding: 16px 20px; overflow-x: auto; line-height: 1.6; }
+  .code-block code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 13px; color: #d4d4d4; }
+  .code-block code .c-comment { color: #6a9955; }
+  .code-block code .c-key { color: #9cdcfe; }
+  .code-block code .c-str { color: #ce9178; }
+  .code-block code .c-kw { color: #569cd6; }
+  .code-block code .c-num { color: #b5cea8; }
+  .code-block code .c-dir { color: #c586c0; }
+  .code-block code .c-fn { color: #dcdcaa; }
+
+  /* INLINE CODE */
+  code:not(.no-style) { background: #f0f0f0; border: 1px solid var(--sp-neutral-30); border-radius: 3px; padding: 1px 5px; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 12px; color: #a31515; }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout.warn    { background: #fff4ce; border-left: 4px solid #f7c948; color: #7a5000; }
+  .callout.danger  { background: #fde7e9; border-left: 4px solid var(--sp-red); color: #6b0e14; }
+  .callout.success { background: #e6f4ec; border-left: 4px solid var(--sp-python); color: #0a2e1a; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .mini-card { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 16px; }
+  .mini-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--sp-python); margin-bottom: 10px; }
+
+  /* TABLE */
+  .sp-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); margin: 12px 0 20px; }
+  .sp-table thead th { padding: 10px 14px; background: var(--sp-neutral-90); color: white; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; border-right: 1px solid rgba(255,255,255,.1); }
+  .sp-table thead th:last-child { border-right: none; }
+  .sp-table tbody td { padding: 9px 14px; border-bottom: 1px solid var(--sp-neutral-20); border-right: 1px solid var(--sp-neutral-20); vertical-align: top; line-height: 1.55; color: var(--sp-neutral-80); font-size: 13px; }
+  .sp-table tbody td:last-child { border-right: none; }
+  .sp-table tbody tr:last-child td { border-bottom: none; }
+  .sp-table tbody tr:hover td { background: #f0f7f3; }
+  .sp-table td.col-h { font-weight: 600; color: var(--sp-neutral-90); background: var(--sp-neutral-10); }
+  .sp-table td.bad { color: var(--sp-red); }
+  .sp-table td.good { color: var(--sp-python); font-weight: 600; }
+
+  /* LAYER FLOW */
+  .layer-flow { display: flex; align-items: center; gap: 0; margin: 16px 0; overflow-x: auto; padding-bottom: 4px; }
+  .layer-node { background: var(--sp-neutral-0); border: 1.5px solid var(--sp-neutral-30); border-top: 3px solid var(--sp-python); border-radius: 4px; padding: 10px 14px; text-align: center; min-width: 110px; flex-shrink: 0; }
+  .layer-node .ln-icon { font-size: 18px; margin-bottom: 4px; }
+  .layer-node .ln-name { font-size: 12px; font-weight: 700; color: var(--sp-neutral-90); }
+  .layer-node .ln-file { font-size: 10px; color: var(--sp-neutral-60); margin-top: 2px; font-family: 'Cascadia Code','Consolas',monospace; }
+  .layer-arrow { font-size: 20px; color: var(--sp-neutral-30); padding: 0 6px; flex-shrink: 0; }
+
+  /* TAG */
+  .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .tag-green  { background: #e6f4ec; color: var(--sp-python); }
+  .tag-blue   { background: var(--sp-blue-light); color: var(--sp-blue-dark); }
+  .tag-orange { background: #fff4ce; color: var(--sp-orange); }
+  .tag-red    { background: #fde7e9; color: var(--sp-red); }
+  .tag-ms     { background: #e0f6fb; color: #038387; }
+
+  /* CHECKLIST */
+  .check-group { background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+  .check-group-title { padding: 10px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--sp-neutral-20); }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 16px; font-size: 13px; color: var(--sp-neutral-80); border-bottom: 1px solid var(--sp-neutral-20); line-height: 1.5; }
+  .check-item:last-child { border-bottom: none; }
+  .check-box { width: 16px; height: 16px; border: 2px solid var(--sp-neutral-30); border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+  .check-item code { font-size: 11px; }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-python); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: #0a2e1a; }
+  #scrollTop.visible { display: flex; }
+  @media(max-width:768px){ .left-nav{display:none} .main-content{margin-left:0} .content-area{padding:20px} .page-hero{padding:24px 20px} .two-col{grid-template-columns:1fr} .layer-flow{flex-direction:column} }
+</style>
+</head>
+<body>
+
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="sme-nav-link"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/manual-ux.html" class="sme-nav-link"><span class="nav-icon">🎨</span><span>Manual UX</span></a>
+    <a href="#" class="sme-nav-link active"><span class="nav-icon">🐍</span><span>Guia Django</span></a>
+  </nav>
+</header>
+
+<div class="page-wrapper">
+
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#principios"    class="left-nav-item active">📐 Princípios Gerais</a>
+    <span class="left-nav-label">Arquitetura</span>
+    <a href="#pastas"        class="left-nav-item">📁 Arquitetura de Pastas</a>
+    <a href="#dependencias"  class="left-nav-item">📦 Recursos e Dependências</a>
+    <span class="left-nav-label">Padrões de Código</span>
+    <a href="#nomenclatura"  class="left-nav-item">🇧🇷 Nomenclatura pt-br</a>
+    <a href="#env"           class="left-nav-item">🔐 Configuração via .env</a>
+    <a href="#config"        class="left-nav-item">⚙️ Pasta config/</a>
+    <a href="#camadas"       class="left-nav-item">🔄 Camadas do App</a>
+    <a href="#autenticacao"  class="left-nav-item">🔑 Autenticação</a>
+    <a href="#openapi"       class="left-nav-item">📄 Documentação da API</a>
+    <a href="#health"        class="left-nav-item">💚 Endpoint de Health</a>
+    <span class="left-nav-label">Boas Práticas</span>
+    <a href="#precommit"     class="left-nav-item">🔧 Pre-commit</a>
+    <a href="#docstrings"    class="left-nav-item">📝 Docstrings</a>
+    <a href="#sphinx"        class="left-nav-item">📚 Sphinx</a>
+    <a href="#requirements"  class="left-nav-item">📋 Requirements</a>
+    <a href="#testes"        class="left-nav-item">🧪 Testes</a>
+    <a href="#cobertura"     class="left-nav-item">📊 Cobertura</a>
+    <a href="#pyproject"     class="left-nav-item">🛠️ pyproject.toml</a>
+    <a href="#docker"        class="left-nav-item">🐳 Docker</a>
+    <span class="left-nav-label">Referência</span>
+    <a href="#checklist"     class="left-nav-item">☑️ Checklist Novos Projetos</a>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow">SME · Padrão Técnico · Python + Django</div>
+      <div class="hero-title"><strong>Guia para criação de aplicações</strong><br>Python + Django alinhadas aos padrões SME</div>
+      <div class="hero-sub">Monolitos e microsserviços — arquitetura, ferramentas e convenções</div>
+      <div class="hero-badge"><span class="dot"></span> v2 · Referência oficial para times de desenvolvimento</div>
+      <div class="hero-meta">
+        <span>🐍 Python + Django</span>
+        <span>🏗️ Monolitos e Microsserviços</span>
+        <span>🏛️ SME – COTIC</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <div class="callout warn">
+        <span class="callout-icon">⚠️</span>
+        <div><strong>Disclaimer.</strong> Este guia reúne instruções e padrões recomendados, mas não pretende contemplar todas as necessidades ou particularidades de cada projeto. Quando o contexto técnico ou de negócio exigir uma abordagem diferente, cabe ao <strong>desenvolvedor sênior ou arquiteto responsável</strong> avaliar e definir as configurações, ferramentas e padrões mais adequados, registrando as decisões e suas justificativas.</div>
+      </div>
+      <div class="callout info">
+        <span class="callout-icon">ℹ️</span>
+        <div><strong>Monolito × microsserviço.</strong> A esmagadora maioria do guia (estrutura de pastas, camadas, nomenclatura pt-br, pre-commit, docstrings, Sphinx, requirements, testes, Docker) aplica-se igualmente aos dois. As seções que dependem do estilo de implantação — principalmente <strong>autenticação</strong> — apresentam opções para cada caso. Quando uma recomendação for específica, será marcada com <span class="tag tag-ms">MS</span> ou <span class="tag tag-blue">monolito</span>.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 1. PRINCÍPIOS -->
+      <div class="sp-section" id="principios">
+        <h2 class="section-heading"><span class="sec-num">1</span> Princípios Gerais</h2>
+        <ul class="sp-list">
+          <li><strong>Idioma único: pt-br.</strong> Modelos, campos, classes, funções, variáveis, rotas e mensagens são todos em português. Inglês é reservado apenas para termos técnicos consagrados (<code>request</code>, <code>response</code>, <code>serializer</code>, <code>view</code>, <code>migration</code>).</li>
+          <li><strong>Separação de camadas explícita.</strong> Cada domínio é um <em>app</em> Django independente; dentro de cada app o fluxo é <code>model → repository → service → serializer → view</code>.</li>
+          <li><strong>Configuração via ambiente.</strong> Todo valor que muda entre ambientes (chaves, URLs, portas, hosts, segredos) vem de variáveis de ambiente, nunca hard-coded.</li>
+          <li><strong>Documentação como código.</strong> Docstrings obrigatórias, Sphinx para domínios, drf-spectacular para a API HTTP.</li>
+          <li><strong>Lint/format/type-check automatizados.</strong> O que não passa no pre-commit não vai para o repositório.</li>
+          <li><strong>Testes ao lado do código.</strong> Cada app guarda seus próprios testes.</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 2. PASTAS -->
+      <div class="sp-section" id="pastas">
+        <h2 class="section-heading"><span class="sec-num">2</span> Arquitetura de Pastas</h2>
+        <p class="sp-text">Estrutura mínima de uma aplicação Django SME:</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-lang">estrutura do repositório</span>
+          </div>
+          <pre><code>repo/
+├── apps/                    <span class="c-comment"># Apps Django (um por domínio de negócio)</span>
+│   ├── core/                <span class="c-comment"># Autenticação, health, utilidades compartilhadas</span>
+│   └── &lt;dominio&gt;/           <span class="c-comment"># Demais domínios (ex.: turmas, componentes_curriculares)</span>
+├── config/                  <span class="c-comment"># Configurações Django (settings, urls, wsgi)</span>
+├── docs/                    <span class="c-comment"># Documentação Sphinx (regras de domínio, decisões)</span>
+├── requirements/            <span class="c-comment"># Dependências separadas por ambiente</span>
+├── scripts/                 <span class="c-comment"># Scripts auxiliares</span>
+├── testes/                  <span class="c-comment"># Testes E2E (Cypress, Postman) — não unitários</span>
+├── .env.example
+├── .pre-commit-config.yaml
+├── Dockerfile               <span class="c-comment"># Produção</span>
+├── Dockerfile.dev           <span class="c-comment"># Desenvolvimento</span>
+├── docker-compose.yml
+├── docker-compose-dev.yml
+├── manage.py
+├── pyproject.toml
+└── README.md</code></pre>
+        </div>
+
+        <h3 class="subsection-heading">Pasta <code>apps/</code></h3>
+        <p class="sp-text">Todos os apps Django residem em <code>apps/</code>. Cada app segue a estrutura:</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">estrutura de cada app</span></div>
+          <pre><code>apps/&lt;dominio&gt;/
+├── __init__.py
+├── apps.py
+├── models.py
+├── repository.py
+├── services.py
+├── serializers.py
+├── constants.py
+├── queries.py
+├── api/
+│   ├── __init__.py
+│   ├── urls.py
+│   └── views.py
+└── tests/
+    ├── __init__.py
+    ├── test_views.py
+    ├── test_services.py
+    └── test_repository.py</code></pre>
+        </div>
+
+        <h3 class="subsection-heading">Pasta <code>config/</code></h3>
+        <p class="sp-text">Substitui o pacote homônimo ao projeto criado pelo <code>django-admin startproject</code>. Centraliza configuração e roteamento:</p>
+        <ul class="sp-list">
+          <li><code>config/settings.py</code> — settings único, lendo do ambiente</li>
+          <li><code>config/urls.py</code> — URL conf raiz</li>
+          <li><code>config/wsgi.py</code> — entrada WSGI/ASGI</li>
+          <li><code>config/test_runner.py</code> — runner de testes customizado (quando necessário)</li>
+        </ul>
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div>O nome <code>config</code> é canônico no padrão SME. <strong>Não usar</strong> <code>core_project</code>, <code>&lt;nome_projeto&gt;</code> ou similares.</div>
+        </div>
+
+        <h3 class="subsection-heading">Pasta <code>docs/</code></h3>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">estrutura docs/</span></div>
+          <pre><code>docs/
+├── conf.py
+├── index.rst
+├── dominios/
+│   └── &lt;dominio&gt;/
+│       └── index.rst
+└── make.bat / Makefile</code></pre>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 3. DEPENDÊNCIAS -->
+      <div class="sp-section" id="dependencias">
+        <h2 class="section-heading"><span class="sec-num">3</span> Recursos e Dependências</h2>
+        <p class="sp-text">Stack base da SME:</p>
+
+        <table class="sp-table">
+          <thead><tr><th>Categoria</th><th>Ferramenta</th><th>Função</th></tr></thead>
+          <tbody>
+            <tr><td class="col-h">Linguagem</td><td>Python</td><td>Versão mínima suportada (fixada no <code>pyproject.toml</code>)</td></tr>
+            <tr><td class="col-h">Framework</td><td>Django</td><td>Web framework principal</td></tr>
+            <tr><td class="col-h">API REST</td><td>Django REST Framework</td><td>Camada HTTP</td></tr>
+            <tr><td class="col-h">Schema OpenAPI</td><td>drf-spectacular</td><td>Documentação automática da API</td></tr>
+            <tr><td class="col-h">Formatter</td><td>Black</td><td>Formatação de código</td></tr>
+            <tr><td class="col-h">Linter</td><td>Ruff</td><td>Lint e ordenação de imports</td></tr>
+            <tr><td class="col-h">Type checker</td><td>mypy</td><td>Tipagem estática</td></tr>
+            <tr><td class="col-h">Coverage</td><td>coverage.py</td><td>Cobertura de testes</td></tr>
+            <tr><td class="col-h">Hooks</td><td>pre-commit</td><td>Gatekeeping local</td></tr>
+            <tr><td class="col-h">Docs</td><td>Sphinx</td><td>Documentação de domínio</td></tr>
+            <tr><td class="col-h">Container</td><td>Docker + Docker Compose</td><td>Empacotamento e desenvolvimento</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.1 NOMENCLATURA -->
+      <div class="sp-section" id="nomenclatura">
+        <h2 class="section-heading"><span class="sec-num">4.1</span> Nomenclatura em Português</h2>
+        <p class="sp-text">Modelos, campos, classes, métodos, variáveis e rotas em <strong>pt-br</strong>, sem acentos (compatibilidade com identificadores Python). Termos técnicos da stack permanecem em inglês (<code>request</code>, <code>response</code>, <code>serializer</code>, <code>view</code>, <code>manager</code>, <code>queryset</code>).</p>
+
+        <table class="sp-table">
+          <thead><tr><th>❌ Errado</th><th>✅ Certo</th></tr></thead>
+          <tbody>
+            <tr><td class="bad"><code>EtlExecution</code></td><td class="good"><code>EtlExecucao</code></td></tr>
+            <tr><td class="bad"><code>start_date</code></td><td class="good"><code>data_inicio</code></td></tr>
+            <tr><td class="bad"><code>user_login</code></td><td class="good"><code>login_usuario</code></td></tr>
+            <tr><td class="bad"><code>class StudentService</code></td><td class="good"><code>class AlunoService</code></td></tr>
+            <tr><td class="bad"><code>/api/v1/classes/</code></td><td class="good"><code>/api/v1/turmas/</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.2 ENV -->
+      <div class="sp-section" id="env">
+        <h2 class="section-heading"><span class="sec-num">4.2</span> Configuração via <code>.env</code></h2>
+        <ul class="sp-list">
+          <li>Todos os valores variáveis vivem em <code>config/settings.py</code>, lidos com <code>os.environ</code> e <em>default seguro</em>.</li>
+          <li>O arquivo <code>.env</code> real <strong>nunca</strong> é commitado; apenas <code>.env.example</code> documenta as variáveis suportadas.</li>
+          <li>Valores de exemplo no <code>.env.example</code> não devem expor portas reais, hostnames internos ou chaves de produção. Use placeholders descritivos (<code>sua-chave-aqui</code>, <code>url_banco_dominio</code>).</li>
+          <li>Variáveis sensíveis (senhas, tokens, secrets) devem ter <code>default</code> vazio ou genérico no <code>settings.py</code>.</li>
+          <li>A <code>SECRET_KEY</code> do Django sempre vem do ambiente — o default no código serve apenas para falhar visivelmente em produção quando não configurada.</li>
+        </ul>
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div><strong>Nunca</strong> usar valores como <code>localhost:5432</code>, <code>redis://10.0.0.5</code> ou portas usadas em produção no <code>.env.example</code>. Isso evita reconhecimento de superfície interna em vazamentos do repositório.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.3 CONFIG -->
+      <div class="sp-section" id="config">
+        <h2 class="section-heading"><span class="sec-num">4.3</span> Pasta de Settings renomeada para <code>config/</code></h2>
+        <p class="sp-text">O <code>django-admin startproject</code> cria um pacote com o mesmo nome do projeto. Após criar, <strong>renomeie para <code>config/</code></strong> e atualize:</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">manage.py</span></div>
+          <pre><code><span class="c-key">DJANGO_SETTINGS_MODULE</span> = <span class="c-str">"config.settings"</span></code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">config/settings.py</span></div>
+          <pre><code><span class="c-key">ROOT_URLCONF</span> = <span class="c-str">"config.urls"</span>
+<span class="c-key">WSGI_APPLICATION</span> = <span class="c-str">"config.wsgi.application"</span></code></pre>
+        </div>
+        <p class="sp-text">Isso desacopla o nome do projeto da configuração e padroniza a importação entre microsserviços.</p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.4 CAMADAS -->
+      <div class="sp-section" id="camadas">
+        <h2 class="section-heading"><span class="sec-num">4.4</span> Camadas dentro de um App</h2>
+        <p class="sp-text">O fluxo de uma requisição segue <strong>sempre</strong> a mesma cadeia:</p>
+
+        <div class="layer-flow">
+          <div class="layer-node">
+            <div class="ln-icon">🌐</div>
+            <div class="ln-name">HTTP</div>
+            <div class="ln-file">request</div>
+          </div>
+          <div class="layer-arrow">›</div>
+          <div class="layer-node">
+            <div class="ln-icon">👁️</div>
+            <div class="ln-name">View</div>
+            <div class="ln-file">api/views.py</div>
+          </div>
+          <div class="layer-arrow">›</div>
+          <div class="layer-node">
+            <div class="ln-icon">⚙️</div>
+            <div class="ln-name">Service</div>
+            <div class="ln-file">services.py</div>
+          </div>
+          <div class="layer-arrow">›</div>
+          <div class="layer-node">
+            <div class="ln-icon">🗄️</div>
+            <div class="ln-name">Repository</div>
+            <div class="ln-file">repository.py</div>
+          </div>
+          <div class="layer-arrow">›</div>
+          <div class="layer-node">
+            <div class="ln-icon">🏗️</div>
+            <div class="ln-name">Model</div>
+            <div class="ln-file">models.py</div>
+          </div>
+        </div>
+
+        <table class="sp-table" style="margin-top:16px">
+          <thead><tr><th>Arquivo</th><th>Responsabilidade</th></tr></thead>
+          <tbody>
+            <tr><td class="col-h"><code>models.py</code></td><td>Define a estrutura de dados. Métodos só para coisas estritamente de modelo (<code>__str__</code>, propriedades derivadas).</td></tr>
+            <tr><td class="col-h"><code>repository.py</code></td><td>Única camada autorizada a executar queries ORM. Retorna <code>dict</code> ou tipos primitivos — não instâncias de modelo — para isolar o resto da aplicação do ORM.</td></tr>
+            <tr><td class="col-h"><code>services.py</code></td><td>Orquestra repositórios, aplica regras de negócio, combina dados. <strong>Não</strong> importa do DRF nem do Django HTTP.</td></tr>
+            <tr><td class="col-h"><code>serializers.py</code></td><td>Valida entrada e formata saída. <strong>Sem</strong> regra de negócio.</td></tr>
+            <tr><td class="col-h"><code>api/views.py</code></td><td>Fina: recebe <code>request</code>, delega ao service, devolve <code>Response</code>. Decorada com <code>@extend_schema</code> para documentação OpenAPI.</td></tr>
+            <tr><td class="col-h"><code>api/urls.py</code></td><td>Apenas rotas do app, sem prefixo global (o prefixo vem do <code>include()</code> em <code>config/urls.py</code>).</td></tr>
+            <tr><td class="col-h"><code>constants.py</code></td><td>Códigos de domínio (tipos, modalidades, status) usados pelos demais módulos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.5 AUTENTICAÇÃO -->
+      <div class="sp-section" id="autenticacao">
+        <h2 class="section-heading"><span class="sec-num">4.5</span> Autenticação</h2>
+        <p class="sp-text">O esquema de autenticação é determinado pelo tipo da aplicação:</p>
+
+        <table class="sp-table">
+          <thead><tr><th>Tipo</th><th>Esquema</th><th>Implementação</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="col-h"><span class="tag tag-ms">MS</span> Microsserviço</td>
+              <td><strong>API Key</strong> em header HTTP</td>
+              <td>Segredo compartilhado entre serviços, configurado via <code>.env</code> (<code>API_KEY</code>, <code>API_KEY_HEADER</code>)</td>
+            </tr>
+            <tr>
+              <td class="col-h"><span class="tag tag-blue">monolito</span></td>
+              <td><strong>JWT</strong> com integração ao <strong>CoreSSO</strong></td>
+              <td>Identidade do usuário emitida pelo CoreSSO (SSO institucional SME); o monolito valida o token e resolve perfis via API EOL</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-heading">Regras comuns aos dois esquemas</h3>
+        <ul class="sp-list">
+          <li>Configurar em <code>REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"]</code>, nunca por view.</li>
+          <li>Segredos (API Key, JWT signing key, credenciais do CoreSSO) sempre via <code>.env</code>.</li>
+          <li>Endpoint de health sempre público (<code>AllowAny</code>), nunca atrás de auth.</li>
+          <li>Documentar o esquema no schema OpenAPI via <code>SPECTACULAR_SETTINGS["APPEND_COMPONENTS"]["securitySchemes"]</code>.</li>
+        </ul>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.6 OPENAPI -->
+      <div class="sp-section" id="openapi">
+        <h2 class="section-heading"><span class="sec-num">4.6</span> Documentação da API</h2>
+        <p class="sp-text">Toda view deve ter:</p>
+        <ul class="sp-list">
+          <li>Docstring de classe descrevendo a responsabilidade</li>
+          <li>Decorator <code>@extend_schema(...)</code> com <code>tags</code>, <code>summary</code>, <code>parameters</code>, <code>request</code>, <code>responses</code> e <code>operation_id</code></li>
+        </ul>
+        <div class="two-col" style="margin-top:12px">
+          <div class="mini-card">
+            <h5>📄 Schema OpenAPI 3</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80)">Exposto em <code>/api/v1/schema/</code></p>
+          </div>
+          <div class="mini-card">
+            <h5>🖥️ Swagger UI</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80)">Disponível em <code>/api/v1/docs/</code></p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 4.7 HEALTH -->
+      <div class="sp-section" id="health">
+        <h2 class="section-heading"><span class="sec-num">4.7</span> Endpoint de Health</h2>
+        <p class="sp-text">Toda aplicação expõe <code>GET /api/v1/health/</code> público (sem autenticação). Usado por orquestradores como Kubernetes e load balancers para liveness/readiness.</p>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">resposta esperada</span></div>
+          <pre><code>GET /api/v1/health/
+→ 200 OK
+{<span class="c-str">"status"</span>: <span class="c-str">"ok"</span>}</code></pre>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.1 PRE-COMMIT -->
+      <div class="sp-section" id="precommit">
+        <h2 class="section-heading"><span class="sec-num">5.1</span> Pre-commit</h2>
+        <p class="sp-text">Arquivo <code>.pre-commit-config.yaml</code> na raiz, configurado com no mínimo:</p>
+        <ul class="sp-list">
+          <li><strong>black</strong> — formatação</li>
+          <li><strong>ruff --fix</strong> — lint e ordenação de imports</li>
+          <li><strong>mypy</strong> — tipagem estática</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">bash</span></div>
+          <pre><code><span class="c-comment"># Instalação obrigatória após clonar o repositório</span>
+pre-commit install</code></pre>
+        </div>
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div>O que não passa no pre-commit <strong>não vai para o repositório</strong>.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.2 DOCSTRINGS -->
+      <div class="sp-section" id="docstrings">
+        <h2 class="section-heading"><span class="sec-num">5.2</span> Docstrings — Padrão Google</h2>
+        <p class="sp-text"><strong>Todas</strong> as funções, métodos e classes públicas têm docstring conforme o padrão Google:</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">python</span></div>
+          <pre><code><span class="c-kw">def</span> <span class="c-fn">buscar_turma</span>(codigo: <span class="c-kw">int</span>) -> <span class="c-kw">dict</span> | <span class="c-kw">None</span>:
+    <span class="c-str">"""Retorna dados cadastrais de uma turma.
+
+    Args:
+        codigo: Código identificador da turma no EOL.
+
+    Returns:
+        Dicionário com os dados da turma, ou None se não encontrada.
+
+    Raises:
+        TurmaInvalidaError: Se o código informado não for válido.
+    """</span></code></pre>
+        </div>
+        <p class="sp-text">Seções suportadas: <code>Args</code>, <code>Returns</code>, <code>Raises</code>, <code>Yields</code>, <code>Example</code>. A configuração das regras pydocstyle do Ruff no <code>pyproject.toml</code> deve habilitar as regras <code>D</code> para validação automática.</p>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.3 SPHINX -->
+      <div class="sp-section" id="sphinx">
+        <h2 class="section-heading"><span class="sec-num">5.3</span> Sphinx para Documentação de Domínio</h2>
+        <p class="sp-text">O foco do Sphinx <strong>não</strong> é documentar a API HTTP (responsabilidade do drf-spectacular) — é documentar:</p>
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>📋 O que documentar no Sphinx</h5>
+            <ul class="sp-list">
+              <li>Regras de negócio do domínio</li>
+              <li>Decisões arquiteturais (ADRs leves)</li>
+              <li>Mapeamento com sistemas legados (ETL, EOL)</li>
+              <li>Glossário de termos do negócio</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>🔨 Build</h5>
+            <div class="code-block" style="margin-top:0">
+              <div class="code-block-header"><span class="code-block-lang">bash</span></div>
+              <pre><code>sphinx-build -b html \
+  docs/ docs/_build/html</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.4 REQUIREMENTS -->
+      <div class="sp-section" id="requirements">
+        <h2 class="section-heading"><span class="sec-num">5.4</span> Requirements Separados</h2>
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>🏭 requirements/base.txt</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Somente o que roda em <strong>produção</strong>.</p>
+          </div>
+          <div class="mini-card">
+            <h5>💻 requirements/local.txt</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Começa com <code>-r base.txt</code> e adiciona ferramentas de desenvolvimento, linters, coverage, pre-commit e debugpy.</p>
+          </div>
+        </div>
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div><strong>Nunca</strong> colocar <code>pytest</code>, <code>coverage</code>, <code>black</code>, <code>ruff</code>, <code>mypy</code> ou <code>pre-commit</code> em <code>base.txt</code>: essas ferramentas pertencem ao ambiente de desenvolvimento.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.5 TESTES -->
+      <div class="sp-section" id="testes">
+        <h2 class="section-heading"><span class="sec-num">5.5</span> Testes dentro de cada App</h2>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">estrutura de testes por app</span></div>
+          <pre><code>apps/&lt;dominio&gt;/tests/
+├── __init__.py
+├── test_views.py
+├── test_services.py
+└── test_repository.py</code></pre>
+        </div>
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>✅ Vantagens</h5>
+            <ul class="sp-list">
+              <li><strong>Coesão</strong> — testes acompanham o código que verificam</li>
+              <li><strong>Encapsulamento</strong> — mover/remover um app remove seus testes junto</li>
+              <li><strong>Discoverability</strong> — quem abre o app vê o que está coberto</li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>🗂️ Pasta <code>testes/</code> (raiz)</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Reservada para testes E2E / smoke com <strong>Cypress</strong>, <strong>Postman</strong> ou <strong>BDD</strong>. Testes unitários ficam dentro de cada app.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.6 COBERTURA -->
+      <div class="sp-section" id="cobertura">
+        <h2 class="section-heading"><span class="sec-num">5.6–5.7</span> Cobertura e Banco em Testes</h2>
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>📊 Cobertura mínima</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6;margin-bottom:8px">Mínimo recomendado de <strong>80%</strong> por app, com prioridade para <code>services.py</code> e <code>repository.py</code>. Configurado no <code>pyproject.toml</code>.</p>
+            <div style="text-align:center;padding:12px 0">
+              <span style="font-size:32px;font-weight:700;color:var(--sp-python)">80%</span>
+              <div style="font-size:11px;color:var(--sp-neutral-60);text-transform:uppercase;letter-spacing:.05em">cobertura mínima</div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <h5>🗄️ Banco em testes</h5>
+            <p style="font-size:13px;color:var(--sp-neutral-80);line-height:1.6">Usar <strong>SQLite em memória</strong> durante testes para velocidade e isolamento, mantendo <strong>PostgreSQL</strong> como banco de produção. A troca do <code>ENGINE</code> pode ser feita em <code>config/settings.py</code> quando o argumento <code>test</code> estiver presente em <code>sys.argv</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.8 PYPROJECT -->
+      <div class="sp-section" id="pyproject">
+        <h2 class="section-heading"><span class="sec-num">5.8</span> Configuração do <code>pyproject.toml</code></h2>
+        <p class="sp-text">O <code>pyproject.toml</code> centraliza os metadados do projeto e as configurações das ferramentas de qualidade. Isso evita configurações espalhadas em arquivos diferentes.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">pyproject.toml</span></div>
+          <pre><code>[build-system]
+requires = [<span class="c-str">"setuptools>=68"</span>, <span class="c-str">"wheel"</span>]
+build-backend = <span class="c-str">"setuptools.build_meta"</span>
+
+[project]
+name = <span class="c-str">"&lt;nome-do-projeto&gt;"</span>
+version = <span class="c-str">"0.1.0"</span>
+description = <span class="c-str">"&lt;descrição-do-projeto&gt;"</span>
+readme = <span class="c-str">"README.md"</span>
+requires-python = <span class="c-str">">=&lt;versao-python&gt;"</span>
+authors = [{ name = <span class="c-str">"SME"</span> }]
+
+[tool.setuptools.packages.find]
+where = [<span class="c-str">"."</span>]
+include = [<span class="c-str">"apps*"</span>, <span class="c-str">"config*"</span>]
+
+[tool.black]
+line-length = <span class="c-num">79</span>
+target-version = [<span class="c-str">"&lt;alvo-python&gt;"</span>]
+exclude = <span class="c-str">"/migrations/"</span>
+
+[tool.ruff]
+line-length = <span class="c-num">79</span>
+target-version = <span class="c-str">"&lt;alvo-python&gt;"</span>
+exclude = [<span class="c-str">"migrations"</span>]
+
+[tool.ruff.lint]
+select = [<span class="c-str">"E"</span>, <span class="c-str">"F"</span>, <span class="c-str">"W"</span>, <span class="c-str">"I"</span>, <span class="c-str">"N"</span>, <span class="c-str">"UP"</span>, <span class="c-str">"B"</span>, <span class="c-str">"C4"</span>, <span class="c-str">"SIM"</span>, <span class="c-str">"D"</span>]
+
+[tool.ruff.lint.per-file-ignores]
+<span class="c-str">"**/__init__.py"</span> = [<span class="c-str">"D104"</span>]
+<span class="c-str">"**/tests/**/*.py"</span> = [<span class="c-str">"D100"</span>, <span class="c-str">"D101"</span>, <span class="c-str">"D102"</span>, <span class="c-str">"D103"</span>]
+
+[tool.ruff.lint.pydocstyle]
+convention = <span class="c-str">"google"</span>
+
+[tool.mypy]
+python_version = <span class="c-str">"&lt;versao-python&gt;"</span>
+exclude = <span class="c-str">".*/migrations/.*"</span>
+warn_return_any = <span class="c-kw">true</span>
+disallow_untyped_defs = <span class="c-kw">true</span>
+ignore_missing_imports = <span class="c-kw">true</span>
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = <span class="c-str">"config.settings"</span>
+python_files = [<span class="c-str">"test_*.py"</span>]
+python_classes = [<span class="c-str">"Test*"</span>]
+python_functions = [<span class="c-str">"test_*"</span>]
+
+[tool.coverage.run]
+source = [<span class="c-str">"apps"</span>]
+
+[tool.coverage.report]
+show_missing = <span class="c-kw">true</span>
+fail_under = <span class="c-num">80</span></code></pre>
+        </div>
+
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div><strong>Critérios de adaptação:</strong> Não adicionar <code>ignore</code> global para regras de docstring — exceções devem ser restritas com <code>per-file-ignores</code>. Não usar versões flutuantes: a versão estável mais recente deve ser adotada conscientemente na criação do projeto e deve permanecer <strong>fixada e consistente</strong> no <code>pyproject.toml</code>, Dockerfile e CI.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 5.9 DOCKER -->
+      <div class="sp-section" id="docker">
+        <h2 class="section-heading"><span class="sec-num">5.9</span> Docker</h2>
+        <div class="two-col">
+          <div class="mini-card" style="border-left:3px solid var(--sp-python)">
+            <h5>🏭 Dockerfile (produção)</h5>
+            <ul class="sp-list">
+              <li>Slim, instala apenas <code>base.txt</code></li>
+              <li>Usa <strong>Gunicorn</strong> como servidor WSGI</li>
+              <li>Base: <code>python:&lt;versao&gt;-slim</code></li>
+            </ul>
+          </div>
+          <div class="mini-card" style="border-left:3px solid var(--sp-blue)">
+            <h5>💻 Dockerfile.dev (desenvolvimento)</h5>
+            <ul class="sp-list">
+              <li>Instala <code>local.txt</code> + debugpy</li>
+              <li>Hot reload habilitado</li>
+              <li>Volume mount via <code>docker-compose-dev.yml</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <span class="callout-icon">🚫</span>
+          <div>
+            <strong>Não usar:</strong>
+            <ul style="margin-top:6px;padding-left:16px;list-style:disc;font-size:13px">
+              <li>Tags flutuantes como <code>python:latest</code> ou <code>python:slim</code> — podem mudar entre builds sem alteração no código.</li>
+              <li>Alpine — incompatibilidades recorrentes com Psycopg, gRPC para Python e wheels binários.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- 6. CHECKLIST -->
+      <div class="sp-section" id="checklist">
+        <h2 class="section-heading"><span class="sec-num">6</span> Checklist para Novos Projetos</h2>
+        <p class="sp-text">Ao criar uma nova aplicação Django SME (monolito ou microsserviço), garantir <strong>antes do primeiro merge</strong>:</p>
+
+        <div class="check-group">
+          <div class="check-group-title" style="background:#e6f4ec;color:#0a2e1a">📁 Estrutura</div>
+          <div class="check-item"><div class="check-box"></div>Pasta <code>apps/</code> com pelo menos <code>apps/core/</code></div>
+          <div class="check-item"><div class="check-box"></div>Pasta <code>config/</code> (renomeada do default do <code>startproject</code>)</div>
+          <div class="check-item"><div class="check-box"></div>Pasta <code>requirements/</code> com <code>base.txt</code> e <code>local.txt</code></div>
+          <div class="check-item"><div class="check-box"></div>Pasta <code>docs/</code> com Sphinx configurado</div>
+          <div class="check-item"><div class="check-box"></div>Testes dentro de cada app, não na raiz</div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="background:#e6f4ec;color:#0a2e1a">📄 Arquivos obrigatórios na raiz</div>
+          <div class="check-item"><div class="check-box"></div><code>pyproject.toml</code> com black, ruff, mypy, coverage configurados</div>
+          <div class="check-item"><div class="check-box"></div><code>.pre-commit-config.yaml</code> com black, ruff, mypy</div>
+          <div class="check-item"><div class="check-box"></div><code>.env.example</code> sem valores reais nem portas explícitas</div>
+          <div class="check-item"><div class="check-box"></div><code>.gitignore</code> cobrindo <code>.env</code>, <code>__pycache__</code>, <code>.venv</code>, <code>.coverage</code></div>
+          <div class="check-item"><div class="check-box"></div><code>Dockerfile</code> (prod) e <code>Dockerfile.dev</code></div>
+          <div class="check-item"><div class="check-box"></div><code>docker-compose.yml</code> e <code>docker-compose-dev.yml</code></div>
+          <div class="check-item"><div class="check-box"></div><code>README.md</code> com instruções de execução, endpoints e autenticação</div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="background:#e6f4ec;color:#0a2e1a">💻 Código</div>
+          <div class="check-item"><div class="check-box"></div>Modelos, campos, classes e rotas em pt-br</div>
+          <div class="check-item"><div class="check-box"></div>Camadas separadas: <code>model → repository → service → serializer → view</code></div>
+          <div class="check-item"><div class="check-box"></div>Docstrings Google em todas as classes/funções públicas</div>
+          <div class="check-item"><div class="check-box"></div>Tipagem estática (mypy <code>disallow_untyped_defs</code>)</div>
+          <div class="check-item"><div class="check-box"></div>Esquema de autenticação adequado: <span class="tag tag-ms">MS</span> API Key ou <span class="tag tag-blue">monolito</span> JWT + CoreSSO</div>
+          <div class="check-item"><div class="check-box"></div>Endpoint <code>/api/v1/health/</code> público</div>
+          <div class="check-item"><div class="check-box"></div>Schema OpenAPI em <code>/api/v1/schema/</code> e Swagger em <code>/api/v1/docs/</code></div>
+        </div>
+
+        <div class="check-group">
+          <div class="check-group-title" style="background:#e6f4ec;color:#0a2e1a">🧪 Qualidade</div>
+          <div class="check-item"><div class="check-box"></div>Pre-commit instalado e passando (<code>pre-commit install</code>)</div>
+          <div class="check-item"><div class="check-box"></div>Cobertura mínima de 80%</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
