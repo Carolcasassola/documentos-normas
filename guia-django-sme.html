@@ -186,7 +186,7 @@
   <main class="main-content">
 
     <div class="page-hero">
-      <div class="hero-eyebrow">SME · Padrão Técnico · Python + Django</div>
+      <div class="hero-eyebrow">Padrão Técnico · Python + Django</div>
       <div class="hero-title"><strong>Guia para criação de aplicações</strong><br>Python + Django alinhadas aos padrões SME</div>
       <div class="hero-sub">Monolitos e microsserviços — arquitetura, ferramentas e convenções</div>
       <div class="hero-badge"><span class="dot"></span> v2 · Referência oficial para times de desenvolvimento</div>
@@ -201,11 +201,7 @@
 
       <div class="callout warn">
         <span class="callout-icon">⚠️</span>
-        <div><strong>Disclaimer.</strong> Este guia reúne instruções e padrões recomendados, mas não pretende contemplar todas as necessidades ou particularidades de cada projeto. Quando o contexto técnico ou de negócio exigir uma abordagem diferente, cabe ao <strong>desenvolvedor sênior ou arquiteto responsável</strong> avaliar e definir as configurações, ferramentas e padrões mais adequados, registrando as decisões e suas justificativas.</div>
-      </div>
-      <div class="callout info">
-        <span class="callout-icon">ℹ️</span>
-        <div><strong>Monolito × microsserviço.</strong> A esmagadora maioria do guia (estrutura de pastas, camadas, nomenclatura pt-br, pre-commit, docstrings, Sphinx, requirements, testes, Docker) aplica-se igualmente aos dois. As seções que dependem do estilo de implantação — principalmente <strong>autenticação</strong> — apresentam opções para cada caso. Quando uma recomendação for específica, será marcada com <span class="tag tag-ms">MS</span> ou <span class="tag tag-blue">monolito</span>.</div>
+        <div><strong>Importante!</strong> Este guia reúne instruções e padrões recomendados, mas não pretende contemplar todas as necessidades ou particularidades de cada projeto. Quando o contexto técnico ou de negócio exigir uma abordagem diferente, cabe ao <strong>desenvolvedor sênior ou arquiteto responsável</strong> avaliar e definir as configurações, ferramentas e padrões mais adequados, registrando as decisões e suas justificativas.</div>
       </div>
 
       <hr class="sp-divider">
@@ -222,7 +218,12 @@
           <li><strong>Testes ao lado do código.</strong> Cada app guarda seus próprios testes.</li>
         </ul>
       </div>
-
+      
+      <div class="callout info">
+        <span class="callout-icon">ℹ️</span>
+        <div><strong>Monolito × microsserviço.</strong> A esmagadora maioria do guia (estrutura de pastas, camadas, nomenclatura pt-br, pre-commit, docstrings, Sphinx, requirements, testes, Docker) aplica-se igualmente aos dois. As seções que dependem do estilo de implantação — principalmente <strong>autenticação</strong> — apresentam opções para cada caso. Quando uma recomendação for específica, será marcada com <span class="tag tag-ms">MS</span> ou <span class="tag tag-blue">monolito</span>.</div>
+      </div>
+      
       <hr class="sp-divider">
 
       <!-- 2. PASTAS -->
