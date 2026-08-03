@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template de Resumo de Projeto</title>
+<style>
+  :root {
+    --sp-blue: #0078d4;
+    --sp-blue-dark: #005a9e;
+    --sp-blue-light: #deecf9;
+    --sp-blue-xlight: #f3f9fe;
+    --sp-neutral-0: #ffffff;
+    --sp-neutral-10: #f3f2f1;
+    --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce;
+    --sp-neutral-60: #605e5c;
+    --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e;
+    --sp-red: #a4262c;
+    --sp-green: #107c10;
+    --sp-orange: #986f0b;
+    --sp-purple: #5c2d91;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; color: var(--sp-neutral-90);
+    background: var(--sp-neutral-10); line-height: 1.5;
+  }
+
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  .left-nav {
+    width: var(--sp-sidebar-width);
+    background: var(--sp-neutral-0);
+    border-right: 1px solid var(--sp-neutral-30);
+    padding: 20px 0;
+    position: fixed; top: 0; bottom: 0; left: 0;
+    overflow-y: auto; z-index: 50;
+  }
+  .left-nav-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--sp-neutral-60);
+    padding: 10px 20px 4px; display: block;
+  }
+  .left-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px;
+    cursor: pointer; border-left: 3px solid transparent;
+    text-decoration: none; transition: background .12s, color .12s;
+  }
+  .left-nav-item:hover { background: var(--sp-neutral-10); color: var(--sp-blue); }
+  .left-nav-item.active {
+    background: var(--sp-blue-light); color: var(--sp-blue-dark);
+    border-left-color: var(--sp-blue); font-weight: 600;
+  }
+
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  .page-hero {
+    background: linear-gradient(135deg, #003f6b 0%, var(--sp-blue-dark) 50%, var(--sp-blue) 100%);
+    padding: 40px 48px 36px; color: white;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content:''; position: absolute; right: -80px; top: -80px;
+    width: 360px; height: 360px;
+    background: rgba(255,255,255,.04); border-radius: 50%;
+  }
+  .page-hero::after {
+    content:''; position: absolute; right: 100px; bottom: -60px;
+    width: 200px; height: 200px;
+    background: rgba(0,120,212,.2); border-radius: 50%;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .1em; opacity: .8; margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .hero-title {
+    font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .hero-title strong { font-weight: 700; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    border-radius: 12px; padding: 3px 10px;
+    font-size: 11px; font-weight: 600; margin-top: 14px;
+    position: relative; z-index: 1;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #7fff7f; }
+  .hero-meta {
+    font-size: 12px; opacity: .75;
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;
+    position: relative; z-index: 1;
+  }
+
+  .content-area { padding: 32px 48px; max-width: 980px; }
+
+  .alert {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px 20px; border-radius: 2px; margin-bottom: 24px;
+  }
+  .alert-info { background: #dff6ff; border-left: 4px solid var(--sp-blue); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-body { font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+  .alert-body strong { display: block; font-size: 14px; color: var(--sp-neutral-90); margin-bottom: 4px; }
+
+  .sp-section { margin-bottom: 36px; }
+  .section-heading {
+    font-size: 20px; font-weight: 600; color: var(--sp-neutral-90);
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--sp-blue);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-heading .sec-num {
+    background: var(--sp-blue); color: white;
+    font-size: 12px; font-weight: 700;
+    min-width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; padding: 0 4px;
+  }
+  .subsection-heading {
+    font-size: 15px; font-weight: 600; color: var(--sp-blue-dark);
+    margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .subsection-heading::before {
+    content:''; display: inline-block; width: 3px; height: 16px;
+    background: var(--sp-blue); border-radius: 2px; flex-shrink: 0;
+  }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+
+  .cards-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap: 12px; margin-bottom: 20px;
+  }
+  .sp-card {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; padding: 16px;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .sp-card:hover { box-shadow: 0 2px 8px rgba(0,120,212,.15); border-color: var(--sp-blue); }
+  .card-icon { font-size: 22px; margin-bottom: 8px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 4px; }
+  .card-desc { font-size: 12px; color: var(--sp-neutral-60); line-height: 1.4; }
+
+  /* property bag = field table */
+  .property-bag {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; overflow: hidden; margin-bottom: 20px;
+  }
+  .property-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--sp-neutral-20); }
+  .property-row:last-child { border-bottom: none; }
+  .property-key {
+    background: var(--sp-neutral-10); padding: 12px 16px;
+    font-size: 12px; font-weight: 600; color: var(--sp-neutral-60);
+    text-transform: uppercase; letter-spacing: .04em;
+    display: flex; align-items: flex-start; border-right: 1px solid var(--sp-neutral-20);
+  }
+  .property-val { padding: 4px 16px; font-size: 13px; color: var(--sp-neutral-80); line-height: 1.6; }
+
+  /* fillable field */
+  .fill {
+    min-height: 34px; margin: 8px 0; padding: 8px 10px;
+    border: 1px dashed var(--sp-neutral-30); border-radius: 3px;
+    background: var(--sp-blue-xlight);
+    font-size: 12.5px; color: var(--sp-neutral-60); font-style: italic;
+    line-height: 1.5;
+  }
+  .fill[contenteditable="true"]:focus {
+    outline: none; border-color: var(--sp-blue); color: var(--sp-neutral-90);
+    font-style: normal; background: var(--sp-neutral-0);
+  }
+
+  .tag {
+    display: inline-flex; align-items: center;
+    background: var(--sp-blue-light); color: var(--sp-blue-dark);
+    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+  }
+  .tag.green  { background: #dff6dd; color: #107c10; }
+  .tag.orange { background: #fff4ce; color: #986f0b; }
+  .tag.red    { background: #fde7e9; color: var(--sp-red); }
+  .tag.purple { background: #f0e6ff; color: var(--sp-purple); }
+
+  .callout {
+    background: var(--sp-blue-light); border: 1px solid #c7e0f4;
+    border-radius: 2px; padding: 14px 18px; margin: 12px 0;
+    font-size: 13px; color: var(--sp-blue-dark);
+  }
+  .callout.warn { background: #fff4ce; border-color: #f0d080; color: #7a5000; }
+  .callout.danger { background: #fde7e9; border-color: #f5b5bb; color: #8e0c0c; }
+  .callout.success { background: #dff6dd; border-color: #9ed89a; color: #1a5c1a; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .mini-card {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-radius: 2px; padding: 16px;
+  }
+  .mini-card h5 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--sp-blue-dark); margin-bottom: 10px;
+  }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+
+  /* ── ROADMAP TIMELINE ── */
+  .roadmap-wrap { overflow-x: auto; padding: 8px 0 4px; }
+  .roadmap-track {
+    display: flex; align-items: flex-start; gap: 0; min-width: 920px;
+    position: relative; padding-top: 18px;
+  }
+  .roadmap-track::before {
+    content: ''; position: absolute; top: 32px; left: 24px; right: 24px;
+    height: 3px; background: var(--sp-blue); z-index: 0;
+  }
+  .roadmap-phase { flex: 1; position: relative; z-index: 1; padding: 0 8px; text-align: center; }
+  .roadmap-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--sp-blue); color: white; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px; border: 3px solid var(--sp-neutral-0); box-shadow: 0 0 0 2px var(--sp-blue);
+  }
+  .roadmap-phase.final .roadmap-dot { background: var(--sp-green); box-shadow: 0 0 0 2px var(--sp-green); }
+  .roadmap-card {
+    background: var(--sp-neutral-0); border: 1px solid var(--sp-neutral-30);
+    border-top: 3px solid var(--sp-blue); border-radius: 2px;
+    padding: 12px; text-align: left; min-height: 150px;
+  }
+  .roadmap-phase.final .roadmap-card { border-top-color: var(--sp-green); background: #f6fbf6; }
+  .roadmap-card .rc-title { font-size: 13px; font-weight: 700; color: var(--sp-neutral-90); margin-bottom: 6px; }
+  .roadmap-card .rc-field { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--sp-neutral-60); margin-top: 8px; font-weight: 600; }
+  .roadmap-card .rc-fill {
+    font-size: 12px; color: var(--sp-neutral-60); font-style: italic;
+    border-bottom: 1px dashed var(--sp-neutral-30); padding: 2px 0; margin-top: 2px;
+  }
+  .roadmap-card .rc-date { font-size: 11px; color: var(--sp-blue-dark); font-weight: 600; margin-top: 10px; }
+
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 6px 0; font-size: 13px; color: var(--sp-neutral-80);
+    border-bottom: 1px solid var(--sp-neutral-20);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 16px; height: 16px; border: 2px solid var(--sp-neutral-30);
+    border-radius: 3px; flex-shrink: 0; margin-top: 1px;
+  }
+
+  #scrollTop {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--sp-blue); color: white; border: none;
+    font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    display: none; align-items: center; justify-content: center; z-index: 900;
+  }
+  #scrollTop:hover { background: var(--sp-blue-dark); }
+  #scrollTop.visible { display: flex; }
+
+  @media (max-width: 768px) {
+    .left-nav { display: none; }
+    .main-content { margin-left: 0; }
+    .content-area { padding: 20px; }
+    .page-hero { padding: 24px 20px; }
+    .property-row { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <nav class="left-nav">
+    <span class="left-nav-label">Nesta Página</span>
+    <a href="#identificacao" class="left-nav-item active">🏷️ Identificação</a>
+    <a href="#visao-geral"   class="left-nav-item">🎯 Visão Geral</a>
+    <a href="#execucao"      class="left-nav-item">⚙️ Execução</a>
+    <a href="#roadmap"       class="left-nav-item">🗺️ Roadmap Visual</a>
+    <span class="left-nav-label">Como usar</span>
+    <a href="#como-usar"     class="left-nav-item">💡 Instruções de Preenchimento</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow">Template · Gestão de Projetos</div>
+      <div class="hero-title"><strong>Resumo de Projeto</strong><br>Documento de Visão Geral</div>
+      <div class="hero-badge"><span class="dot"></span> Modelo Padrão de Preenchimento</div>
+      <div class="hero-meta">
+        <span>📅 Última atualização: ___/___/______</span>
+        <span>👤 Responsável pelo preenchimento: _______________</span>
+        <span>📌 Versão: 1.0</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <div class="alert alert-info">
+        <div class="alert-icon">💡</div>
+        <div class="alert-body">
+          <strong>Como usar este template</strong>
+          Preencha os campos destacados em cinza-itálico (áreas tracejadas) com as informações do seu projeto. Copie esta página para cada novo projeto/sistema e mantenha o roadmap atualizado a cada marco concluído.
+        </div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="sp-section" id="identificacao">
+        <h2 class="section-heading"><span class="sec-num">🏷️</span> Identificação</h2>
+
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">Nome do Projeto/Sistema</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Ex.: NovoSGP — Sistema de Gestão Pedagógica</div></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Área Promotora</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Área/diretoria responsável por patrocinar o projeto</div></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Responsáveis</div>
+            <div class="property-val"><div class="fill" contenteditable="true">PO, Design de Serviços, Scrum Master, sponsors...</div></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Time de Desenvolvimento</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Nomes/papéis dos desenvolvedores, QA, UX/UI alocados</div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- VISÃO GERAL -->
+      <div class="sp-section" id="visao-geral">
+        <h2 class="section-heading"><span class="sec-num">🎯</span> Visão Geral</h2>
+
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">Objetivo</div>
+            <div class="property-val"><div class="fill" contenteditable="true">O que o projeto pretende resolver ou entregar</div></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Público</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Quem utilizará o sistema/projeto (perfis de usuário)</div></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>📈 Ganho</h5>
+            <div class="fill" contenteditable="true">Benefício geral gerado pelo projeto (eficiência, redução de custo, qualidade...)</div>
+          </div>
+          <div class="mini-card">
+            <h5>🤝 Ganho para os Stakeholders</h5>
+            <div class="fill" contenteditable="true">Valor percebido por cada parte interessada (gestores, usuários finais, área técnica...)</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- EXECUÇÃO -->
+      <div class="sp-section" id="execucao">
+        <h2 class="section-heading"><span class="sec-num">⚙️</span> Execução</h2>
+
+        <h3 class="subsection-heading">Fases</h3>
+        <div class="cards-grid">
+          <div class="sp-card"><div class="card-icon">1️⃣</div><div class="card-title">Fase 1</div><div class="card-desc" contenteditable="true">Descrição da fase</div></div>
+          <div class="sp-card"><div class="card-icon">2️⃣</div><div class="card-title">Fase 2</div><div class="card-desc" contenteditable="true">Descrição da fase</div></div>
+          <div class="sp-card"><div class="card-icon">3️⃣</div><div class="card-title">Fase 3</div><div class="card-desc" contenteditable="true">Descrição da fase</div></div>
+          <div class="sp-card"><div class="card-icon">4️⃣</div><div class="card-title">Fase 4</div><div class="card-desc" contenteditable="true">Descrição da fase</div></div>
+        </div>
+
+        <h3 class="subsection-heading">Grandes Marcos</h3>
+        <div class="property-bag">
+          <div class="property-row"><div class="property-key">Marco 1</div><div class="property-val"><div class="fill" contenteditable="true">Descrição do marco · data prevista ___/___/____</div></div></div>
+          <div class="property-row"><div class="property-key">Marco 2</div><div class="property-val"><div class="fill" contenteditable="true">Descrição do marco · data prevista ___/___/____</div></div></div>
+          <div class="property-row"><div class="property-key">Marco 3</div><div class="property-val"><div class="fill" contenteditable="true">Descrição do marco · data prevista ___/___/____</div></div></div>
+        </div>
+
+        <h3 class="subsection-heading">Entregas de Valor</h3>
+        <div class="check-item"><div class="check-box"></div><span contenteditable="true">Entrega 1 — descreva o valor gerado para o negócio/usuário</span></div>
+        <div class="check-item"><div class="check-box"></div><span contenteditable="true">Entrega 2 — descreva o valor gerado para o negócio/usuário</span></div>
+        <div class="check-item"><div class="check-box"></div><span contenteditable="true">Entrega 3 — descreva o valor gerado para o negócio/usuário</span></div>
+
+        <h3 class="subsection-heading">Riscos</h3>
+        <div class="property-bag">
+          <div class="property-row">
+            <div class="property-key">Risco</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Descreva o risco identificado</div></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Impacto</div>
+            <div class="property-val"><span class="tag orange">Médio</span> &nbsp;<span style="font-size:11px;color:var(--sp-neutral-60)">(ajuste para Baixo/Médio/Alto conforme o caso)</span></div>
+          </div>
+          <div class="property-row">
+            <div class="property-key">Mitigação</div>
+            <div class="property-val"><div class="fill" contenteditable="true">Ação planejada para reduzir ou eliminar o risco</div></div>
+          </div>
+        </div>
+        <div class="callout warn">⚠️ Adicione uma linha para cada risco relevante — técnico, de prazo, de escopo ou de dependência externa.</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- ROADMAP VISUAL -->
+      <div class="sp-section" id="roadmap">
+        <h2 class="section-heading"><span class="sec-num">🗺️</span> Roadmap Visual</h2>
+        <p class="sp-text">Linha do tempo com as fases do projeto e seus principais marcos. Atualize as datas e entregas conforme o planejamento evoluir.</p>
+
+        <div class="roadmap-wrap">
+          <div class="roadmap-track">
+            <div class="roadmap-phase">
+              <div class="roadmap-dot">1</div>
+              <div class="roadmap-card">
+                <div class="rc-title">Fase 1</div>
+                <div class="rc-fill" contenteditable="true">Descrição da fase</div>
+                <div class="rc-field">Entrega</div>
+                <div class="rc-fill" contenteditable="true">Entrega associada</div>
+                <div class="rc-date" contenteditable="true">___/___/____</div>
+              </div>
+            </div>
+            <div class="roadmap-phase">
+              <div class="roadmap-dot">2</div>
+              <div class="roadmap-card">
+                <div class="rc-title">Fase 2</div>
+                <div class="rc-fill" contenteditable="true">Descrição da fase</div>
+                <div class="rc-field">Entrega</div>
+                <div class="rc-fill" contenteditable="true">Entrega associada</div>
+                <div class="rc-date" contenteditable="true">___/___/____</div>
+              </div>
+            </div>
+            <div class="roadmap-phase">
+              <div class="roadmap-dot">3</div>
+              <div class="roadmap-card">
+                <div class="rc-title">Fase 3</div>
+                <div class="rc-fill" contenteditable="true">Descrição da fase</div>
+                <div class="rc-field">Entrega</div>
+                <div class="rc-fill" contenteditable="true">Entrega associada</div>
+                <div class="rc-date" contenteditable="true">___/___/____</div>
+              </div>
+            </div>
+            <div class="roadmap-phase">
+              <div class="roadmap-dot">4</div>
+              <div class="roadmap-card">
+                <div class="rc-title">Fase 4</div>
+                <div class="rc-fill" contenteditable="true">Descrição da fase</div>
+                <div class="rc-field">Entrega</div>
+                <div class="rc-fill" contenteditable="true">Entrega associada</div>
+                <div class="rc-date" contenteditable="true">___/___/____</div>
+              </div>
+            </div>
+            <div class="roadmap-phase final">
+              <div class="roadmap-dot">✓</div>
+              <div class="roadmap-card">
+                <div class="rc-title">Encerramento</div>
+                <div class="rc-fill" contenteditable="true">Entrega final e encerramento do projeto</div>
+                <div class="rc-field">Entrega</div>
+                <div class="rc-fill" contenteditable="true">Entrega final</div>
+                <div class="rc-date" contenteditable="true">___/___/____</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- COMO USAR -->
+      <div class="sp-section" id="como-usar">
+        <h2 class="section-heading"><span class="sec-num">💡</span> Instruções de Preenchimento</h2>
+        <div class="two-col">
+          <div class="mini-card">
+            <h5>✅ Boas práticas</h5>
+            <div class="check-item"><div class="check-box"></div>Use linguagem objetiva e evite termos genéricos</div>
+            <div class="check-item"><div class="check-box"></div>Atualize o roadmap a cada marco concluído</div>
+            <div class="check-item"><div class="check-box"></div>Reavalie os riscos periodicamente</div>
+          </div>
+          <div class="mini-card">
+            <h5>📎 Antes de compartilhar</h5>
+            <div class="check-item"><div class="check-box"></div>Revise se todos os campos tracejados foram preenchidos</div>
+            <div class="check-item"><div class="check-box"></div>Valide o conteúdo com os responsáveis indicados</div>
+            <div class="check-item"><div class="check-box"></div>Exporte ou salve uma cópia para o histórico do projeto</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
