@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designer de Serviços – SME Spassu</title>
+<style>
+  :root {
+    --sp-blue: #0078d4; --sp-blue-dark: #005a9e; --sp-blue-light: #deecf9;
+    --sp-neutral-0: #ffffff; --sp-neutral-10: #f3f2f1; --sp-neutral-20: #edebe9;
+    --sp-neutral-30: #d2d0ce; --sp-neutral-60: #605e5c; --sp-neutral-80: #3b3a39;
+    --sp-neutral-90: #201f1e; --sp-ds: #d4560a; --sp-ds-dark: #a83d06;
+    --sp-ds-light: #fef0e6; --sp-green: #107c10; --sp-orange: #986f0b;
+    --sp-sidebar-width: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; color: var(--sp-neutral-90); background: var(--sp-neutral-10); line-height: 1.5; }
+  .page-wrapper { display: flex; min-height: 100vh; }
+
+  /* TOPBAR */
+  .sme-topbar { background: linear-gradient(90deg,#0f1923 0%,#162032 100%); height: 60px; display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.45); border-bottom: 1px solid rgba(0,120,212,.3); }
+  .sme-topbar-logo { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; padding-right: 24px; border-right: 1px solid rgba(255,255,255,.12); margin-right: 16px; }
+  .sme-topbar-logo .logo-badge { background: #0078d4; color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: .06em; }
+  .sme-topbar-logo .logo-text { color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+  .sme-topbar-nav { display: flex; align-items: stretch; gap: 4px; flex: 1; overflow-x: auto; height: 100%; }
+  .sme-topbar-nav::-webkit-scrollbar { display: none; }
+  .sme-nav-link { color: rgba(255,255,255,.65); font-size: 12.5px; font-weight: 500; text-decoration: none; padding: 0 14px; white-space: nowrap; transition: background .15s,color .15s,border-color .15s; display: flex; align-items: center; gap: 7px; border-bottom: 3px solid transparent; }
+  .sme-nav-link:hover { background: rgba(255,255,255,.07); color: #fff; border-bottom-color: rgba(0,120,212,.5); }
+  .sme-nav-link.active { color: #fff; font-weight: 600; background: rgba(212,86,10,.2); border-bottom-color: #f07030; }
+  .sme-nav-link .nav-icon { font-size: 15px; flex-shrink: 0; }
+
+  /* SIDEBAR */
+  .left-nav { width: var(--sp-sidebar-width); background: var(--sp-neutral-0); border-right: 1px solid var(--sp-neutral-30); padding: 20px 0; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; z-index: 50; height: calc(100vh - 60px); }
+  .left-nav-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--sp-neutral-60); padding: 10px 20px 4px; display: block; }
+  .left-nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--sp-neutral-80); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; text-decoration: none; transition: background .12s,color .12s; }
+  .left-nav-item:hover { background: var(--sp-ds-light); color: var(--sp-ds); }
+  .left-nav-item.active { background: var(--sp-ds-light); color: var(--sp-ds); border-left-color: var(--sp-ds); font-weight: 600; }
+
+  .main-content { margin-left: var(--sp-sidebar-width); flex: 1; }
+
+  /* HERO */
+  .page-hero { background: linear-gradient(135deg,#4a1a00 0%,#b84500 50%,#f07030 100%); padding: 40px 48px 36px; color: white; position: relative; overflow: hidden; }
+  .page-hero::before { content:''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; background: rgba(255,255,255,.04); border-radius: 50%; }
+  .page-hero::after { content:''; position: absolute; right: 100px; bottom: -60px; width: 200px; height: 200px; background: rgba(212,86,10,.3); border-radius: 50%; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; opacity: .8; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero-title { font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px; position: relative; z-index: 1; }
+  .hero-title strong { font-weight: 700; }
+  .hero-sub { font-size: 14px; opacity: .8; margin-bottom: 14px; position: relative; z-index: 1; }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .hero-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px 12px; font-size: 11px; font-weight: 600; }
+
+  /* CONTENT */
+  .content-area { padding: 32px 48px; max-width: 980px; }
+  .sp-section { margin-bottom: 36px; }
+  .section-heading { font-size: 20px; font-weight: 600; color: var(--sp-neutral-90); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--sp-ds); display: flex; align-items: center; gap: 10px; }
+  .section-heading .sec-badge { background: var(--sp-ds); color: white; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px; white-space: nowrap; }
+  .sp-text { font-size: 14px; color: var(--sp-neutral-80); line-height: 1.65; margin-bottom: 12px; }
+
+  /* PERFIL CARDS */
+  .perfil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+  .perfil-card { background: white; border: 1px solid var(--sp-neutral-30); border-top: 4px solid var(--sp-ds); border-radius: 4px; padding: 20px 18px; }
+  .perfil-card .pc-icon { font-size: 28px; margin-bottom: 10px; }
+  .perfil-card .pc-title { font-size: 13px; font-weight: 700; color: var(--sp-ds); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .perfil-card .pc-desc { font-size: 13px; color: var(--sp-neutral-80); line-height: 1.55; }
+  .perfil-quote { background: var(--sp-ds-light); border-left: 4px solid var(--sp-ds); padding: 14px 20px; border-radius: 2px; font-size: 14px; color: var(--sp-ds-dark); font-style: italic; font-weight: 500; margin-top: 16px; }
+
+  /* CICLO DE FASES */
+  .fase-timeline { display: flex; gap: 0; margin: 16px 0; overflow-x: auto; padding-bottom: 8px; }
+  .fase-node { display: flex; flex-direction: column; align-items: center; min-width: 160px; flex: 1; }
+  .fase-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--sp-ds); color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; flex-shrink: 0; }
+  .fase-circle.continua { background: linear-gradient(135deg, #f07030, #d4560a); border: 3px dashed rgba(255,255,255,.6); }
+  .fase-connector { height: 2px; flex: 1; background: var(--sp-neutral-30); align-self: center; position: relative; top: -24px; }
+  .fase-label { font-size: 12px; font-weight: 700; color: var(--sp-ds); text-align: center; margin-top: 8px; }
+  .fase-sub { font-size: 11px; color: var(--sp-neutral-60); text-align: center; margin-top: 2px; max-width: 140px; line-height: 1.4; }
+  .fase-note { font-size: 12px; color: var(--sp-neutral-60); text-align: center; margin-top: 12px; font-style: italic; }
+
+  /* FASE DETAIL CARDS */
+  .fase-detail { background: white; border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; margin: 12px 0 20px; }
+  .fase-detail-header { background: var(--sp-ds); color: white; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .fase-detail-header .fh-num { font-size: 11px; font-weight: 800; background: rgba(255,255,255,.2); border-radius: 8px; padding: 2px 8px; letter-spacing: .06em; }
+  .fase-detail-header .fh-title { font-size: 15px; font-weight: 700; }
+  .fase-detail-header .fh-sub { font-size: 12px; opacity: .85; margin-left: auto; }
+  .fase-detail-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .fase-col { padding: 18px 20px; border-right: 1px solid var(--sp-neutral-20); }
+  .fase-col:last-child { border-right: none; }
+  .fase-col h5 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--sp-ds); margin-bottom: 12px; }
+  .fase-item { display: flex; align-items: flex-start; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--sp-neutral-10); font-size: 13px; color: var(--sp-neutral-80); line-height: 1.5; }
+  .fase-item:last-child { border-bottom: none; }
+  .fase-item::before { content: '→'; color: var(--sp-ds); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .fase-result { background: #f0e6f7; padding: 10px 20px; font-size: 12px; color: var(--sp-ds-dark); display: flex; align-items: center; gap: 8px; }
+  .fase-result strong { font-weight: 700; }
+  .fase-warn { background: #fff4ce; padding: 10px 20px; font-size: 12px; color: #7a5000; display: flex; align-items: center; gap: 8px; border-top: 1px solid #f7c948; }
+
+  /* REFINAMENTO COLS */
+  .ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0; }
+  .ref-col { background: white; border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; }
+  .ref-col-header { padding: 10px 14px; background: var(--sp-ds-light); font-size: 12px; font-weight: 700; color: var(--sp-ds); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--sp-neutral-30); }
+  .ref-col-sub { font-size: 10px; font-weight: 400; color: var(--sp-neutral-60); display: block; text-transform: none; letter-spacing: 0; margin-top: 2px; }
+  .ref-item { font-size: 12.5px; color: var(--sp-neutral-80); padding: 7px 14px; border-bottom: 1px solid var(--sp-neutral-10); line-height: 1.45; display: flex; align-items: flex-start; gap: 8px; }
+  .ref-item:last-child { border-bottom: none; }
+  .ref-item::before { content:'▸'; color: var(--sp-ds); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+  .ref-rule { background: #fff4ce; border: 1px solid #f7c948; border-radius: 4px; padding: 10px 16px; font-size: 13px; color: #7a5000; margin-top: 12px; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+
+  /* QUALIDADE DO BACKLOG */
+  .backlog-table { width: 100%; border-collapse: collapse; margin: 12px 0; background: white; border: 1px solid var(--sp-neutral-30); font-size: 13px; }
+  .backlog-table th { padding: 10px 14px; background: var(--sp-neutral-90); color: white; font-size: 11px; font-weight: 700; text-align: left; letter-spacing: .04em; }
+  .backlog-table td { padding: 10px 14px; border-bottom: 1px solid var(--sp-neutral-20); vertical-align: top; line-height: 1.5; }
+  .backlog-table tr:last-child td { border-bottom: none; }
+  .status-ok     { color: #107c10; font-weight: 700; font-size: 13px; }
+  .status-warn   { color: #986f0b; font-weight: 700; font-size: 13px; }
+  .status-block  { color: #a4262c; font-weight: 700; font-size: 13px; }
+
+  .formato-card { background: var(--sp-ds-light); border: 1.5px solid var(--sp-ds); border-radius: 6px; padding: 20px 24px; margin: 16px 0; }
+  .formato-card h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--sp-ds); margin-bottom: 12px; }
+  .formato-code { font-family: 'Cascadia Code','Consolas',monospace; font-size: 14px; color: var(--sp-ds-dark); background: white; border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 14px 18px; line-height: 2; }
+  .formato-code .fmt-kw { color: var(--sp-ds); font-weight: 700; }
+
+  /* CHECKLISTS */
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .check-group { background: white; border: 1px solid var(--sp-neutral-30); border-radius: 4px; overflow: hidden; }
+  .check-group-title { padding: 10px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--sp-ds); background: var(--sp-ds-light); border-bottom: 1px solid var(--sp-neutral-20); display: flex; align-items: center; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 16px; font-size: 13px; color: var(--sp-neutral-80); border-bottom: 1px solid var(--sp-neutral-10); line-height: 1.5; }
+  .check-item:last-child { border-bottom: none; }
+  .check-box { width: 16px; height: 16px; border: 2px solid var(--sp-ds); border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+
+  /* CALLOUT */
+  .callout { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 2px; margin: 12px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info    { background: #dff6ff; border-left: 4px solid var(--sp-blue); color: #004b80; }
+  .callout.warn    { background: #fff4ce; border-left: 4px solid #f7c948; color: #7a5000; }
+  .callout.success { background: #e6f4ec; border-left: 4px solid #107c10; color: #0a2e1a; }
+  .callout.purple  { background: var(--sp-ds-light); border-left: 4px solid var(--sp-ds); color: var(--sp-ds-dark); }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+
+  /* ENCERRAMENTO */
+  .closing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  .closing-card { background: white; border: 1px solid var(--sp-neutral-30); border-radius: 4px; padding: 16px 14px; text-align: center; }
+  .closing-card .cc-icon { font-size: 24px; margin-bottom: 8px; }
+  .closing-card .cc-title { font-size: 12px; font-weight: 700; color: var(--sp-ds); margin-bottom: 4px; }
+  .closing-card .cc-desc { font-size: 11.5px; color: var(--sp-neutral-60); line-height: 1.45; }
+
+  .sp-divider { border: none; border-top: 1px solid var(--sp-neutral-20); margin: 28px 0; }
+  #scrollTop { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--sp-ds); color: white; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); display: none; align-items: center; justify-content: center; z-index: 900; }
+  #scrollTop:hover { background: var(--sp-ds-dark); }
+  #scrollTop.visible { display: flex; }
+  @media(max-width:768px){ .left-nav{display:none} .main-content{margin-left:0} .content-area{padding:20px} .page-hero{padding:24px 20px} .perfil-grid,.ref-grid,.closing-grid{grid-template-columns:1fr} .check-grid{grid-template-columns:1fr} .fase-detail-body{grid-template-columns:1fr} .fase-timeline{flex-direction:column} }
+</style>
+</head>
+<body>
+
+<header class="sme-topbar">
+  <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-topbar-logo">
+    <span class="logo-badge">SME</span>
+    <span class="logo-text">Regras e Fluxos</span>
+  </a>
+  <nav class="sme-topbar-nav">
+    <a href="https://carolcasassola.github.io/documentos-normas/" class="sme-nav-link"><span class="nav-icon">📋</span><span>Manual do Desenvolvedor</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-atividades-azure.html" class="sme-nav-link"><span class="nav-icon">☁️</span><span>Treinamento Azure</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-publicacao-ambientes-sme.html" class="sme-nav-link"><span class="nav-icon">🚀</span><span>Fluxo de Publicação</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/papeis-e-responsabilidades.html" class="sme-nav-link"><span class="nav-icon">👥</span><span>Papéis e Responsabilidades</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/sobre-a-sme.html" class="sme-nav-link"><span class="nav-icon">🏫</span><span>Sobre a SME</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/fluxo-de-projetos.html" class="sme-nav-link"><span class="nav-icon">🔄</span><span>Fluxo de Projetos</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/scrum-masters-sme.html" class="sme-nav-link"><span class="nav-icon">🏃</span><span>Scrum Masters</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/manual-ux.html" class="sme-nav-link"><span class="nav-icon">🎨</span><span>Manual UX</span></a>
+    <a href="https://carolcasassola.github.io/documentos-normas/guia-django-sme.html" class="sme-nav-link"><span class="nav-icon">🐍</span><span>Guia Django</span></a>
+    <a href="#" class="sme-nav-link active"><span class="nav-icon">🗂️</span><span>Designer de Serviços</span></a>
+  </nav>
+</header>
+
+<div class="page-wrapper">
+
+  <nav class="left-nav">
+    <span class="left-nav-label">Perfil</span>
+    <a href="#quem-e" class="left-nav-item active">🔍 Quem é o DS na SME?</a>
+    <span class="left-nav-label">Ciclo de Atuação</span>
+    <a href="#ciclo"  class="left-nav-item">🔄 Visão Geral</a>
+    <a href="#fase1"  class="left-nav-item">① Apropriação do Projeto</a>
+    <a href="#fase2"  class="left-nav-item">② Planejamento e Roadmap</a>
+    <a href="#fase3"  class="left-nav-item">③ Levantamento de Requisitos</a>
+    <a href="#fase4"  class="left-nav-item">④ Ciclo de Refinamento</a>
+    <span class="left-nav-label">Qualidade</span>
+    <a href="#backlog"    class="left-nav-item">📋 Qualidade do Backlog</a>
+    <a href="#historias"  class="left-nav-item">✍️ Formato das Histórias</a>
+    <a href="#checklists" class="left-nav-item">☑️ Rotinas e Checklists</a>
+    <span class="left-nav-label">Referência</span>
+    <a href="#encerramento" class="left-nav-item">⭐ O DS na SME</a>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="page-hero">
+      <div class="hero-eyebrow">SME · Papéis e Responsabilidades</div>
+      <div class="hero-title"><strong>Atuação do Designer de Serviços</strong><br>Descoberta · Análise · Refinamento · Entrega</div>
+      <div class="hero-sub">O DS é a ponte entre a visão do PO e a execução técnica do time de desenvolvimento</div>
+      <div class="hero-pills">
+        <span class="hero-pill">🔍 Descoberta</span>
+        <span class="hero-pill">📋 Backlog</span>
+        <span class="hero-pill">🔄 Refinamento</span>
+        <span class="hero-pill">🤝 Integração de Times</span>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- QUEM É O DS -->
+      <div class="sp-section" id="quem-e">
+        <h2 class="section-heading">🔍 Quem é o DS na SME?<span class="sec-badge">Perfil e Competências</span></h2>
+
+        <div class="perfil-grid">
+          <div class="perfil-card">
+            <div class="pc-icon">📊</div>
+            <div class="pc-title">Analista de Negócios</div>
+            <div class="pc-desc">Compreende as necessidades do negócio e as traduz em requisitos concretos para desenvolvimento.</div>
+          </div>
+          <div class="perfil-card">
+            <div class="pc-icon">🔍</div>
+            <div class="pc-title">Descoberta de Serviços</div>
+            <div class="pc-desc">Mapeia necessidades reais do usuário e descobre oportunidades de melhoria nos serviços.</div>
+          </div>
+          <div class="perfil-card">
+            <div class="pc-icon">📚</div>
+            <div class="pc-title">Guardião do Backlog</div>
+            <div class="pc-desc">Mantém as histórias de usuário organizadas, refinadas e priorizadas para o time técnico.</div>
+          </div>
+        </div>
+
+        <div class="perfil-quote">
+          💬 "O DS é a ponte entre a visão do PO e a execução técnica do time de desenvolvimento."
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- CICLO DE ATUAÇÃO -->
+      <div class="sp-section" id="ciclo">
+        <h2 class="section-heading">🔄 Visão Geral<span class="sec-badge">Ciclo de Atuação</span></h2>
+
+        <div class="fase-timeline">
+          <div class="fase-node">
+            <div class="fase-circle">1</div>
+            <div class="fase-label">Apropriação do Projeto</div>
+            <div class="fase-sub">Entendimento do negócio, necessidades e objetivos</div>
+          </div>
+          <div class="fase-connector"></div>
+          <div class="fase-node">
+            <div class="fase-circle">2</div>
+            <div class="fase-label">Planejamento e Roadmap</div>
+            <div class="fase-sub">Definição de marcos, objetivos e roadmap viável</div>
+          </div>
+          <div class="fase-connector"></div>
+          <div class="fase-node">
+            <div class="fase-circle">3</div>
+            <div class="fase-label">Levantamento de Requisitos</div>
+            <div class="fase-sub">Entrevistas, mapeamento e definição de features</div>
+          </div>
+          <div class="fase-connector"></div>
+          <div class="fase-node">
+            <div class="fase-circle continua">4</div>
+            <div class="fase-label">Ciclo de Refinamento</div>
+            <div class="fase-sub">Refinamento semanal contínuo a cada sprint</div>
+          </div>
+        </div>
+        <div class="fase-note">As fases 1, 2 e 3 são de início de projeto · A fase 4 é contínua e se repete a cada sprint</div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- FASE 1 -->
+      <div class="sp-section" id="fase1">
+        <h2 class="section-heading">① Apropriação do Projeto</h2>
+
+        <div class="fase-detail">
+          <div class="fase-detail-header">
+            <span class="fh-num">FASE 1</span>
+            <span class="fh-title">Apropriação do Projeto</span>
+            <span class="fh-sub">Início de Projeto</span>
+          </div>
+          <div class="fase-detail-body">
+            <div class="fase-col">
+              <h5>🏢 Entendimento do Negócio</h5>
+              <div class="fase-item">Quais são os objetivos e necessidades do projeto?</div>
+              <div class="fase-item">Quem são os usuários do sistema?</div>
+              <div class="fase-item">Quais processos serão digitalizados ou melhorados?</div>
+              <div class="fase-item">Reuniões com PO e stakeholders para alinhamento</div>
+            </div>
+            <div class="fase-col">
+              <h5>📄 Entendimento do Contrato</h5>
+              <div class="fase-item">Escopo contratual: o que pode e o que não pode ser feito</div>
+              <div class="fase-item">Prazos e marcos a respeitar</div>
+              <div class="fase-item">Entregas esperadas e critérios de aceite contratuais</div>
+              <div class="fase-item">Alinhamento com o SM e Gestor de Portfólio</div>
+            </div>
+          </div>
+          <div class="fase-result">
+            ✅ <span><strong>Resultado esperado:</strong> DS domina o contexto do projeto antes de escrever qualquer história</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="sp-section" id="fase2">
+        <h2 class="section-heading">② Planejamento e Roadmap</h2>
+
+        <div class="fase-detail">
+          <div class="fase-detail-header">
+            <span class="fh-num">FASE 2</span>
+            <span class="fh-title">Planejamento e Roadmap</span>
+            <span class="fh-sub">Início de Projeto</span>
+          </div>
+          <div class="fase-detail-body">
+            <div class="fase-col">
+              <h5>🎯 Definição de Marcos</h5>
+              <div class="fase-item">Principais entregas e objetivos do projeto</div>
+              <div class="fase-item">Datas e prazos alinhados ao planejamento</div>
+              <div class="fase-item">Dependências entre marcos e entregas</div>
+              <div class="fase-item">Validação com PO, SM e Gestor de Portfólio</div>
+            </div>
+            <div class="fase-col">
+              <h5>🗺️ Construção do Roadmap</h5>
+              <div class="fase-item">Sequência lógica de features e módulos</div>
+              <div class="fase-item">Estimativas preliminares de tempo</div>
+              <div class="fase-item">Priorização baseada em valor ao negócio</div>
+              <div class="fase-item">Roadmap viável e realista para o time</div>
+            </div>
+          </div>
+          <div class="fase-warn">
+            ⚠️ <span><strong>Atenção:</strong> O roadmap deve ser construído com base na realidade do projeto — capacidade, velocidade e prazos contratuais. Promessas irrealistas geram frustração para todos.</span>
+          </div>
+          <div class="fase-result">
+            ✅ <span><strong>Resultado esperado:</strong> Roadmap aprovado pelo PO, SM e Gestor de Portfólio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="sp-section" id="fase3">
+        <h2 class="section-heading">③ Levantamento de Requisitos</h2>
+
+        <div class="fase-detail">
+          <div class="fase-detail-header">
+            <span class="fh-num">FASE 3</span>
+            <span class="fh-title">Levantamento dos Requisitos Iniciais</span>
+            <span class="fh-sub">Início de Projeto</span>
+          </div>
+          <div class="fase-detail-body">
+            <div class="fase-col">
+              <h5>🔍 Atividades de Discovery</h5>
+              <div class="fase-item"><strong>Entrevistas com usuários:</strong> Descoberta das reais necessidades e dores</div>
+              <div class="fase-item"><strong>Mapeamento de Processos:</strong> Jornadas, fluxos atuais e oportunidades de melhoria</div>
+              <div class="fase-item"><strong>Análise Documental:</strong> Legislação, normas e documentos que regem o serviço público</div>
+            </div>
+            <div class="fase-col">
+              <h5>🏗️ Hierarquia de Organização</h5>
+              <div class="fase-item"><strong>Épico:</strong> Grande capacidade do sistema</div>
+              <div class="fase-item"><strong>Feature (Funcionalidade):</strong> Conjunto de histórias relacionadas</div>
+              <div class="fase-item"><strong>Histórias de Usuário:</strong> Itens refinados para desenvolvimento</div>
+            </div>
+          </div>
+          <div class="fase-result">
+            ✅ <span><strong>Resultado esperado:</strong> Backlog inicial com features e épicos validados pelo PO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 4 -->
+      <div class="sp-section" id="fase4">
+        <h2 class="section-heading">④ Ciclo Contínuo de Refinamento <span class="sec-badge" style="background:#f07030">Contínua</span></h2>
+
+        <div class="callout purple">
+          <span class="callout-icon">♾️</span>
+          <div>Esta fase é <strong>contínua</strong> e se repete a cada sprint, durante toda a vida do projeto.</div>
+        </div>
+
+        <div class="ref-grid">
+          <div class="ref-col">
+            <div class="ref-col-header">
+              👥 Refinamento com o PO
+              <span class="ref-col-sub">Semanal ou quinzenal</span>
+            </div>
+            <div class="ref-item">Novas histórias são escritas, revisadas e priorizadas</div>
+            <div class="ref-item">Alinhamento de backlog com visão do negócio</div>
+            <div class="ref-item">Validação de critérios de aceite</div>
+            <div class="ref-item">Priorização para as próximas sprints</div>
+          </div>
+          <div class="ref-col">
+            <div class="ref-col-header">
+              💻 Refinamento com o Time
+              <span class="ref-col-sub">Semanal ou 1x por sprint</span>
+            </div>
+            <div class="ref-item">Foco nas 2 sprints do mês atual</div>
+            <div class="ref-item">Detalhamento técnico das histórias</div>
+            <div class="ref-item">Estimativas e criação de tarefas</div>
+            <div class="ref-item">Atribuição conforme capacity do time</div>
+          </div>
+          <div class="ref-col">
+            <div class="ref-col-header">
+              🏃 Cerimônias do Time
+              <span class="ref-col-sub">Participação ativa</span>
+            </div>
+            <div class="ref-item"><strong>Planning:</strong> apresenta histórias da sprint</div>
+            <div class="ref-item"><strong>Daily:</strong> participa e pode conduzir</div>
+            <div class="ref-item"><strong>Review:</strong> membro ativo do time</div>
+            <div class="ref-item"><strong>Retrospectiva:</strong> membro ativo do time</div>
+          </div>
+        </div>
+
+        <div class="ref-rule">
+          🏅 <span><strong>Regra de ouro:</strong> refinar prioritariamente as <strong>2 sprints do mês vigente</strong>. Refinamentos para 2–3 meses à frente precisam ser revisados. Ao final do ciclo: DS passa ao PO a previsão do que entra na sprint e o ciclo recomeça.</span>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- QUALIDADE DO BACKLOG -->
+      <div class="sp-section" id="backlog">
+        <h2 class="section-heading">📋 Qualidade do Backlog<span class="sec-badge">Histórias de Usuário</span></h2>
+
+        <table class="backlog-table">
+          <thead>
+            <tr><th>Status</th><th>Situação da História</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status-ok">✓ OK</span></td>
+              <td>Formato correto, critérios claros, priorizada pelo PO, validada com o time</td>
+            </tr>
+            <tr>
+              <td><span class="status-warn">⚠ Atenção</span></td>
+              <td>Critérios de aceite incompletos ou ambíguos — refinar antes de priorizar</td>
+            </tr>
+            <tr>
+              <td><span class="status-block">✗ Bloquear</span></td>
+              <td>Sem formato de usuário, sem critérios de aceite — não deve entrar na sprint</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div>Histórias sem critérios claros geram <strong>atraso e retrabalho</strong> para o time. Um bom backlog é validado com o PO antes de ser refinado com o time técnico.</div>
+        </div>
+      </div>
+
+      <!-- FORMATO DAS HISTÓRIAS -->
+      <div class="sp-section" id="historias">
+        <h2 class="section-heading">✍️ Formato das Histórias<span class="sec-badge">Obrigatório</span></h2>
+
+        <div class="formato-card">
+          <h5>📌 Formato Obrigatório de História de Usuário</h5>
+          <div class="formato-code">
+            <span class="fmt-kw">Eu como</span> [perfil do usuário],<br>
+            <span class="fmt-kw">preciso</span> [ação/funcionalidade],<br>
+            <span class="fmt-kw">para</span> [objetivo/benefício]
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <span class="callout-icon">🚫</span>
+          <div>Histórias <strong>fora deste formato não devem ser priorizadas</strong>. Histórias sem critérios claros geram atraso e retrabalho para o time.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- CHECKLISTS -->
+      <div class="sp-section" id="checklists">
+        <h2 class="section-heading">☑️ Rotinas do DS<span class="sec-badge">Checklists Essenciais</span></h2>
+
+        <div class="check-grid">
+          <div class="check-group">
+            <div class="check-group-title">📅 Antes da Planning</div>
+            <div class="check-item"><div class="check-box"></div>Histórias no formato correto</div>
+            <div class="check-item"><div class="check-box"></div>Critérios de aceite claros</div>
+            <div class="check-item"><div class="check-box"></div>Histórias priorizadas pelo PO</div>
+            <div class="check-item"><div class="check-box"></div>Volume alinhado ao capacity</div>
+          </div>
+          <div class="check-group">
+            <div class="check-group-title">💻 Refinamento com Time</div>
+            <div class="check-item"><div class="check-box"></div>Foco nas 2 sprints do mês vigente</div>
+            <div class="check-item"><div class="check-box"></div>Todas as dúvidas técnicas sanadas</div>
+            <div class="check-item"><div class="check-box"></div>Tarefas criadas e distribuídas</div>
+            <div class="check-item"><div class="check-box"></div>Histórias estimadas e priorizadas</div>
+          </div>
+          <div class="check-group">
+            <div class="check-group-title">⭐ Qualidade da História</div>
+            <div class="check-item"><div class="check-box"></div>Segue o formato Eu como / preciso / para</div>
+            <div class="check-item"><div class="check-box"></div>Critérios de aceite presentes e claros</div>
+            <div class="check-item"><div class="check-box"></div>Estimada pelo time técnico</div>
+          </div>
+          <div class="check-group">
+            <div class="check-group-title">📊 Gestão de Capacity</div>
+            <div class="check-item"><div class="check-box"></div>Horas do time visíveis no Azure</div>
+            <div class="check-item"><div class="check-box"></div>Se faltam histórias: alinhar mais com PO</div>
+            <div class="check-item"><div class="check-box"></div>Se sobram horas: quebrar histórias em menores</div>
+          </div>
+        </div>
+
+        <div class="callout purple">
+          <span class="callout-icon">💡</span>
+          <div>O DS é responsável por garantir que o time <strong>sempre tenha trabalho bem definido pela frente</strong>.</div>
+        </div>
+      </div>
+
+      <hr class="sp-divider">
+
+      <!-- ENCERRAMENTO -->
+      <div class="sp-section" id="encerramento">
+        <h2 class="section-heading">⭐ O DS na SME<span class="sec-badge">O elo entre visão e execução</span></h2>
+
+        <div class="closing-grid">
+          <div class="closing-card">
+            <div class="cc-icon">🏢</div>
+            <div class="cc-title">Entende o Negócio</div>
+            <div class="cc-desc">Transforma necessidades em histórias claras e priorizadas</div>
+          </div>
+          <div class="closing-card">
+            <div class="cc-icon">🤝</div>
+            <div class="cc-title">Conecta os Times</div>
+            <div class="cc-desc">É o elo entre a visão do PO e a execução técnica</div>
+          </div>
+          <div class="closing-card">
+            <div class="cc-icon">✅</div>
+            <div class="cc-title">Garante Qualidade</div>
+            <div class="cc-desc">Histórias bem escritas significam entregas com menos retrabalho</div>
+          </div>
+          <div class="closing-card">
+            <div class="cc-icon">📋</div>
+            <div class="cc-title">Backlog Saudável</div>
+            <div class="cc-desc">Mantém o time sempre bem orientado e com trabalho definido</div>
+          </div>
+        </div>
+
+        <div class="callout purple" style="font-size:14px;font-style:italic">
+          <span class="callout-icon">💬</span>
+          <div>"Um backlog bem refinado é o maior presente que o DS pode dar ao time de desenvolvimento."</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<button id="scrollTop" title="Voltar ao topo">↑</button>
+<script>
+  const sections = document.querySelectorAll('.sp-section[id]');
+  const navItems = document.querySelectorAll('.left-nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + current));
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+  });
+  document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const href = item.getAttribute('href');
+      if (href?.startsWith('#')) { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
